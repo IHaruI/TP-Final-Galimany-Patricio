@@ -1,0 +1,35 @@
+.contenedor-bienvenida {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Ocupa toda la altura de la ventana */
+  background: linear-gradient(to right, #4e54c8, #8f94fb); /* Fondo degradado */
+  color: #fff; /* Color de texto blanco */
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+}
+
+h1 {
+  font-size: 3rem; /* Tamaño del texto del título */
+  margin-bottom: 20px; /* Espacio inferior del título */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra para el texto */
+}
+
+button {
+  background-color: #ff6b6b; /* Color de fondo del botón */
+  color: #fff; /* Color del texto del botón */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 15px 25px; /* Espaciado interno */
+  font-size: 1.2rem; /* Tamaño del texto del botón */
+  margin: 10px; /* Espaciado entre botones */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+  transition: background-color 0.3s, transform 0.3s; /* Transiciones para efectos */
+}
+
+button:hover {
+  background-color: #ff4d4d; /* Color de fondo al pasar el cursor */
+  transform: scale(1.05); /* Aumentar tamaño al pasar el cursor */
+}

@@ -1,0 +1,29 @@
+<div class="contenedor">
+  <h2>Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()">
+    <label>Email</label>
+    <input formControlName="email" type="email" required />
+
+    <label>Password</label>
+    <input formControlName="password" type="password" required />
+
+    <button type="submit" [disabled]="!loginForm.valid">Iniciar Sesión</button>
+  </form>
+
+  <!-- Mensaje de éxito o error -->
+  <div *ngIf="mensaje" [ngClass]="{ success: esExito, error: !esExito }">
+    {{ mensaje }}
+  </div>
+
+  <div *ngIf="imagenPerfilURL || imagenPortadaURL">
+    <h3>Imágenes del Usuario</h3>
+    <div *ngIf="imagenPerfilURL">
+      <label>Imagen de Perfil:</label>
+      <img [src]="imagenPerfilURL" alt="Imagen de Perfil" width="150" />
+    </div>
+    <div *ngIf="imagenPortadaURL">
+      <label>Imagen de Portada:</label>
+      <img [src]="imagenPortadaURL" alt="Imagen de Portada" width="150" />
+    </div>
+  </div>
+</div>

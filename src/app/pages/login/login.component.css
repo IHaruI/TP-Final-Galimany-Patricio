@@ -1,0 +1,109 @@
+html,
+body {
+  height: 100%; /* Asegúrate de que el body ocupe toda la altura de la pantalla */
+  margin: 0; /* Elimina el margen por defecto */
+}
+
+.contenedor {
+  display: flex;
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  flex-direction: column;
+  height: 100vh; /* Ocupa toda la altura de la ventana */
+}
+
+/* Establecer box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Contenedor principal para ambos formularios */
+form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  transition: transform 0.3s;
+}
+
+form:hover {
+  transform: scale(1.02); /* Efecto de aumento al pasar el ratón */
+}
+
+/* Títulos */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #4e54c8; /* Color atractivo para los títulos */
+}
+
+/* Etiquetas */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+/* Inputs y select */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 10px; /* Espaciado interno */
+  margin-bottom: 15px; /* Espaciado entre elementos */
+  border: 1px solid #ccc; /* Borde */
+  border-radius: 5px; /* Bordes redondeados */
+  transition: border-color 0.3s; /* Transición del color del borde */
+}
+
+/* Estilos de foco */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+select:focus {
+  border-color: #4e54c8; /* Color de foco */
+}
+
+/* Botones */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4e54c8; /* Color del botón */
+  border: none;
+  border-radius: 5px; /* Bordes redondeados */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s; /* Añadir efecto de transición */
+}
+
+button:hover {
+  background-color: #3a3e8f; /* Color del botón al pasar el ratón */
+  transform: scale(1.05); /* Aumentar tamaño al pasar el ratón */
+}
+
+button:disabled {
+  background-color: #ccc; /* Color del botón deshabilitado */
+  cursor: not-allowed;
+}
+
+.success {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Mensajes de error */
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px; /* Ajustar el margen para que se vea más cercano al input */
+}

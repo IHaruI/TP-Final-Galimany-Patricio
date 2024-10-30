@@ -1,0 +1,89 @@
+<h2>Administración de Usuarios</h2>
+
+<!-- Mensaje de confirmación o error -->
+<div
+  *ngIf="mensaje"
+  class="mensaje"
+  [ngClass]="{ exito: exitoMensaje, error: !exitoMensaje }"
+>
+  {{ mensaje }}
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <td>{{ usuario.nombre }}</td>
+      <td>{{ usuario.email }}</td>
+      <td>{{ usuario.rol }}</td>
+      <td>{{ usuario.aprobado ? "Aprobado" : "Pendiente" }}</td>
+      <td>
+        <button
+          (click)="toggleAprobacion(usuario)"
+          *ngIf="usuario.rol === 'especialista'"
+        >
+          {{ usuario.aprobado ? "Inhabilitar" : "Habilitar" }}
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div [formGroup]="rolForm">
+  <h3>Seleccione un Rol</h3>
+  <select formControlName="rol" (change)="onRoleChange()">
+    <option value="administrador">Administrador</option>
+    <option value="paciente-especialista">Paciente / Especialista</option>
+  </select>
+</div>
+
+<!-- Mostrar el RegistroComponent cuando el rol es "paciente-especialista" -->
+<app-registro *ngIf="mostrarRegistroComponent"></app-registro>
+
+<!-- Formulario de creación de usuarios solo si el rol es "administrador" -->
+<div *ngIf="mostrarFormulario">
+  <h3>Crear Nuevo Usuario</h3>
+  <form [formGroup]="nuevoUsuarioForm" (ngSubmit)="crearUsuario()">
+    <div class="input-group">
+      <label>Nombre</label>
+      <input formControlName="nombre" type="text" required />
+    </div>
+    <div class="input-group">
+      <label>Apellido</label>
+      <input formControlName="apellido" type="text" required />
+    </div>
+    <div class="input-group">
+      <label>Edad</label>
+      <input formControlName="edad" type="number" required />
+    </div>
+    <div class="input-group">
+      <label>DNI</label>
+      <input formControlName="dni" type="number" required />
+    </div>
+    <div class="input-group">
+      <label>Email</label>
+      <input formControlName="email" type="email" required />
+    </div>
+    <div class="input-group">
+      <label>Password</label>
+      <input formControlName="password" type="password" required />
+    </div>
+    <div class="input-group">
+      <label>Imagen de Perfil</label>
+      <input type="file" (change)="onFileSelected($event)" required />
+    </div>
+    <div class="crear-usuario">
+      <button type="submit" [disabled]="!nuevoUsuarioForm.valid">
+        Crear Usuario
+      </button>
+    </div>
+  </form>
+</div>
