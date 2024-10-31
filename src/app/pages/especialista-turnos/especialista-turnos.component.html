@@ -1,0 +1,52 @@
+<h2>Mis Turnos</h2>
+
+<div>
+  <label>Filtrar por Especialidad:</label>
+  <input
+    type="text"
+    [(ngModel)]="filtroEspecialidad"
+    (input)="aplicarFiltro()"
+  />
+
+  <label>Filtrar por Paciente:</label>
+  <input type="text" [(ngModel)]="filtroPaciente" (input)="aplicarFiltro()" />
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Especialidad</th>
+      <th>Paciente</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turno of turnosFiltrados">
+      <td>{{ turno.especialidad }}</td>
+      <td>{{ turno.paciente }}</td>
+      <td>{{ turno.estado }}</td>
+      <td>
+        <!-- Acciones para los turnos -->
+        <ng-container *ngIf="turno.estado === 'Aceptado'">
+          <button (click)="cancelarTurno(turno)">Cancelar Turno</button>
+          <button (click)="finalizarTurno(turno)">Finalizar Turno</button>
+          <button *ngIf="turno.comentario" (click)="verResena(turno)">
+            Ver Reseña
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="turno.estado === 'Pendiente'">
+          <button (click)="rechazarTurno(turno)">Rechazar Turno</button>
+          <button (click)="aceptarTurno(turno)">Aceptar Turno</button>
+        </ng-container>
+
+        <ng-container *ngIf="turno.estado === 'Realizado'">
+          <button *ngIf="turno.comentario" (click)="verResena(turno)">
+            Ver Reseña
+          </button>
+        </ng-container>
+      </td>
+    </tr>
+  </tbody>
+</table>

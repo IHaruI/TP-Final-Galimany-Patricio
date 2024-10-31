@@ -1,0 +1,133 @@
+/* src/app/solicitar-turno/solicitar-turno.component.css */
+
+h2 {
+  text-align: center;
+  color: #4a90e2; /* Color llamativo para el título */
+  margin-bottom: 20px;
+  font-size: 2em; /* Tamaño del título */
+}
+
+form {
+  background: #f9f9f9; /* Fondo suave para el formulario */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 500px; /* Ancho máximo del formulario */
+  margin: 0 auto; /* Centrar el formulario */
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin: 15px 0 5px;
+  color: #333;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: border 0.3s;
+}
+
+input:focus {
+  border-color: #4a90e2; /* Color de borde al enfocar */
+  outline: none;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* Sombra al enfocar */
+}
+
+ul {
+  list-style-type: none; /* Eliminar viñetas */
+  padding: 0;
+  margin: 10px 0;
+}
+
+li {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 5px 0;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s; /* Transición suave */
+}
+
+li:hover {
+  background: #e0f7fa; /* Color de fondo al pasar el mouse */
+  transform: translateY(-2px); /* Efecto de levantamiento */
+}
+
+li.selected {
+  background: #4a90e2; /* Color de fondo cuando está seleccionado */
+  color: white; /* Color del texto en selección */
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50; /* Color de fondo del botón */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s; /* Transición suave */
+  margin-top: 20px; /* Margen superior */
+}
+
+button:disabled {
+  background-color: #ccc; /* Color cuando está deshabilitado */
+  cursor: not-allowed; /* Cursor al pasar sobre un botón deshabilitado */
+}
+
+button:hover:not(:disabled) {
+  background-color: #45a049; /* Color al pasar el mouse cuando no está deshabilitado */
+}
+
+.fecha-hora-container {
+  display: flex;
+  flex-direction: column; /* Organiza los elementos en columnas */
+  margin-top: 10px;
+}
+
+.calendario {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(120px, 1fr)
+  ); /* Cuadrícula adaptable */
+  gap: 10px; /* Espacio entre los elementos */
+  margin-top: 10px;
+}
+
+.dia {
+  display: flex;
+  flex-direction: column; /* Coloca la fecha y la hora en columnas */
+  justify-content: center; /* Centrar verticalmente */
+  align-items: center; /* Centrar horizontalmente */
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s; /* Transición suave */
+}
+
+.dia:hover {
+  background: #e0f7fa; /* Color de fondo al pasar el mouse */
+  transform: translateY(-2px); /* Efecto de levantamiento */
+}
+
+.dia.selected {
+  background: #4a90e2; /* Color de fondo cuando está seleccionado */
+  color: white; /* Color del texto en selección */
+}
+
+.fecha {
+  font-weight: bold; /* Destacar la fecha */
+  color: #4a90e2; /* Color del texto de la fecha */
+}
+
+.hora {
+  color: #666; /* Color más suave para la hora */
+}

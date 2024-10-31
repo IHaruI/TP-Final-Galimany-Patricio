@@ -1,0 +1,34 @@
+/* src/app/especialista-turnos/especialista-turnos.component.css */
+h2 {
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: center;
+}
+
+label {
+  margin-right: 10px;
+}
+
+input {
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+button {
+  margin: 5px;
+}

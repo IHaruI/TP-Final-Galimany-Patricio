@@ -84,6 +84,9 @@ export class LoginComponent {
                 false
               );
               return;
+            } else {
+              this.router.navigate(['/especialista-turnos']);
+              return;
             }
           }
 
@@ -93,6 +96,8 @@ export class LoginComponent {
               false
             );
             return;
+          } else {
+            this.router.navigate(['/mis-turnos']);
           }
 
           // Redirigir si el rol es administrador

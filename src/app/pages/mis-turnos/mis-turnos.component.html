@@ -1,0 +1,57 @@
+<h2>Mis Turnos</h2>
+
+<div>
+  <label>Filtrar por Especialidad:</label>
+  <input
+    type="text"
+    [(ngModel)]="filtroEspecialidad"
+    (input)="aplicarFiltro()"
+  />
+
+  <label>Filtrar por Especialista:</label>
+  <input
+    type="text"
+    [(ngModel)]="filtroEspecialista"
+    (input)="aplicarFiltro()"
+  />
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Especialidad</th>
+      <th>Especialista</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turno of turnosFiltrados">
+      <td>{{ turno.especialidad }}</td>
+      <td>{{ turno.especialista }}</td>
+      <td>{{ turno.estado }}</td>
+      <td>
+        <button
+          *ngIf="turno.estado === 'Pendiente'"
+          (click)="cancelarTurno(turno)"
+        >
+          Cancelar Turno
+        </button>
+        <button *ngIf="turno.comentario" (click)="verResena(turno)">
+          Ver Reseña
+        </button>
+        <button
+          *ngIf="turno.realizado && turno.comentario"
+          (click)="completarEncuesta(turno)"
+        >
+          Completar Encuesta
+        </button>
+        <button *ngIf="turno.realizado" (click)="calificarAtencion(turno)">
+          Calificar Atención
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<app-solicitar-turno></app-solicitar-turno>

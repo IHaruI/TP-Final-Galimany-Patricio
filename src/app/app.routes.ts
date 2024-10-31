@@ -3,6 +3,9 @@ import { RegistroComponent } from './pages/registro/registro.component';
 import { LoginComponent } from './pages/login/login.component';
 import { BienvenidaComponent } from './pages/bienvenida/bienvenida.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { MisTurnosComponent } from './pages/mis-turnos/mis-turnos.component';
+import { EspecialistaTurnosComponent } from './pages/especialista-turnos/especialista-turnos.component';
+import { SolicitarTurnoComponent } from './pages/solicitar-turnos/solicitar-turnos.component';
 
 export const routes: Routes = [
   {
@@ -18,8 +21,20 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'usuarios', // URL para acceder al componente de login
+    path: 'usuarios', // URL para acceder al componente de usuarios
     component: UsuariosComponent,
+  },
+  {
+    path: 'mis-turnos', // URL para acceder al componente de mis-turnos
+    component: MisTurnosComponent,
+  },
+  {
+    path: 'especialista-turnos', // URL para acceder al componente de especialista-turnos
+    component: EspecialistaTurnosComponent,
+  },
+  {
+    path: 'solicitar-turnos', // URL para acceder al componente de especialista-turnos
+    component: SolicitarTurnoComponent,
   },
   {
     path: '**', // Ruta para manejar rutas no encontradas

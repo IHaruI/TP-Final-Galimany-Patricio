@@ -1,0 +1,31 @@
+/* src/app/mis-turnos/mis-turnos.component.css */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  background-color: #007bff;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

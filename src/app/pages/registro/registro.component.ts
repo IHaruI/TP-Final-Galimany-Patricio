@@ -91,7 +91,7 @@ export class RegistroComponent {
     }
   }
 
-  // Función que ahora concatena la especialidad seleccionada y las adicionales
+  // Función para concatenar la especialidad seleccionada y las adicionales
   getEspecialidadesConcatenadas(): string | null {
     const especialidadSeleccionada =
       this.registroForm.value.especialidadSeleccionada?.trim() || '';

@@ -1,0 +1,44 @@
+<h2>Solicitar Turno</h2>
+
+<form (submit)="solicitarTurno()">
+  <label>Seleccionar Especialidad:</label>
+  <input
+    type="text"
+    [(ngModel)]="especialidadSeleccionada"
+    name="especialidad"
+    (input)="filtrarEspecialistasPorEspecialidad()"
+  />
+
+  <label>Seleccionar Especialista:</label>
+  <ul>
+    <li
+      *ngFor="let especialista of especialistasFiltrados"
+      (click)="seleccionarEspecialista(especialista)"
+      [class.selected]="especialista === especialistaSeleccionado"
+    >
+      {{ especialista.nombre }}
+    </li>
+  </ul>
+
+  <label>Seleccionar Día y Horario del Turno:</label>
+  <div class="fecha-hora-container">
+    <div class="calendario">
+      <div
+        class="dia"
+        *ngFor="let fecha of fechasDisponibles"
+        (click)="seleccionarFecha(fecha)"
+        [class.selected]="fecha === fechaSeleccionada"
+      >
+        <div class="fecha">{{ fecha | date : "shortDate" }}</div>
+        <div class="hora">{{ fecha | date : "shortTime" }}</div>
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="!fechaSeleccionada || !especialistaSeleccionado"
+  >
+    Solicitar Turno
+  </button>
+</form>
