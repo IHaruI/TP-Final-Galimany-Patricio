@@ -13,6 +13,7 @@ import {
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Turno } from '../interfaces/turno.interface';
+import { Timestamp } from 'firebase/firestore';
 
 interface Especialista {
   uid: string;
@@ -44,13 +45,33 @@ export class TurnosService {
     );
   }
 
-  obtenerTurnosPorEspecialista(especialistaId: string): Observable<Turno[]> {
+  obtenerTurnosPorEspecialista(especialista: string): Observable<Turno[]> {
     const turnosRef = collection(this.firestore, 'turnos');
-    const q = query(turnosRef, where('especialistaId', '==', especialistaId));
+    const q = query(turnosRef, where('especialista', '==', especialista));
     return from(
       getDocs(q).then((snapshot) =>
         snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Turno))
       )
+    );
+  }
+
+  obtenerTurnos(): Observable<Turno[]> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    return from(
+      getDocs(turnosRef).then((snapshot) =>
+        snapshot.docs.map((doc) => {
+          const data = doc.data();
+          const fecha = data['fecha'] ? data['fecha'].toDate() : null; // Ajuste aquí
+          return { id: doc.id, ...data, fecha } as Turno;
+        })
+      )
+    );
+  }
+
+  cancelarTurno(id: string, motivo: string): Observable<void> {
+    const turnoRef = doc(this.firestore, `turnos/${id}`);
+    return from(
+      updateDoc(turnoRef, { estado: 'Cancelado', motivoCancelacion: motivo })
     );
   }
 

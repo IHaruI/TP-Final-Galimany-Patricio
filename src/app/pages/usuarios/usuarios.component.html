@@ -1,3 +1,5 @@
+<app-perfil></app-perfil>
+
 <h2>Administración de Usuarios</h2>
 
 <!-- Mensaje de confirmación o error -->
@@ -36,6 +38,70 @@
     </tr>
   </tbody>
 </table>
+
+<h2>Administración de Turnos</h2>
+
+<!-- Filtro por Especialidad y Especialista -->
+<div>
+  <label>Filtrar por Especialidad:</label>
+  <input
+    type="text"
+    [(ngModel)]="filtroEspecialidad"
+    (input)="filtrarTurnos()"
+    placeholder="Ingrese especialidad"
+  />
+
+  <label>Filtrar por Especialista:</label>
+  <input
+    type="text"
+    [(ngModel)]="filtroEspecialista"
+    (input)="filtrarTurnos()"
+    placeholder="Ingrese especialista"
+  />
+</div>
+
+<!-- Listado de Turnos -->
+<table>
+  <thead>
+    <tr>
+      <th>Fecha y Hora</th>
+      <th>Paciente</th>
+      <th>Especialista</th>
+      <th>Especialidad</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turno of turnosFiltrados">
+      <td>
+        {{
+          turno.fecha
+            ? (turno.fecha | date : "dd MMMM yyyy, h:mm:ss a")
+            : "Sin fecha"
+        }}
+      </td>
+      <td>{{ turno.nombre }} {{ turno.apellido }}</td>
+      <td>{{ turno.especialista }}</td>
+      <td>{{ turno.especialidad }}</td>
+      <td>{{ turno.estado }}</td>
+      <td>
+        <!-- Botón para cancelar turno, solo si cumple las condiciones -->
+        <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)">
+          Cancelar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal para motivo de cancelación -->
+<div *ngIf="mostrarModalCancelacion">
+  <label>Motivo de cancelación:</label>
+  <textarea [(ngModel)]="motivoCancelacion"></textarea>
+  <button (click)="confirmarCancelacion()">Confirmar</button>
+  <button (click)="cerrarModal()">Cancelar</button>
+</div>
 
 <div [formGroup]="rolForm">
   <h3>Seleccione un Rol</h3>

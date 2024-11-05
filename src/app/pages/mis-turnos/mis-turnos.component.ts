@@ -5,11 +5,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Turno } from '../../interfaces/turno.interface';
 import { SolicitarTurnoComponent } from '../solicitar-turnos/solicitar-turnos.component';
+import { PerfilComponent } from '../../perfil/perfil.component';
 
 @Component({
   selector: 'app-mis-turnos',
   standalone: true,
-  imports: [CommonModule, FormsModule, SolicitarTurnoComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    SolicitarTurnoComponent,
+    PerfilComponent,
+  ],
   templateUrl: './mis-turnos.component.html',
   styleUrls: ['./mis-turnos.component.css'],
 })

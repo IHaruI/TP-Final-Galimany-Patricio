@@ -38,7 +38,6 @@ export class SolicitarTurnoComponent implements OnInit {
       if (data) {
         this.nombrePaciente = data.nombre;
         this.apellidoPaciente = data.apellido;
-        console.log('nombre: ' + this.nombrePaciente);
       }
     } else {
       console.log('El paciente no está autenticado.');

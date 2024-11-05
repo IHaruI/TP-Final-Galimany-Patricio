@@ -67,13 +67,21 @@ export class AuthService {
     return this.auth.currentUser ? this.auth.currentUser.uid : null;
   }
 
+  async getNombre(): Promise<string | null> {
+    try {
+      const pacienteData = await this.getPacienteData();
+      return pacienteData.nombre;
+    } catch (error) {
+      console.error('Error al obtener el nombre:', error);
+      return null;
+    }
+  }
+
   // Método que devuelve los datos del paciente autenticado
   async getPacienteData(): Promise<{ nombre: string; apellido: string }> {
     const userId = this.getUid();
-    console.log('User ID:', userId); // Para verificar el ID
     if (userId) {
       const userData = await this.obtenerDatosUsuario(userId);
-      console.log('User Data:', userData); // Verifica qué datos se están recuperando
       return {
         nombre: userData.nombre || '',
         apellido: userData.apellido || '',
@@ -88,10 +96,8 @@ export class AuthService {
 
     if (!querySnapshot.empty) {
       const doc = querySnapshot.docs[0];
-      console.log('User Document Exists:', true); // Verifica si el documento existe
       return { id: doc.id, ...doc.data() }; // Retorna los datos del usuario
     } else {
-      console.log('User Document Exists:', false); // Verifica si el documento existe
       return null; // Retorna null si no se encuentra el documento
     }
   }

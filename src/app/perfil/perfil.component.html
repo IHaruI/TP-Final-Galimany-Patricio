@@ -1,0 +1,46 @@
+<div class="perfil">
+  <h2>Mi Perfil</h2>
+  <div class="perfil-info">
+    <img
+      [src]="usuario?.imagenPerfilURL"
+      alt="Imagen de perfil"
+      class="perfil-img"
+    />
+    <img
+      *ngIf="usuario?.tipoUsuario === 'Paciente'"
+      [src]="usuario?.imagenPortadaURL"
+      alt="Imagen de portada"
+      class="portada-img"
+    />
+    <h3>{{ usuario?.nombre }} {{ usuario?.apellido }}</h3>
+    <p>Tipo de usuario: {{ usuario?.tipoUsuario }}</p>
+    <p>Email: {{ usuario?.email }}</p>
+  </div>
+
+  <div *ngIf="esEspecialista" class="disponibilidad">
+    <h3>Mis Horarios de Disponibilidad</h3>
+    <form [formGroup]="disponibilidadForm" (ngSubmit)="guardarDisponibilidad()">
+      <div
+        *ngFor="
+          let dia of [
+            'lunes',
+            'martes',
+            'miercoles',
+            'jueves',
+            'viernes',
+            'sabado',
+            'domingo'
+          ]
+        "
+      >
+        <label>{{ dia | titlecase }}:</label>
+        <input
+          type="text"
+          formControlName="{{ dia }}"
+          placeholder="Ej: 9:00 - 17:00"
+        />
+      </div>
+      <button type="submit">Guardar Disponibilidad</button>
+    </form>
+  </div>
+</div>

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { TurnosService } from '../../services/turnos.service';
 import { AuthService } from '../../services/auth.service';
 import { Turno } from '../../interfaces/turno.interface';
+import { PerfilComponent } from '../../perfil/perfil.component';
 
 @Component({
   selector: 'app-especialista-turnos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PerfilComponent],
   templateUrl: './especialista-turnos.component.html',
   styleUrls: ['./especialista-turnos.component.css'],
 })
@@ -17,7 +18,7 @@ export class EspecialistaTurnosComponent implements OnInit {
   filtroEspecialidad: string = '';
   filtroPaciente: string = '';
   turnosFiltrados: Turno[] = [];
-  especialistaId: string | null = null;
+  especialistaNombre: string | null = null;
 
   constructor(
     private turnosService: TurnosService,
@@ -25,21 +26,23 @@ export class EspecialistaTurnosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.especialistaId = this.authService.getUid();
-    if (this.especialistaId) {
-      this.obtenerTurnos();
-    }
+    this.authService.getNombre().then((nombre) => {
+      this.especialistaNombre = nombre;
+      if (this.especialistaNombre) {
+        this.obtenerTurnos();
+      }
+    });
   }
 
   obtenerTurnos() {
     this.turnosService
-      .obtenerTurnosPorEspecialista(this.especialistaId!)
+      .obtenerTurnosPorEspecialista(this.especialistaNombre!)
       .subscribe((turnos) => {
         this.turnos = turnos.map((turno) => ({
           ...turno,
           paciente: `${turno.nombre} ${turno.apellido}`,
         }));
-        this.aplicarFiltro();
+        this.aplicarFiltro(); // Aplica el filtro inicial
       });
   }
 

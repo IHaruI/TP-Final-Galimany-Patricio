@@ -1,3 +1,5 @@
+<app-perfil></app-perfil>
+
 <h2>Mis Turnos</h2>
 
 <div>
@@ -42,6 +44,12 @@
         </ng-container>
 
         <ng-container *ngIf="turno.estado === 'Realizado'">
+          <button *ngIf="turno.comentario" (click)="verResena(turno)">
+            Ver Reseña
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="turno.estado === 'Cancelado'">
           <button *ngIf="turno.comentario" (click)="verResena(turno)">
             Ver Reseña
           </button>

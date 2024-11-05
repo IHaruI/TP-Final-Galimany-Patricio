@@ -13,6 +13,7 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import {
@@ -22,6 +23,9 @@ import {
   getDownloadURL,
 } from '@angular/fire/storage';
 import { RegistroComponent } from '../registro/registro.component';
+import { TurnosService } from '../../services/turnos.service';
+import { Turno } from '../../interfaces/turno.interface';
+import { PerfilComponent } from '../../perfil/perfil.component';
 
 interface Usuario {
   id: string;
@@ -37,7 +41,13 @@ interface Usuario {
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RegistroComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RegistroComponent,
+    FormsModule,
+    PerfilComponent,
+  ],
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.css'],
 })
@@ -54,15 +64,22 @@ export class UsuariosComponent implements OnInit {
     password: new FormControl('', Validators.required),
     rol: new FormControl('administrador', Validators.required),
   });
-
   selectedFile: File | null = null;
   mensaje: string | null = null;
   exitoMensaje = false;
+  turnos: Turno[] = [];
+  turnosFiltrados: Turno[] = [];
+  filtroEspecialidad: string = '';
+  filtroEspecialista: string = '';
+  mostrarModalCancelacion = false;
+  turnoSeleccionado: Turno | null = null;
+  motivoCancelacion: string = '';
 
   constructor(
     private firestore: Firestore,
     private authService: AuthService,
-    private storage: Storage
+    private storage: Storage,
+    private turnosService: TurnosService
   ) {}
 
   async ngOnInit() {
@@ -75,6 +92,60 @@ export class UsuariosComponent implements OnInit {
           id: doc.id,
         } as Usuario)
     );
+    this.obtenerTurnos();
+  }
+
+  obtenerTurnos() {
+    this.turnosService.obtenerTurnos().subscribe((turnos) => {
+      this.turnos = turnos;
+      this.turnosFiltrados = turnos;
+    });
+  }
+
+  filtrarTurnos() {
+    this.turnosFiltrados = this.turnos.filter(
+      (turno) =>
+        turno.especialidad
+          .toLowerCase()
+          .includes(this.filtroEspecialidad.toLowerCase()) &&
+        turno.especialista
+          .toLowerCase()
+          .includes(this.filtroEspecialista.toLowerCase())
+    );
+  }
+
+  puedeCancelar(turno: Turno): boolean {
+    return turno.estado
+      ? !['Aceptado', 'Realizado', 'Rechazado'].includes(turno.estado)
+      : false;
+  }
+
+  cancelarTurno(turno: Turno) {
+    this.turnoSeleccionado = turno;
+    this.mostrarModalCancelacion = true;
+  }
+
+  confirmarCancelacion() {
+    const motivo = this.motivoCancelacion?.trim() ?? ''; // Asigna una cadena vacía si es undefined
+
+    if (
+      this.turnoSeleccionado &&
+      this.turnoSeleccionado.id &&
+      motivo.length > 0
+    ) {
+      this.turnosService
+        .cancelarTurno(this.turnoSeleccionado.id, motivo as string) // Aseguramos que motivo es string
+        .subscribe(() => {
+          this.turnoSeleccionado!.estado = 'Cancelado';
+          this.motivoCancelacion = '';
+          this.mostrarModalCancelacion = false;
+        });
+    }
+  }
+
+  cerrarModal() {
+    this.mostrarModalCancelacion = false;
+    this.motivoCancelacion = '';
   }
 
   // Nuevo FormGroup solo para el selector de rol
@@ -118,18 +189,19 @@ export class UsuariosComponent implements OnInit {
       this.nuevoUsuarioForm.value;
 
     try {
+      // Registramos al usuario en Auth y obtenemos el UID
       const userCredential = await this.authService.registrarUsuario(
         email!,
         password!
       );
 
       if (userCredential) {
+        const uid = userCredential.user.uid; // Obtenemos el UID del usuario autenticado
         let imagenPerfilURL: string | undefined;
+
+        // Subimos la imagen de perfil si fue seleccionada
         if (this.selectedFile) {
-          const storageRef = ref(
-            this.storage,
-            `imagenes_perfil/${userCredential.user.uid}`
-          );
+          const storageRef = ref(this.storage, `imagenes_perfil/${uid}`);
           const uploadTask = uploadBytesResumable(
             storageRef,
             this.selectedFile
@@ -138,22 +210,28 @@ export class UsuariosComponent implements OnInit {
           imagenPerfilURL = await getDownloadURL(storageRef);
         }
 
+        // Creamos el objeto del nuevo usuario con todos los datos, el UID y el tipo de usuario
         const nuevoUsuario = {
+          uid, // Guardamos el UID en Firestore
           ...datosUsuario,
           email,
           rol,
+          tipoUsuario: 'Administrador', // Añadimos el tipo de usuario aquí
           aprobado: rol === 'especialista' ? false : true,
           verificado: false,
           imagenPerfilURL,
         };
+
+        // Guardamos el nuevo usuario en Firestore
         const usuariosRef = collection(this.firestore, 'usuarios');
         await addDoc(usuariosRef, nuevoUsuario);
 
+        // Mensaje de éxito y limpieza del formulario
         this.mensaje = 'Usuario creado exitosamente.';
         this.exitoMensaje = true;
         this.nuevoUsuarioForm.reset();
         this.selectedFile = null;
-        this.ngOnInit();
+        this.ngOnInit(); // Actualizamos la lista de usuarios
       }
     } catch (error) {
       console.error('Error al crear usuario:', error);
