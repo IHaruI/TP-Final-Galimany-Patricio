@@ -18,6 +18,7 @@ import {
   sendEmailVerification,
 } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 
 interface Usuario {
   tipoUsuario: string;
@@ -39,7 +40,12 @@ interface Usuario {
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RecaptchaModule,
+    RecaptchaFormsModule,
+  ],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css'],
 })
@@ -62,23 +68,35 @@ export class RegistroComponent {
     imagenPortada: new FormControl<File | null>(null),
   });
 
-  especialidades: string[] = [
-    'Cardiología',
-    'Pediatría',
-    'Dermatología',
-    'Otro',
-  ];
+  tipoUsuarioSeleccionado: string | null = null;
+  especialidades: string[] = ['Cardiología', 'Pediatría', 'Dermatología'];
 
   imagenPerfilFile: File | null = null;
   imagenPortadaFile: File | null = null;
   mensaje: string = '';
   esExito: boolean = false;
+  captchaResolved: string | null = null;
 
   constructor(
     private storage: Storage,
     private firestore: Firestore,
     private auth: Auth
   ) {}
+
+  cambiarTipoUsuario(tipo: string): void {
+    this.registroForm.patchValue({
+      tipoUsuario: tipo,
+    });
+    this.tipoUsuarioSeleccionado = tipo;
+  }
+
+  resolverCaptcha(response: string | null): void {
+    if (response) {
+      this.captchaResolved = response; // Guarda el valor si no es null
+    } else {
+      this.captchaResolved = null; // O maneja el caso cuando es null
+    }
+  }
 
   onFileSelected(event: Event, controlName: string) {
     const fileInput = event.target as HTMLInputElement;
@@ -110,6 +128,12 @@ export class RegistroComponent {
   }
 
   async registrarUsuario() {
+    // Verifica que el reCAPTCHA fue completado exitosamente
+    if (!this.captchaResolved) {
+      this.mostrarMensaje('Por favor, completa el captcha.', false);
+      return;
+    }
+
     const tipoUsuario = this.registroForm.value.tipoUsuario;
 
     if (tipoUsuario !== 'Paciente' && tipoUsuario !== 'Especialista') {

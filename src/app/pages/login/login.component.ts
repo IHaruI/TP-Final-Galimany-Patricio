@@ -106,9 +106,6 @@ export class LoginComponent {
             return;
           }
 
-          // Asignar URLs de imágenes para otros roles
-          this.imagenPerfilURL = usuarioData['imagenPerfilURL'] || null;
-          this.imagenPortadaURL = usuarioData['imagenPortadaURL'] || null;
           this.mostrarMensaje('Inicio de sesión exitoso.', true);
         }
       }
@@ -119,6 +116,31 @@ export class LoginComponent {
         false
       );
     }
+  }
+
+  autocompletar(opcion: number): void {
+    const emails = [
+      'patogaly001@gmail.com',
+      'patriciogalimany48@gmail.com',
+      'xitiri3090@lineacr.com',
+      'patogaly555@gmail.com',
+      'patogaly07@gmail.com',
+      'patrygaly01@gmail.com',
+    ];
+
+    const passwords = [
+      'password1',
+      'password2',
+      'password1',
+      'password1',
+      'password1',
+      'password1',
+    ];
+
+    this.loginForm.patchValue({
+      email: emails[opcion - 1],
+      password: passwords[opcion - 1],
+    });
   }
 
   private mostrarMensaje(mensaje: string, exito: boolean) {

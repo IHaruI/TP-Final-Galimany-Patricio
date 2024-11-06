@@ -114,17 +114,55 @@ export class TurnosService {
   obtenerFechasDisponibles(especialista: string): Observable<Date[]> {
     const fechas: Date[] = [];
     const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Asegúrate de que la hora sea 00:00
+
     for (let i = 1; i <= 15; i++) {
-      const fechaDisponible = new Date(hoy);
+      const fechaDisponible = new Date(hoy); // Crea una nueva fecha basada en hoy
       fechaDisponible.setDate(hoy.getDate() + i);
-      fechas.push(new Date(fechaDisponible.setHours(9, 0)));
-      fechas.push(new Date(fechaDisponible.setHours(14, 0)));
+      fechas.push(new Date(fechaDisponible.getTime())); // Usa getTime() para evitar efectos de referencia
     }
     return from(Promise.resolve(fechas));
+  }
+
+  obtenerTurnosPorFecha(
+    fecha: string,
+    especialista: string
+  ): Observable<any[]> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    const q = query(
+      turnosRef,
+      where('fecha', '==', fecha),
+      where('especialista', '==', especialista)
+    );
+
+    return from(getDocs(q)).pipe(
+      map((snapshot) =>
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+      )
+    );
   }
 
   solicitarTurno(turno: Turno): Observable<void> {
     const turnosRef = collection(this.firestore, 'turnos');
     return from(addDoc(turnosRef, turno)).pipe(map(() => {}));
+  }
+
+  obtenerUsuarioPorUid(uid: string): Observable<any> {
+    const usuariosRef = collection(this.firestore, 'usuarios'); // Referencia a la colección 'usuarios'
+    const q = query(usuariosRef, where('uid', '==', uid)); // Buscar documentos donde el campo 'uid' sea igual al uid proporcionado
+
+    return from(getDocs(q)).pipe(
+      map((querySnapshot) => {
+        if (!querySnapshot.empty) {
+          // Si se encuentra el documento con el UID, se devuelve el primer resultado
+          const doc = querySnapshot.docs[0]; // Solo tomamos el primer documento
+          return { id: doc.id, ...doc.data() };
+        }
+        return null; // Si no se encuentra, retornamos null
+      })
+    );
   }
 }

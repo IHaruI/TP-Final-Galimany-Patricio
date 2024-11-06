@@ -102,6 +102,23 @@ export class AuthService {
     }
   }
 
+  async obtenerPacientesVerificados(): Promise<any[]> {
+    const q = query(
+      this.usuariosCollection,
+      where('rol', '==', 'paciente'),
+      where('verificado', '==', true)
+    );
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        ...data, // Incluye todos los campos, incluyendo el `uid` dentro del documento
+        id: doc.id, // Si quieres también el id del documento en sí
+      };
+    });
+  }
+
   async obtenerUsuarioPorEmail(email: string): Promise<any | null> {
     try {
       const q = query(this.usuariosCollection, where('email', '==', email));

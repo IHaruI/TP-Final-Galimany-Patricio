@@ -16,6 +16,20 @@ form {
   transition: transform 0.3s;
 }
 
+.botones-usuarios {
+  max-width: 400px;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.usuario {
+  width: 100%;
+  padding: 10px;
+}
+
 form:hover {
   transform: scale(1.02); /* Efecto de aumento al pasar el ratón */
 }
@@ -92,4 +106,42 @@ button:disabled {
   color: red;
   font-size: 14px;
   margin-top: -10px; /* Ajustar el margen para que se vea más cercano al input */
+}
+
+/* Estilo para los botones */
+.tipo-usuario-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+
+  transition: transform 0.3s ease-in-out; /* Para animación suave */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Agregar sombra para darle profundidad */
+}
+
+.tipo-usuario-btn:hover {
+  transform: scale(1.1); /* Escalar el botón al pasar el mouse */
+}
+
+.tipo-usuario-btn img {
+  width: 60px; /* Ajustar el tamaño de la imagen */
+  height: 60px; /* Asegurarse de que la imagen sea cuadrada */
+  object-fit: cover; /* Mantener las proporciones de la imagen sin estirarla */
+  border-radius: 50%; /* Hacer la imagen circular */
+}
+
+/* Estilo específico para el botón de "Paciente" */
+.paciente-btn {
+  background-color: #5cb85c; /* Color de fondo verde para el paciente */
+}
+
+/* Estilo específico para el botón de "Especialista" */
+.especialista-btn {
+  background-color: #0275d8; /* Color de fondo azul para el especialista */
+}
+
+.reCAPTCHA {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

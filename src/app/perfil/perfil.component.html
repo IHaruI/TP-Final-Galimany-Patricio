@@ -20,25 +20,36 @@
   <div *ngIf="esEspecialista" class="disponibilidad">
     <h3>Mis Horarios de Disponibilidad</h3>
     <form [formGroup]="disponibilidadForm" (ngSubmit)="guardarDisponibilidad()">
-      <div
-        *ngFor="
-          let dia of [
-            'lunes',
-            'martes',
-            'miercoles',
-            'jueves',
-            'viernes',
-            'sabado',
-            'domingo'
-          ]
-        "
-      >
-        <label>{{ dia | titlecase }}:</label>
-        <input
-          type="text"
-          formControlName="{{ dia }}"
-          placeholder="Ej: 9:00 - 17:00"
-        />
+      <div formArrayName="especialidades">
+        <div
+          *ngFor="
+            let especialidadGroup of especialidadArray.controls;
+            let i = index
+          "
+          [formGroupName]="i"
+        >
+          <label>{{ especialidades[i] }}:</label>
+          <div
+            *ngFor="
+              let dia of [
+                'lunes',
+                'martes',
+                'miercoles',
+                'jueves',
+                'viernes',
+                'sabado',
+                'domingo'
+              ]
+            "
+          >
+            <label>{{ dia | titlecase }}:</label>
+            <input
+              type="text"
+              formControlName="{{ dia }}"
+              placeholder="Ej: 10:00 - 14:00, 16:00 - 20:00"
+            />
+          </div>
+        </div>
       </div>
       <button type="submit">Guardar Disponibilidad</button>
     </form>

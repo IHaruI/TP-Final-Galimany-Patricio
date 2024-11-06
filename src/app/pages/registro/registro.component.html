@@ -1,5 +1,30 @@
 <h2>Registro de Usuario</h2>
 
+<!-- Botones para seleccionar el tipo de usuario con imágenes -->
+<div class="botones-usuarios">
+  <div class="usuario">
+    <button
+      (click)="cambiarTipoUsuario('Paciente')"
+      class="tipo-usuario-btn paciente-btn"
+    >
+      <img src="paciente-hombre.png" alt="Paciente" class="tipo-usuario-img" />
+    </button>
+  </div>
+
+  <div class="usuario">
+    <button
+      (click)="cambiarTipoUsuario('Especialista')"
+      class="tipo-usuario-btn especialista-btn"
+    >
+      <img
+        src="especialista-hombre.png"
+        alt="Especialista"
+        class="tipo-usuario-img"
+      />
+    </button>
+  </div>
+</div>
+
 <form [formGroup]="registroForm" (ngSubmit)="registrarUsuario()">
   <label>Tipo de Usuario</label>
   <select formControlName="tipoUsuario">
@@ -87,7 +112,7 @@
     >
   </div>
 
-  <label>Password</label>
+  <label>Constaseña</label>
   <input formControlName="password" type="password" required />
   <div
     *ngIf="
@@ -100,8 +125,22 @@
     >
   </div>
 
-  <button type="submit" [disabled]="registroForm.invalid">Registrar</button>
+  <!-- reCAPTCHA -->
+  <div class="reCAPTCHA">
+    <div>
+      <re-captcha
+        (resolved)="resolverCaptcha($event)"
+        siteKey="6LcmOHcqAAAAAI0yUpZ8x1jjXcs0ILVWGCL56iTR"
+      ></re-captcha>
+    </div>
+  </div>
 
+  <br />
+
+  <!-- Botón de registro, habilitado solo si el reCAPTCHA es válido -->
+  <button type="submit" [disabled]="!captchaResolved">Registrarse</button>
+  <br />
+  <br />
   <!-- Mensajes de estado -->
   <div *ngIf="mensaje" [ngClass]="{ success: esExito, error: !esExito }">
     {{ mensaje }}

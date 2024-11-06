@@ -19,7 +19,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Contenedor principal para ambos formularios */
+/* Contenedor principal para el formulario */
 form {
   max-width: 400px;
   margin: 20px auto;
@@ -106,4 +106,43 @@ button:disabled {
   color: red;
   font-size: 14px;
   margin-top: -10px; /* Ajustar el margen para que se vea más cercano al input */
+}
+
+/* Estilos para los botones de acceso rápido */
+.botones-acceso {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espacio entre los botones */
+  align-items: center; /* Centra los botones */
+}
+
+.botones-acceso button {
+  width: 100%;
+  max-width: 300px; /* Controla el tamaño máximo del botón */
+  height: 60px;
+  padding: 10px;
+  background-color: #4e54c8;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px; /* Bordes redondeados */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.botones-acceso button:hover {
+  transform: scale(1.05); /* Efecto al pasar el ratón */
+}
+
+.botones-acceso img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-right: 10px; /* Espacio entre la imagen y el texto */
 }

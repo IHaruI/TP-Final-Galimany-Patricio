@@ -4,7 +4,7 @@
     <label>Email</label>
     <input formControlName="email" type="email" required />
 
-    <label>Password</label>
+    <label>Contraseña</label>
     <input formControlName="password" type="password" required />
 
     <button type="submit" [disabled]="!loginForm.valid">Iniciar Sesión</button>
@@ -15,15 +15,31 @@
     {{ mensaje }}
   </div>
 
-  <div *ngIf="imagenPerfilURL || imagenPortadaURL">
-    <h3>Imágenes del Usuario</h3>
-    <div *ngIf="imagenPerfilURL">
-      <label>Imagen de Perfil:</label>
-      <img [src]="imagenPerfilURL" alt="Imagen de Perfil" width="150" />
-    </div>
-    <div *ngIf="imagenPortadaURL">
-      <label>Imagen de Portada:</label>
-      <img [src]="imagenPortadaURL" alt="Imagen de Portada" width="150" />
-    </div>
+  <!-- Botones de acceso rápido -->
+  <div class="botones-acceso">
+    <button (click)="autocompletar(1)">
+      <img src="paciente-hombre.png" alt="Paciente 1" />
+      Paciente 1
+    </button>
+    <button (click)="autocompletar(2)">
+      <img src="paciente-mujer.png" alt="Paciente 2" />
+      Paciente 2
+    </button>
+    <button (click)="autocompletar(3)">
+      <img src="paciente-abuela.png" alt="Paciente 3" />
+      Paciente 3
+    </button>
+    <button (click)="autocompletar(4)">
+      <img src="especialista-hombre.png" alt="Especialista 1" />
+      Especialista 1
+    </button>
+    <button (click)="autocompletar(5)">
+      <img src="especialista-mujer.png" alt="Especialista 2" />
+      Especialista 2
+    </button>
+    <button (click)="autocompletar(6)">
+      <img src="administrador.png" alt="Administrador" />
+      Administrador
+    </button>
   </div>
 </div>

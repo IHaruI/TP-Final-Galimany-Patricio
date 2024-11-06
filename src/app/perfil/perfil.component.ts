@@ -8,7 +8,12 @@ import {
   setDoc,
 } from '@angular/fire/firestore';
 import { AuthService } from '../services/auth.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -22,6 +27,7 @@ export class PerfilComponent implements OnInit {
   usuario: any;
   esEspecialista: boolean = false;
   disponibilidadForm: FormGroup;
+  especialidades: string[] = [];
 
   constructor(
     private firestore: Firestore,
@@ -29,29 +35,52 @@ export class PerfilComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.disponibilidadForm = this.fb.group({
-      lunes: [''],
-      martes: [''],
-      miercoles: [''],
-      jueves: [''],
-      viernes: [''],
-      sabado: [''],
-      domingo: [''],
+      especialidades: this.fb.array([]),
     });
+  }
+
+  get especialidadArray() {
+    return this.disponibilidadForm.get('especialidades') as FormArray;
   }
 
   async ngOnInit() {
     const authUid = this.authService.getUid();
+    if (authUid) {
+      const usuariosRef = collection(this.firestore, 'usuarios');
+      const q = query(usuariosRef, where('uid', '==', authUid));
+      const querySnapshot = await getDocs(q);
 
-    // Crear una consulta en la colección `usuarios` buscando el campo `uid` que coincida con el UID autenticado
-    const usuariosRef = collection(this.firestore, 'usuarios');
-    const q = query(usuariosRef, where('uid', '==', authUid));
-    const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        this.usuario = doc.data();
+        this.esEspecialista = this.usuario.tipoUsuario === 'Especialista';
 
-    if (!querySnapshot.empty) {
-      const doc = querySnapshot.docs[0];
-      this.usuario = doc.data();
-      this.esEspecialista = this.usuario.tipoUsuario === 'Especialista';
+        // Obtener especialidades y generar el formulario dinámico
+        if (this.esEspecialista && this.usuario.especialidad) {
+          this.especialidades = this.usuario.especialidad
+            .split(', ')
+            .map((e: string) => e.trim());
+          this.crearFormularioEspecialidades();
+        }
+      }
     }
+  }
+
+  crearFormularioEspecialidades() {
+    this.especialidades.forEach((especialidad) => {
+      this.especialidadArray.push(
+        this.fb.group({
+          especialidad: [especialidad],
+          lunes: [''],
+          martes: [''],
+          miercoles: [''],
+          jueves: [''],
+          viernes: [''],
+          sabado: [''],
+          domingo: [''],
+        })
+      );
+    });
   }
 
   async guardarDisponibilidad() {
@@ -65,7 +94,7 @@ export class PerfilComponent implements OnInit {
         const usuarioDoc = querySnapshot.docs[0];
         await setDoc(
           usuarioDoc.ref,
-          { disponibilidad: this.disponibilidadForm.value },
+          { disponibilidad: this.disponibilidadForm.value.especialidades },
           { merge: true }
         );
         alert('Disponibilidad horaria guardada.');

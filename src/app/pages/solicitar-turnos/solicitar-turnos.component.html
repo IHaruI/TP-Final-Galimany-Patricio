@@ -1,6 +1,24 @@
 <h2>Solicitar Turno</h2>
 
+<div *ngIf="esAdministrador">
+  <h2>Pacientes Verificados</h2>
+  <label for="pacienteSelect">Selecciona un paciente:</label>
+  <select
+    id="pacienteSelect"
+    [(ngModel)]="pacienteSeleccionadoUid"
+    (change)="seleccionarPaciente()"
+  >
+    <option
+      *ngFor="let paciente of pacientesVerificados"
+      [value]="paciente.uid"
+    >
+      {{ paciente.nombre }} {{ paciente.apellido }}
+    </option>
+  </select>
+</div>
+
 <form (submit)="solicitarTurno()">
+  <!-- Especialidad y especialista -->
   <label>Seleccionar Especialidad:</label>
   <input
     type="text"
@@ -20,24 +38,49 @@
     </li>
   </ul>
 
-  <label>Seleccionar Día y Horario del Turno:</label>
-  <div class="fecha-hora-container">
+  <!-- Selección de día -->
+  <div *ngIf="especialidadSeleccionada && especialistaSeleccionado">
+    <label>Seleccionar Día del Turno:</label>
     <div class="calendario">
-      <div
-        class="dia"
-        *ngFor="let fecha of fechasDisponibles"
-        (click)="seleccionarFecha(fecha)"
-        [class.selected]="fecha === fechaSeleccionada"
-      >
-        <div class="fecha">{{ fecha | date : "shortDate" }}</div>
-        <div class="hora">{{ fecha | date : "shortTime" }}</div>
+      <span>{{ mesActual }} {{ anioActual }}</span>
+      <div class="dias">
+        <div
+          *ngFor="let dia of diasDelMes"
+          (click)="seleccionarDia(dia)"
+          [class.seleccionado]="dia === diaSeleccionado"
+          [class.disabled]="isDiaDisabled(dia)"
+        >
+          {{ dia.getDate() }}
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- Disponibilidad de horarios -->
+  <div *ngIf="disponibilidadEspecialista.length > 0">
+    <h3>Disponibilidad:</h3>
+    <ul>
+      <li
+        *ngFor="let hora of disponibilidadEspecialista"
+        (click)="!turnoOcupado.includes(hora) && seleccionarHora(hora)"
+        [class.disabled]="turnoOcupado.includes(hora)"
+      >
+        {{ hora }}
+        <span *ngIf="hora === horaSeleccionada"> (Seleccionado)</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Resto de campos de tu formulario -->
+  <div *ngIf="mensajeError" class="error-message">
+    {{ mensajeError }}
+  </div>
+
   <button
     type="submit"
-    [disabled]="!fechaSeleccionada || !especialistaSeleccionado"
+    [disabled]="
+      !fechaSeleccionada || !especialistaSeleccionado || !horaSeleccionada
+    "
   >
     Solicitar Turno
   </button>

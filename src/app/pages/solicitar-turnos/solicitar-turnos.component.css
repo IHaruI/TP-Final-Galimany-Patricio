@@ -92,42 +92,22 @@ button:hover:not(:disabled) {
 }
 
 .calendario {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(120px, 1fr)
-  ); /* Cuadrícula adaptable */
-  gap: 10px; /* Espacio entre los elementos */
-  margin-top: 10px;
-}
-
-.dia {
   display: flex;
-  flex-direction: column; /* Coloca la fecha y la hora en columnas */
-  justify-content: center; /* Centrar verticalmente */
-  align-items: center; /* Centrar horizontalmente */
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.dias div {
   cursor: pointer;
-  transition: background 0.3s, transform 0.3s; /* Transición suave */
+  padding: 10px;
+  text-align: center;
 }
 
-.dia:hover {
-  background: #e0f7fa; /* Color de fondo al pasar el mouse */
-  transform: translateY(-2px); /* Efecto de levantamiento */
-}
-
-.dia.selected {
-  background: #4a90e2; /* Color de fondo cuando está seleccionado */
-  color: white; /* Color del texto en selección */
-}
-
-.fecha {
-  font-weight: bold; /* Destacar la fecha */
-  color: #4a90e2; /* Color del texto de la fecha */
-}
-
-.hora {
-  color: #666; /* Color más suave para la hora */
+.dias div.seleccionado {
+  background-color: lightblue; /* Color de selección */
 }

@@ -26,6 +26,7 @@ import { RegistroComponent } from '../registro/registro.component';
 import { TurnosService } from '../../services/turnos.service';
 import { Turno } from '../../interfaces/turno.interface';
 import { PerfilComponent } from '../../perfil/perfil.component';
+import { SolicitarTurnoComponent } from '../solicitar-turnos/solicitar-turnos.component';
 
 interface Usuario {
   id: string;
@@ -47,6 +48,7 @@ interface Usuario {
     RegistroComponent,
     FormsModule,
     PerfilComponent,
+    SolicitarTurnoComponent,
   ],
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.css'],
