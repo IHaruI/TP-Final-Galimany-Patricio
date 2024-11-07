@@ -2,16 +2,24 @@
   <h2>Mi Perfil</h2>
   <div class="perfil-info">
     <img
-      [src]="usuario?.imagenPerfilURL"
-      alt="Imagen de perfil"
-      class="perfil-img"
-    />
-    <img
       *ngIf="usuario?.tipoUsuario === 'Paciente'"
       [src]="usuario?.imagenPortadaURL"
       alt="Imagen de portada"
       class="portada-img"
     />
+
+    <img
+      [src]="usuario?.imagenPerfilURL"
+      alt="Imagen de perfil"
+      [ngClass]="{
+        'perfil-img-paciente': usuario?.tipoUsuario === 'Paciente',
+        'perfil-img-no-paciente': usuario?.tipoUsuario !== 'Paciente'
+      }"
+    />
+
+    <br />
+    <br />
+    <br />
     <h3>{{ usuario?.nombre }} {{ usuario?.apellido }}</h3>
     <p>Tipo de usuario: {{ usuario?.tipoUsuario }}</p>
     <p>Email: {{ usuario?.email }}</p>
@@ -28,7 +36,9 @@
           "
           [formGroupName]="i"
         >
-          <label>{{ especialidades[i] }}:</label>
+          <div class="especialidad">
+            <label>{{ especialidades[i] }}:</label>
+          </div>
           <div
             *ngFor="
               let dia of [
@@ -37,8 +47,7 @@
                 'miercoles',
                 'jueves',
                 'viernes',
-                'sabado',
-                'domingo'
+                'sabado'
               ]
             "
           >
@@ -46,7 +55,7 @@
             <input
               type="text"
               formControlName="{{ dia }}"
-              placeholder="Ej: 10:00 - 14:00, 16:00 - 20:00"
+              placeholder="Ej: 10:00 - 18:00"
             />
           </div>
         </div>
