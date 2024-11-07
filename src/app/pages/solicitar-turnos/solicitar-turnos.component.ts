@@ -137,7 +137,6 @@ export class SolicitarTurnoComponent implements OnInit {
         )
         .subscribe((turnos) => {
           this.turnoOcupado = turnos.map((turno) => turno.hora);
-          // Aquí filtras los horarios ocupados de los horarios disponibles
           this.disponibilidadEspecialista =
             this.disponibilidadEspecialista.filter(
               (hora) => !this.turnoOcupado.includes(hora)
@@ -207,7 +206,7 @@ export class SolicitarTurnoComponent implements OnInit {
       // Obtener el UID del especialista
       const especialistaId = this.especialistaSeleccionado.uid;
 
-      // Aquí obtienes la disponibilidad del especialista desde Firebase
+      // Obtienes la disponibilidad del especialista desde Firebase
       this.turnosService
         .obtenerUsuarioPorUid(especialistaId)
         .subscribe((usuarioDoc) => {
@@ -293,8 +292,8 @@ export class SolicitarTurnoComponent implements OnInit {
             pacienteId: this.pacienteId as string,
             especialidad: this.especialidadSeleccionada,
             especialista: especialistaId,
-            fecha: fecha, // Usa el objeto Date directamente
-            hora: this.horaSeleccionada || '', // Asignar un valor por defecto si hora es null
+            fecha: fecha,
+            hora: this.horaSeleccionada || '',
             estado: 'Pendiente',
             nombre: this.nombrePaciente,
             apellido: this.apellidoPaciente,

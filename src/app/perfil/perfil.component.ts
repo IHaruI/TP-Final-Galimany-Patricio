@@ -55,7 +55,6 @@ export class PerfilComponent implements OnInit {
         this.usuario = doc.data();
         this.esEspecialista = this.usuario.tipoUsuario === 'Especialista';
 
-        // Obtener especialidades y generar el formulario dinámico
         if (this.esEspecialista && this.usuario.especialidad) {
           this.especialidades = this.usuario.especialidad
             .split(', ')

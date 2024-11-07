@@ -112,7 +112,6 @@ h2 {
   background-color: #327aa1;
 }
 
-/* Para mejorar la organización de los días de la semana */
 .disponibilidad div[formGroupName] {
   padding: 10px;
   border-top: 1px solid #eee;

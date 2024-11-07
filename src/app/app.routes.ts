@@ -6,6 +6,7 @@ import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { MisTurnosComponent } from './pages/mis-turnos/mis-turnos.component';
 import { EspecialistaTurnosComponent } from './pages/especialista-turnos/especialista-turnos.component';
 import { SolicitarTurnoComponent } from './pages/solicitar-turnos/solicitar-turnos.component';
+import { AnimationComponent } from './animation/animation.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,10 @@ export const routes: Routes = [
   {
     path: 'solicitar-turnos', // URL para acceder al componente de especialista-turnos
     component: SolicitarTurnoComponent,
+  },
+  {
+    path: 'animation', // URL para acceder al componente de especialista-turnos
+    component: AnimationComponent,
   },
   {
     path: '**', // Ruta para manejar rutas no encontradas

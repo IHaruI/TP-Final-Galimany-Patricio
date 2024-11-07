@@ -76,6 +76,7 @@ export class RegistroComponent {
   mensaje: string = '';
   esExito: boolean = false;
   captchaResolved: string | null = null;
+  isLoading: boolean = false;
 
   constructor(
     private storage: Storage,
@@ -128,9 +129,13 @@ export class RegistroComponent {
   }
 
   async registrarUsuario() {
+    // Muestra la animación de carga
+    this.isLoading = true;
+
     // Verifica que el reCAPTCHA fue completado exitosamente
     if (!this.captchaResolved) {
       this.mostrarMensaje('Por favor, completa el captcha.', false);
+      this.isLoading = false; // Oculta la animación si el captcha no se completó
       return;
     }
 
@@ -206,6 +211,9 @@ export class RegistroComponent {
         'Error al registrar el usuario. Intenta nuevamente.',
         false
       );
+    } finally {
+      // Oculta la animación de carga
+      this.isLoading = false;
     }
   }
 

@@ -6,7 +6,7 @@ export interface Turno {
   especialidad: string;
   especialista: string;
   fecha: Date;
-  hora: string; // Agregar la propiedad 'hora'
+  hora: string;
   estado?: string;
   comentario?: string;
   realizado?: boolean;

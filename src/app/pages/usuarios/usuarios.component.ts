@@ -55,8 +55,8 @@ interface Usuario {
 })
 export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
-  mostrarFormulario = false; // Variable para mostrar u ocultar el formulario
-  mostrarRegistroComponent = false; // Para el componente RegistroComponent
+  mostrarFormulario = false;
+  mostrarRegistroComponent = false;
   nuevoUsuarioForm = new FormGroup({
     nombre: new FormControl('', Validators.required),
     apellido: new FormControl('', Validators.required),
@@ -128,7 +128,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   confirmarCancelacion() {
-    const motivo = this.motivoCancelacion?.trim() ?? ''; // Asigna una cadena vacía si es undefined
+    const motivo = this.motivoCancelacion?.trim() ?? '';
 
     if (
       this.turnoSeleccionado &&
@@ -136,7 +136,7 @@ export class UsuariosComponent implements OnInit {
       motivo.length > 0
     ) {
       this.turnosService
-        .cancelarTurno(this.turnoSeleccionado.id, motivo as string) // Aseguramos que motivo es string
+        .cancelarTurno(this.turnoSeleccionado.id, motivo as string)
         .subscribe(() => {
           this.turnoSeleccionado!.estado = 'Cancelado';
           this.motivoCancelacion = '';
@@ -150,12 +150,10 @@ export class UsuariosComponent implements OnInit {
     this.motivoCancelacion = '';
   }
 
-  // Nuevo FormGroup solo para el selector de rol
   rolForm = new FormGroup({
     rol: new FormControl('paciente', Validators.required),
   });
 
-  // Método para manejar el cambio de rol
   onRoleChange() {
     const rolSeleccionado = this.rolForm.get('rol')?.value;
     this.mostrarFormulario = rolSeleccionado === 'administrador';
@@ -191,17 +189,15 @@ export class UsuariosComponent implements OnInit {
       this.nuevoUsuarioForm.value;
 
     try {
-      // Registramos al usuario en Auth y obtenemos el UID
       const userCredential = await this.authService.registrarUsuario(
         email!,
         password!
       );
 
       if (userCredential) {
-        const uid = userCredential.user.uid; // Obtenemos el UID del usuario autenticado
+        const uid = userCredential.user.uid;
         let imagenPerfilURL: string | undefined;
 
-        // Subimos la imagen de perfil si fue seleccionada
         if (this.selectedFile) {
           const storageRef = ref(this.storage, `imagenes_perfil/${uid}`);
           const uploadTask = uploadBytesResumable(
@@ -212,28 +208,25 @@ export class UsuariosComponent implements OnInit {
           imagenPerfilURL = await getDownloadURL(storageRef);
         }
 
-        // Creamos el objeto del nuevo usuario con todos los datos, el UID y el tipo de usuario
         const nuevoUsuario = {
-          uid, // Guardamos el UID en Firestore
+          uid,
           ...datosUsuario,
           email,
           rol,
-          tipoUsuario: 'Administrador', // Añadimos el tipo de usuario aquí
+          tipoUsuario: 'Administrador',
           aprobado: rol === 'especialista' ? false : true,
           verificado: false,
           imagenPerfilURL,
         };
 
-        // Guardamos el nuevo usuario en Firestore
         const usuariosRef = collection(this.firestore, 'usuarios');
         await addDoc(usuariosRef, nuevoUsuario);
 
-        // Mensaje de éxito y limpieza del formulario
         this.mensaje = 'Usuario creado exitosamente.';
         this.exitoMensaje = true;
         this.nuevoUsuarioForm.reset();
         this.selectedFile = null;
-        this.ngOnInit(); // Actualizamos la lista de usuarios
+        this.ngOnInit();
       }
     } catch (error) {
       console.error('Error al crear usuario:', error);

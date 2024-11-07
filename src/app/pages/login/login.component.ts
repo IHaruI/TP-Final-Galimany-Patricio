@@ -37,6 +37,7 @@ export class LoginComponent {
   imagenPortadaURL: string | null = null;
   mensaje: string = '';
   esExito: boolean = false;
+  isLoading = false;
 
   constructor(
     private firestore: Firestore,
@@ -48,6 +49,7 @@ export class LoginComponent {
   async iniciarSesion() {
     const email = this.loginForm.value.email!;
     const password = this.loginForm.value.password!;
+    this.isLoading = true;
 
     try {
       const usuarioAutenticado = await this.authService.login(email, password);
@@ -115,6 +117,8 @@ export class LoginComponent {
         'Error al iniciar sesión. Verifique sus credenciales e inténtelo nuevamente.',
         false
       );
+    } finally {
+      this.isLoading = false; // Desactivar la animación de carga
     }
   }
 
