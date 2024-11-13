@@ -1,4 +1,7 @@
 <div class="contenedor">
+  <!-- Botón flotante -->
+  <button class="btn-flotante" (click)="redirigirBienvenida()">← Volver</button>
+
   <h2>Login</h2>
   <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()">
     <label>Email</label>
@@ -7,7 +10,9 @@
     <label>Contraseña</label>
     <input formControlName="password" type="password" required />
 
-    <button type="submit" [disabled]="!loginForm.valid">Iniciar Sesión</button>
+    <button class="button" type="submit" [disabled]="!loginForm.valid">
+      Iniciar Sesión
+    </button>
   </form>
 
   <!-- Pantalla de carga -->

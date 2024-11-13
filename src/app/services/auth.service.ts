@@ -17,6 +17,7 @@ import {
   where,
   CollectionReference,
 } from '@angular/fire/firestore';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,10 @@ export class AuthService {
 
   constructor(private firestore: Firestore, private auth: Auth) {
     this.usuariosCollection = collection(this.firestore, 'usuarios');
+  }
+
+  isAuthenticated(): Observable<boolean> {
+    return user(this.auth).pipe(map((user) => !!user));
   }
 
   async registrarUsuario(
@@ -61,6 +66,11 @@ export class AuthService {
       console.error('Error al iniciar sesión:', error);
       throw error;
     }
+  }
+
+  // Método para cerrar sesión
+  logout() {
+    return this.auth.signOut();
   }
 
   getUid(): string | null {
@@ -102,6 +112,44 @@ export class AuthService {
     }
   }
 
+  async obtenerDatosPaciente(usuarioId: string): Promise<any> {
+    const q = query(this.usuariosCollection, where('uid', '==', usuarioId));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      const data = doc.data();
+      return {
+        id: doc.id,
+        nombre: data['nombre'], // Acceder a 'nombre' usando corchetes
+        apellido: data['apellido'], // Acceder a 'apellido' usando corchetes
+      };
+    } else {
+      return null; // Retorna null si no se encuentra el documento
+    }
+  }
+
+  async obtenerDatosEspecialista(usuarioId: string | null): Promise<any> {
+    if (!usuarioId) {
+      return null; // Retorna null si usuarioId es null
+    }
+
+    const q = query(this.usuariosCollection, where('uid', '==', usuarioId));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      const data = doc.data();
+      return {
+        id: doc.id,
+        nombre: data['nombre'],
+        apellido: data['apellido'],
+      };
+    } else {
+      return null; // Retorna null si no se encuentra el documento
+    }
+  }
+
   async obtenerPacientesVerificados(): Promise<any[]> {
     const q = query(
       this.usuariosCollection,
@@ -134,5 +182,14 @@ export class AuthService {
       console.error('Error al obtener usuario de Firestore:', error);
       throw error;
     }
+  }
+
+  async getRol(): Promise<string | null> {
+    const userId = this.getUid();
+    if (userId) {
+      const userData = await this.obtenerDatosUsuario(userId);
+      return userData?.rol || null;
+    }
+    return null;
   }
 }

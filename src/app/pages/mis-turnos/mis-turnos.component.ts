@@ -4,30 +4,25 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Turno } from '../../interfaces/turno.interface';
-import { SolicitarTurnoComponent } from '../solicitar-turnos/solicitar-turnos.component';
 import { PerfilComponent } from '../../perfil/perfil.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mis-turnos',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    SolicitarTurnoComponent,
-    PerfilComponent,
-  ],
+  imports: [CommonModule, FormsModule, PerfilComponent],
   templateUrl: './mis-turnos.component.html',
   styleUrls: ['./mis-turnos.component.css'],
 })
 export class MisTurnosComponent implements OnInit {
   turnos: Turno[] = [];
   turnosFiltrados: Turno[] = [];
-  filtroEspecialidad = '';
-  filtroEspecialista = '';
+  filtro = '';
 
   constructor(
     private turnosService: TurnosService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -44,15 +39,31 @@ export class MisTurnosComponent implements OnInit {
     }
   }
 
+  logout() {
+    this.authService
+      .logout()
+      .then(() => {
+        this.router.navigate(['/login']);
+      })
+      .catch((error) => {
+        console.error('Error al cerrar sesión:', error);
+      });
+  }
+
+  redireccion(dato: string) {
+    if (dato == 'solicitar') {
+      this.router.navigate(['/solicitar-turnos']);
+    } else if (dato == 'historial') {
+      this.router.navigate(['/historial-clinica']);
+    }
+  }
+
   aplicarFiltro() {
+    const filtroLower = this.filtro.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(
       (turno) =>
-        turno.especialidad
-          .toLowerCase()
-          .includes(this.filtroEspecialidad.toLowerCase()) &&
-        turno.especialista
-          .toLowerCase()
-          .includes(this.filtroEspecialista.toLowerCase())
+        turno.especialidad.toLowerCase().includes(filtroLower) ||
+        turno.especialista.toLowerCase().includes(filtroLower)
     );
   }
 

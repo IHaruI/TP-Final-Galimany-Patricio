@@ -13,6 +13,22 @@ h2 {
   font-weight: 600;
 }
 
+.botones {
+  display: flex;
+  justify-content: space-around;
+  max-width: 700px;
+  margin: 10px auto;
+  text-align: center;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logout {
+  background-color: #ff6347;
+}
+
 /* Tabla en Mis Turnos */
 table {
   width: 100%;
@@ -44,12 +60,12 @@ button {
   font-size: 0.9em;
   cursor: pointer;
   color: #fff;
-  background-color: #3a8fb7;
-  transition: background-color 0.3s ease;
+  background-color: #4caf50;
+  transition: transform 0.3s ease-in-out;
 }
 
 button:hover {
-  background-color: #337aa6;
+  transform: scale(1.05);
 }
 
 button:disabled {

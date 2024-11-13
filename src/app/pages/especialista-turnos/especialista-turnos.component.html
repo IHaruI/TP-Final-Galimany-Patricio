@@ -1,17 +1,18 @@
 <app-perfil></app-perfil>
 
+<div class="botones">
+  <!-- Botón de deslogueo -->
+  <button (click)="logout()">Cerrar Sesión</button>
+
+  <!-- Botón para redirigir a la página de historial clínica -->
+  <button (click)="redireccion('historial')">Historial Clínica</button>
+</div>
+
 <h2>Mis Turnos</h2>
 
 <div>
-  <label>Filtrar por Especialidad:</label>
-  <input
-    type="text"
-    [(ngModel)]="filtroEspecialidad"
-    (input)="aplicarFiltro()"
-  />
-
-  <label>Filtrar por Paciente:</label>
-  <input type="text" [(ngModel)]="filtroPaciente" (input)="aplicarFiltro()" />
+  <label>Filtrar por Especialidad o Paciente:</label>
+  <input type="text" [(ngModel)]="filtroGeneral" (input)="aplicarFiltro()" />
 </div>
 
 <table>

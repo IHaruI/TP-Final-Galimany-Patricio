@@ -1,0 +1,91 @@
+/* Estilo general para el título */
+h2,
+h3 {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+h2 {
+  margin-top: 20px;
+}
+
+h3 {
+  color: #555;
+  font-size: 20px;
+  margin-top: 15px;
+}
+
+/* Estilo para la tabla */
+table {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+thead th {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  text-align: left;
+}
+
+tbody td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Estilo para datos dinámicos */
+td ul {
+  list-style: none;
+  padding: 0;
+}
+
+td ul li {
+  font-size: 14px;
+  color: #555;
+}
+
+td ul li strong {
+  color: #333;
+}
+
+/* Estilos para el contenedor del botón */
+.boton-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Espacio debajo del botón */
+}
+
+/* Estilos para el botón */
+.boton-descargar {
+  background-color: #4caf50; /* Color de fondo verde */
+  color: white; /* Color del texto */
+  font-size: 16px; /* Tamaño de la fuente */
+  padding: 12px 24px; /* Relleno en el botón */
+  border: none; /* Elimina el borde */
+  border-radius: 8px; /* Bordes redondeados */
+  cursor: pointer; /* Cursor pointer */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+  transition: all 0.3s ease; /* Transición suave para hover */
+}
+
+/* Estilo para el hover del botón */
+.boton-descargar:hover {
+  background-color: #45a049; /* Color verde más oscuro cuando se pasa el mouse */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada en hover */
+}
+
+/* Estilo para el foco del botón */
+.boton-descargar:focus {
+  outline: none; /* Elimina el borde de enfoque predeterminado */
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5); /* Resalta el botón cuando está enfocado */
+}

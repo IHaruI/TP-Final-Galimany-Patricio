@@ -1,0 +1,46 @@
+<h2>Registrar Historia Clínica</h2>
+<form (ngSubmit)="guardarHistoriaClinica()">
+  <!-- Datos Fijos -->
+  <label>Altura:</label>
+  <input type="number" [(ngModel)]="historia.altura" name="altura" required />
+
+  <label>Peso:</label>
+  <input type="number" [(ngModel)]="historia.peso" name="peso" required />
+
+  <label>Temperatura:</label>
+  <input
+    type="number"
+    [(ngModel)]="historia.temperatura"
+    name="temperatura"
+    required
+  />
+
+  <label>Presión:</label>
+  <input type="text" [(ngModel)]="historia.presion" name="presion" required />
+
+  <!-- Datos Dinámicos -->
+  <div
+    class="clave-valor"
+    *ngFor="let dato of historia.datosDinamicos; index as i"
+  >
+    <label>Clave:</label>
+    <input
+      [(ngModel)]="historia.datosDinamicos[i].clave"
+      name="clave{{ i }}"
+      required
+    />
+
+    <label>Valor:</label>
+    <input
+      [(ngModel)]="historia.datosDinamicos[i].valor"
+      name="valor{{ i }}"
+      required
+    />
+  </div>
+  <button type="button" (click)="agregarDatoDinamico()">
+    Agregar Dato Dinámico
+  </button>
+
+  <!-- Botón para enviar -->
+  <button type="submit">Guardar Historia Clínica</button>
+</form>

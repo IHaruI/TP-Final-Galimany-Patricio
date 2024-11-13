@@ -19,6 +19,7 @@ import {
 } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { Router } from '@angular/router';
 
 interface Usuario {
   tipoUsuario: string;
@@ -81,8 +82,13 @@ export class RegistroComponent {
   constructor(
     private storage: Storage,
     private firestore: Firestore,
-    private auth: Auth
+    private auth: Auth,
+    private router: Router
   ) {}
+
+  redirigirBienvenida() {
+    this.router.navigate(['/bienvenida']);
+  }
 
   cambiarTipoUsuario(tipo: string): void {
     this.registroForm.patchValue({

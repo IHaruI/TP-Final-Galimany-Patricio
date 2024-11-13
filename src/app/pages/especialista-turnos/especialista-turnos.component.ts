@@ -5,6 +5,7 @@ import { TurnosService } from '../../services/turnos.service';
 import { AuthService } from '../../services/auth.service';
 import { Turno } from '../../interfaces/turno.interface';
 import { PerfilComponent } from '../../perfil/perfil.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-especialista-turnos',
@@ -15,14 +16,14 @@ import { PerfilComponent } from '../../perfil/perfil.component';
 })
 export class EspecialistaTurnosComponent implements OnInit {
   turnos: Turno[] = [];
-  filtroEspecialidad: string = '';
-  filtroPaciente: string = '';
+  filtroGeneral: string = '';
   turnosFiltrados: Turno[] = [];
   especialistaNombre: string | null = null;
 
   constructor(
     private turnosService: TurnosService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -32,6 +33,23 @@ export class EspecialistaTurnosComponent implements OnInit {
         this.obtenerTurnos();
       }
     });
+  }
+
+  logout() {
+    this.authService
+      .logout()
+      .then(() => {
+        this.router.navigate(['/login']);
+      })
+      .catch((error) => {
+        console.error('Error al cerrar sesión:', error);
+      });
+  }
+
+  redireccion(dato: string) {
+    if (dato == 'historial') {
+      this.router.navigate(['/historial-clinica']);
+    }
   }
 
   obtenerTurnos() {
@@ -47,15 +65,11 @@ export class EspecialistaTurnosComponent implements OnInit {
   }
 
   aplicarFiltro() {
+    const filtro = this.filtroGeneral.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(
       (turno) =>
-        turno.especialidad
-          .toLowerCase()
-          .includes(this.filtroEspecialidad.toLowerCase()) &&
-        (turno.paciente
-          ?.toLowerCase()
-          .includes(this.filtroPaciente.toLowerCase()) ??
-          false)
+        turno.especialidad.toLowerCase().includes(filtro) ||
+        (turno.paciente?.toLowerCase().includes(filtro) ?? false)
     );
   }
 
@@ -101,19 +115,27 @@ export class EspecialistaTurnosComponent implements OnInit {
   }
 
   finalizarTurno(turno: Turno) {
-    if (!turno.id) return;
-    const comentario = prompt('Ingrese reseña y diagnóstico:');
-    if (comentario) {
-      this.turnosService
-        .actualizarTurno(turno.id, {
-          estado: 'Realizado',
-          comentario,
-        })
-        .subscribe(() => {
-          turno.estado = 'Realizado';
-          turno.comentario = comentario;
-        });
-    }
+    // if (!turno.id) return;
+    // const comentario = prompt('Ingrese reseña y diagnóstico:');
+    // if (comentario) {
+    //   this.turnosService
+    //     .actualizarTurno(turno.id, {
+    //       estado: 'Realizado',
+    //       comentario,
+    //     })
+    //     .subscribe(() => {
+    //       turno.estado = 'Realizado';
+    //       turno.comentario = comentario;
+    //       // Obtener el pacienteId y navegar al componente HistoriaClinica
+    //       this.router.navigate(['/historia-clinica'], {
+    //         queryParams: { pacienteId: turno.pacienteId }, // Pasa pacienteId como query param
+    //       });
+    //     });
+    // }
+
+    this.router.navigate(['/historia-clinica'], {
+      queryParams: { pacienteId: turno.pacienteId }, // Pasa pacienteId como query param
+    });
   }
 
   verResena(turno: Turno) {

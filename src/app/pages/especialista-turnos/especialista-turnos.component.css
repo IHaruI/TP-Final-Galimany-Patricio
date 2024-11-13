@@ -7,6 +7,18 @@ h2 {
   margin-bottom: 20px;
 }
 
+.botones {
+  display: flex;
+  justify-content: space-evenly;
+  max-width: 700px;
+  margin: 10px auto;
+  text-align: center;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* Contenedor para filtros */
 div {
   display: flex;
@@ -63,11 +75,11 @@ button {
   font-size: 0.9em;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: transform 0.3s ease-in-out;
 }
 
 button:hover {
-  opacity: 0.9;
+  transform: scale(1.05);
 }
 
 button:nth-child(1) {

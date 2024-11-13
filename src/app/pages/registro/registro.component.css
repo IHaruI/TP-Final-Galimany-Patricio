@@ -5,6 +5,26 @@
   box-sizing: border-box;
 }
 
+.btn-flotante {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #4e54c8;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px 15px;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.btn-flotante:hover {
+  transform: scale(1.05);
+}
+
 /* Contenedor principal para ambos formularios */
 form {
   max-width: 400px;
@@ -72,8 +92,8 @@ select:focus {
   border-color: #4e54c8;
 }
 
-/* Botones */
-button {
+.tipo-usuario-btn,
+.registrarse {
   width: 100%;
   padding: 10px;
   background-color: #4e54c8;

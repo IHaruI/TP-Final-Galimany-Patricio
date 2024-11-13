@@ -55,6 +55,56 @@ export class TurnosService {
     );
   }
 
+  // Método para obtener la fecha y hora del turno del paciente
+  obtenerFechaTurnoPaciente(pacienteId: string): Observable<string | null> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    const q = query(turnosRef, where('pacienteId', '==', pacienteId));
+
+    return from(
+      getDocs(q).then((snapshot) => {
+        if (!snapshot.empty) {
+          // Obtener los datos del primer turno
+          const turno = snapshot.docs[0].data();
+
+          const fecha = turno['fecha']; // 'fecha' debe ser un campo Timestamp en Firestore
+          const hora = turno['hora']; // 'hora' debe ser un campo tipo string (ej. "14:30:00")
+
+          // Verificamos si 'fecha' es un Timestamp y si 'hora' está presente
+          if (
+            fecha &&
+            typeof fecha.seconds === 'number' &&
+            typeof fecha.nanoseconds === 'number'
+          ) {
+            // Convertimos el Timestamp a un objeto Date
+            const dateObj = new Date(fecha.seconds * 1000);
+
+            // Formateamos la fecha a "día/mes/año"
+            const day = dateObj.getDate();
+            const month = dateObj.getMonth() + 1; // Recordar que los meses en JS van de 0 a 11
+            const year = dateObj.getFullYear();
+
+            // Si la hora está presente, la concatenamos a la fecha
+            let formattedDate = `${day}/${month}/${year}`;
+
+            if (hora) {
+              formattedDate += ` ${hora}`; // Añadir la hora al formato
+            }
+
+            return formattedDate; // Devolver la fecha formateada con la hora
+          } else {
+            console.warn(
+              'El campo fecha no es un Timestamp válido o la hora no está disponible.'
+            );
+            return null; // Si no es un Timestamp, retornamos null
+          }
+        } else {
+          console.warn('No se encontraron turnos para este paciente.');
+          return null; // Si no se encuentra el turno
+        }
+      })
+    );
+  }
+
   obtenerTurnos(): Observable<Turno[]> {
     const turnosRef = collection(this.firestore, 'turnos');
     return from(
@@ -111,6 +161,25 @@ export class TurnosService {
     );
   }
 
+  obtenerTodasEspecialidades(): Observable<string[]> {
+    const especialistasRef = collection(this.firestore, 'usuarios');
+    const q = query(
+      especialistasRef,
+      where('tipoUsuario', '==', 'Especialista')
+    );
+
+    return from(getDocs(q)).pipe(
+      map((snapshot) => {
+        const especialidades = snapshot.docs
+          .map((doc) => (doc.data() as any)['especialidad'])
+          .flatMap((especialidad: string) =>
+            especialidad.split(',').map((e: string) => e.trim())
+          );
+        return Array.from(new Set(especialidades)); // Eliminar duplicados
+      })
+    );
+  }
+
   obtenerFechasDisponibles(especialista: string): Observable<Date[]> {
     const fechas: Date[] = [];
     const hoy = new Date();
@@ -163,6 +232,53 @@ export class TurnosService {
         }
         return null; // Si no se encuentra, retornamos null
       })
+    );
+  }
+
+  // Método para guardar historia clínica
+  guardarHistoriaClinica(historia: any): Observable<void> {
+    const historiasRef = collection(this.firestore, 'historias_clinicas');
+    return from(
+      addDoc(historiasRef, {
+        ...historia,
+      })
+    ).pipe(map(() => {}));
+  }
+
+  // Método para obtener el historial clínico de un paciente
+  obtenerHistorialClinicoPorPaciente(pacienteId: string): Observable<any[]> {
+    const historiasRef = collection(this.firestore, 'historias_clinicas');
+    const q = query(historiasRef, where('pacienteId', '==', pacienteId)); // Filtro por paciente
+    return from(
+      getDocs(q).then((snapshot) =>
+        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      )
+    );
+  }
+
+  // Método para obtener el historial clínico de todos los pacientes de un especialista
+  obtenerHistorialClinicoPorEspecialista(
+    especialistaId: string
+  ): Observable<any[]> {
+    const historiasRef = collection(this.firestore, 'historias_clinicas');
+    const q = query(
+      historiasRef,
+      where('especialistaId', '==', especialistaId)
+    ); // Filtro por especialista
+    return from(
+      getDocs(q).then((snapshot) =>
+        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      )
+    );
+  }
+
+  // Método para obtener todos los historiales clínicos (para el administrador)
+  obtenerHistorialCompleto(): Observable<any[]> {
+    const historiasRef = collection(this.firestore, 'historias_clinicas');
+    return from(
+      getDocs(historiasRef).then((snapshot) =>
+        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      )
     );
   }
 }

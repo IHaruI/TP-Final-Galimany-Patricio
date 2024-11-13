@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class SolicitarTurnoComponent implements OnInit {
   especialidades: string[] = [];
+  // especialidadSeleccionada: string | null = null;
   especialistas: any[] = [];
   especialistasFiltrados: any[] = [];
   disponibilidadEspecialista: string[] = [];
@@ -33,13 +34,14 @@ export class SolicitarTurnoComponent implements OnInit {
   pacientesVerificados: any[] = [];
   esAdministrador = false;
   pacienteSeleccionadoUid: string | null = null;
+  mensajeExito: string = '';
 
   constructor(
     private turnosService: TurnosService,
     private authService: AuthService
   ) {
     const hoy = new Date();
-    this.mesActual = hoy.getMonth();
+    this.mesActual = 1 + hoy.getMonth();
     this.anioActual = hoy.getFullYear();
     this.generarDiasDelMes();
   }
@@ -53,7 +55,6 @@ export class SolicitarTurnoComponent implements OnInit {
       );
 
       if (usuario && usuario.rol === 'administrador') {
-        console.log('El usuario es administrador');
         this.esAdministrador = true;
         this.obtenerPacientesVerificados();
       } else {
@@ -64,6 +65,11 @@ export class SolicitarTurnoComponent implements OnInit {
         }
       }
     }
+    this.turnosService
+      .obtenerTodasEspecialidades()
+      .subscribe((especialidades) => {
+        this.especialidades = especialidades;
+      });
 
     this.obtenerEspecialidades();
   }
@@ -123,9 +129,8 @@ export class SolicitarTurnoComponent implements OnInit {
       dia.getMonth() + 1
     }/${dia.getFullYear()}`;
 
-    // Llamamos a los métodos para obtener la disponibilidad real
-    this.obtenerDisponibilidad(); // Asegura que se obtenga la disponibilidad del especialista
-    this.obtenerTurnosOcupados(); // Obtiene los turnos ocupados para la fecha y especialista seleccionados
+    this.obtenerDisponibilidad();
+    this.obtenerTurnosOcupados();
   }
 
   obtenerTurnosOcupados() {
@@ -177,6 +182,20 @@ export class SolicitarTurnoComponent implements OnInit {
           this.especialistasFiltrados = [...this.especialistas];
         });
     }
+  }
+
+  seleccionarEspecialidad(especialidad: string) {
+    this.especialidadSeleccionada = especialidad;
+    this.filtrarEspecialistasPorEspecialidad();
+  }
+
+  obtenerImagenEspecialidad(especialidad: string): string {
+    return `${especialidad}.png`;
+  }
+
+  onImageError(event: any) {
+    const img = event.target as HTMLImageElement;
+    img.src = 'default.png';
   }
 
   resetearEstado() {
@@ -259,12 +278,13 @@ export class SolicitarTurnoComponent implements OnInit {
 
   solicitarTurno() {
     if (!this.fechaSeleccionada || !this.horaSeleccionada) {
-      this.mensajeError = 'Por favor, selecciona fecha y hora';
+      this.mensajeExito = '';
       return;
     }
 
     if (!this.pacienteId) {
       this.mensajeError = 'No se pudo obtener el ID del paciente.';
+      this.mensajeExito = '';
       return;
     }
 
@@ -301,7 +321,12 @@ export class SolicitarTurnoComponent implements OnInit {
 
           this.turnosService.solicitarTurno(nuevoTurno).subscribe(() => {
             this.mensajeError = '';
-            alert('Turno solicitado exitosamente');
+            this.mensajeExito = 'Turno solicitado exitosamente';
+
+            setTimeout(() => {
+              this.mensajeExito = '';
+            }, 3000);
+
             this.resetearEstado();
           });
         }

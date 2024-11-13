@@ -46,6 +46,10 @@ export class LoginComponent {
     private auth: Auth
   ) {}
 
+  redirigirBienvenida() {
+    this.router.navigate(['/bienvenida']);
+  }
+
   async iniciarSesion() {
     const email = this.loginForm.value.email!;
     const password = this.loginForm.value.password!;

@@ -194,3 +194,42 @@ button[type="submit"]:hover {
   margin-top: 10px;
   text-align: center;
 }
+
+.success-message {
+  color: #388e3c;
+  font-size: 0.9em;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.especialidades button {
+  margin: 5px;
+  padding: 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  width: 100%;
+}
+
+.especialidades button.selected {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.especialista-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.imagen-perfil {
+  width: 80px; /* Puedes ajustar el tamaño de la imagen */
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nombre-especialista {
+  text-align: center;
+}

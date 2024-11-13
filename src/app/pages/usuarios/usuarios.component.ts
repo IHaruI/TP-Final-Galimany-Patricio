@@ -26,7 +26,8 @@ import { RegistroComponent } from '../registro/registro.component';
 import { TurnosService } from '../../services/turnos.service';
 import { Turno } from '../../interfaces/turno.interface';
 import { PerfilComponent } from '../../perfil/perfil.component';
-import { SolicitarTurnoComponent } from '../solicitar-turnos/solicitar-turnos.component';
+import * as XLSX from 'xlsx';
+import { Router } from '@angular/router';
 
 interface Usuario {
   id: string;
@@ -37,6 +38,9 @@ interface Usuario {
   aprobado: boolean;
   verificado: boolean;
   imagenPerfilURL?: string;
+  obraSocial?: string;
+  edad: number;
+  dni: string;
 }
 
 @Component({
@@ -48,13 +52,13 @@ interface Usuario {
     RegistroComponent,
     FormsModule,
     PerfilComponent,
-    SolicitarTurnoComponent,
   ],
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.css'],
 })
 export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
+  esAdministrador: boolean = true;
   mostrarFormulario = false;
   mostrarRegistroComponent = false;
   nuevoUsuarioForm = new FormGroup({
@@ -71,8 +75,7 @@ export class UsuariosComponent implements OnInit {
   exitoMensaje = false;
   turnos: Turno[] = [];
   turnosFiltrados: Turno[] = [];
-  filtroEspecialidad: string = '';
-  filtroEspecialista: string = '';
+  filtroGeneral: string = '';
   mostrarModalCancelacion = false;
   turnoSeleccionado: Turno | null = null;
   motivoCancelacion: string = '';
@@ -81,7 +84,8 @@ export class UsuariosComponent implements OnInit {
     private firestore: Firestore,
     private authService: AuthService,
     private storage: Storage,
-    private turnosService: TurnosService
+    private turnosService: TurnosService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -97,6 +101,50 @@ export class UsuariosComponent implements OnInit {
     this.obtenerTurnos();
   }
 
+  logout() {
+    this.authService
+      .logout()
+      .then(() => {
+        this.router.navigate(['/login']);
+      })
+      .catch((error) => {
+        console.error('Error al cerrar sesión:', error);
+      });
+  }
+
+  // Función para exportar los datos de usuarios con rol "paciente" a Excel
+  exportarUsuariosExcel() {
+    const usuariosPacientes = this.usuarios.filter(
+      (usuario) => usuario.rol === 'paciente'
+    );
+
+    // Prepara los datos para Excel
+    const datos = usuariosPacientes.map((usuario) => ({
+      Nombre: usuario.nombre,
+      Apellido: usuario.apellido,
+      DNI: usuario.dni,
+      Edad: usuario.edad,
+      Email: usuario.email,
+      ObraSocial: usuario.obraSocial || 'N/A',
+    }));
+
+    // Crea una hoja de Excel
+    const worksheet = XLSX.utils.json_to_sheet(datos);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Usuarios');
+
+    // Descarga el archivo Excel
+    XLSX.writeFile(workbook, 'usuarios_pacientes.xlsx');
+  }
+
+  redireccion(dato: string) {
+    if (dato == 'solicitar') {
+      this.router.navigate(['/solicitar-turnos']);
+    } else if (dato == 'historial') {
+      this.router.navigate(['/historial-clinica']);
+    }
+  }
+
   obtenerTurnos() {
     this.turnosService.obtenerTurnos().subscribe((turnos) => {
       this.turnos = turnos;
@@ -105,14 +153,11 @@ export class UsuariosComponent implements OnInit {
   }
 
   filtrarTurnos() {
+    const filtro = this.filtroGeneral.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(
       (turno) =>
-        turno.especialidad
-          .toLowerCase()
-          .includes(this.filtroEspecialidad.toLowerCase()) &&
-        turno.especialista
-          .toLowerCase()
-          .includes(this.filtroEspecialista.toLowerCase())
+        turno.especialidad.toLowerCase().includes(filtro) ||
+        turno.especialista.toLowerCase().includes(filtro)
     );
   }
 

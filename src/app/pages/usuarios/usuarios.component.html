@@ -1,5 +1,21 @@
 <app-perfil></app-perfil>
 
+<div class="botones">
+  <!-- Botón de deslogueo -->
+  <button (click)="logout()">Cerrar Sesión</button>
+
+  <!-- Botón de exportación a Excel, solo visible para el perfil Administrador -->
+  <button *ngIf="esAdministrador" (click)="exportarUsuariosExcel()">
+    Exportar a Excel
+  </button>
+
+  <!-- Botón para redirigir a la página de solicitar turno -->
+  <button (click)="redireccion('solicitar')">Solicitar Turno</button>
+
+  <!-- Botón para redirigir a la página de historial clínica -->
+  <button (click)="redireccion('historial')">Historial Clínica</button>
+</div>
+
 <h2>Administración de Usuarios</h2>
 
 <!-- Mensaje de confirmación o error -->
@@ -41,22 +57,14 @@
 
 <h2>Administración de Turnos</h2>
 
-<!-- Filtro por Especialidad y Especialista -->
+<!-- Filtro por Especialidad o Especialista -->
 <div>
-  <label>Filtrar por Especialidad:</label>
+  <label>Filtrar por Especialidad o Especialista:</label>
   <input
     type="text"
-    [(ngModel)]="filtroEspecialidad"
+    [(ngModel)]="filtroGeneral"
     (input)="filtrarTurnos()"
-    placeholder="Ingrese especialidad"
-  />
-
-  <label>Filtrar por Especialista:</label>
-  <input
-    type="text"
-    [(ngModel)]="filtroEspecialista"
-    (input)="filtrarTurnos()"
-    placeholder="Ingrese especialista"
+    placeholder="Ingrese especialidad o especialista"
   />
 </div>
 
@@ -139,7 +147,7 @@
       <input formControlName="email" type="email" required />
     </div>
     <div class="input-group">
-      <label>Password</label>
+      <label>Contraseña</label>
       <input formControlName="password" type="password" required />
     </div>
     <div class="input-group">
@@ -153,5 +161,3 @@
     </div>
   </form>
 </div>
-
-<app-solicitar-turno></app-solicitar-turno>

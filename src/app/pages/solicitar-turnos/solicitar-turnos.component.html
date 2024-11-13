@@ -18,23 +18,39 @@
 </div>
 
 <form (submit)="solicitarTurno()">
-  <!-- Especialidad y especialista -->
-  <label>Seleccionar Especialidad:</label>
-  <input
-    type="text"
-    [(ngModel)]="especialidadSeleccionada"
-    name="especialidad"
-    (input)="filtrarEspecialistasPorEspecialidad()"
-  />
+  <!-- Especialidades como botones -->
+  <h3>Seleccionar Especialidad:</h3>
+  <div class="especialidades">
+    <button
+      *ngFor="let especialidad of especialidades"
+      (click)="seleccionarEspecialidad(especialidad)"
+      [class.selected]="especialidad === especialidadSeleccionada"
+    >
+      <img
+        [src]="obtenerImagenEspecialidad(especialidad)"
+        alt="{{ especialidad }}"
+        (error)="onImageError($event)"
+      />
+    </button>
+  </div>
 
-  <label>Seleccionar Especialista:</label>
+  <!-- Especialista -->
+  <h3>Seleccionar Especialista:</h3>
   <ul>
     <li
       *ngFor="let especialista of especialistasFiltrados"
       (click)="seleccionarEspecialista(especialista)"
       [class.selected]="especialista === especialistaSeleccionado"
     >
-      {{ especialista.nombre }}
+      <div class="especialista-item">
+        <span class="nombre-especialista">{{ especialista.nombre }}</span>
+        <img
+          *ngIf="especialista.imagenPerfilURL"
+          [src]="especialista.imagenPerfilURL"
+          alt="{{ especialista.nombre }}"
+          class="imagen-perfil"
+        />
+      </div>
     </li>
   </ul>
 
@@ -58,8 +74,13 @@
 
   <!-- Disponibilidad de horarios -->
   <div *ngIf="disponibilidadEspecialista.length > 0">
+    <br />
     <h3>Disponibilidad:</h3>
-    <ul>
+    <ul
+      *ngIf="
+        disponibilidadEspecialista[0] !== 'No hay disponibilidad para este día.'
+      "
+    >
       <li
         *ngFor="let hora of disponibilidadEspecialista"
         (click)="!turnoOcupado.includes(hora) && seleccionarHora(hora)"
@@ -69,6 +90,13 @@
         <span *ngIf="hora === horaSeleccionada"> (Seleccionado)</span>
       </li>
     </ul>
+    <p
+      *ngIf="
+        disponibilidadEspecialista[0] === 'No hay disponibilidad para este día.'
+      "
+    >
+      {{ disponibilidadEspecialista[0] }}
+    </p>
   </div>
 
   <!-- Resto de campos de tu formulario -->
@@ -76,10 +104,17 @@
     {{ mensajeError }}
   </div>
 
+  <div *ngIf="mensajeExito" class="success-message">
+    {{ mensajeExito }}
+  </div>
+
   <button
     type="submit"
     [disabled]="
-      !fechaSeleccionada || !especialistaSeleccionado || !horaSeleccionada
+      !fechaSeleccionada ||
+      !especialistaSeleccionado ||
+      !horaSeleccionada ||
+      disponibilidadEspecialista[0] === 'No hay disponibilidad para este día.'
     "
   >
     Solicitar Turno
