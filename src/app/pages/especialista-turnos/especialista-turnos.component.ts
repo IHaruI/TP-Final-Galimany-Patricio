@@ -115,27 +115,26 @@ export class EspecialistaTurnosComponent implements OnInit {
   }
 
   finalizarTurno(turno: Turno) {
-    // if (!turno.id) return;
-    // const comentario = prompt('Ingrese reseña y diagnóstico:');
-    // if (comentario) {
-    //   this.turnosService
-    //     .actualizarTurno(turno.id, {
-    //       estado: 'Realizado',
-    //       comentario,
-    //     })
-    //     .subscribe(() => {
-    //       turno.estado = 'Realizado';
-    //       turno.comentario = comentario;
-    //       // Obtener el pacienteId y navegar al componente HistoriaClinica
-    //       this.router.navigate(['/historia-clinica'], {
-    //         queryParams: { pacienteId: turno.pacienteId }, // Pasa pacienteId como query param
-    //       });
-    //     });
-    // }
-
-    this.router.navigate(['/historia-clinica'], {
-      queryParams: { pacienteId: turno.pacienteId }, // Pasa pacienteId como query param
-    });
+    if (!turno.id) return;
+    const comentario = prompt('Ingrese reseña y diagnóstico:');
+    if (comentario) {
+      this.turnosService
+        .actualizarTurno(turno.id, {
+          estado: 'Realizado',
+          comentario,
+        })
+        .subscribe(() => {
+          turno.estado = 'Realizado';
+          turno.comentario = comentario;
+          // Obtener el pacienteId y navegar al componente HistoriaClinica
+          this.router.navigate(['/historia-clinica'], {
+            queryParams: { pacienteId: turno.pacienteId }, // Pasa pacienteId como query param
+          });
+        });
+    }
+    // this.router.navigate(['/historia-clinica'], {
+    //   queryParams: { pacienteId: turno.pacienteId }, // Pasa pacienteId como query param
+    // });
   }
 
   verResena(turno: Turno) {
