@@ -12,7 +12,6 @@ h2 {
   font-weight: 600;
 }
 
-/* Tabla en Mis Turnos */
 table {
   width: 100%;
   margin: 20px 0;
@@ -88,7 +87,6 @@ button:disabled {
   text-align: left;
 }
 
-/* Solicitar Turno */
 form {
   background: #ffffff;
   border-radius: 10px;
@@ -224,7 +222,7 @@ button[type="submit"]:hover {
 }
 
 .imagen-perfil {
-  width: 80px; /* Puedes ajustar el tamaño de la imagen */
+  width: 80px;
   height: 80px;
   border-radius: 50%;
   object-fit: cover;

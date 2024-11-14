@@ -6,11 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { Turno } from '../../interfaces/turno.interface';
 import { PerfilComponent } from '../../perfil/perfil.component';
 import { Router } from '@angular/router';
+import { ModalComponent } from '../../modal/modal.component';
 
 @Component({
   selector: 'app-mis-turnos',
   standalone: true,
-  imports: [CommonModule, FormsModule, PerfilComponent],
+  imports: [CommonModule, FormsModule, PerfilComponent, ModalComponent],
   templateUrl: './mis-turnos.component.html',
   styleUrls: ['./mis-turnos.component.css'],
 })
@@ -18,6 +19,11 @@ export class MisTurnosComponent implements OnInit {
   turnos: Turno[] = [];
   turnosFiltrados: Turno[] = [];
   filtro = '';
+  isModalOpen = false;
+  modalTitle = '';
+  modalMessage = '';
+  modalInput = false;
+  selectedTurno: Turno | null = null;
 
   constructor(
     private turnosService: TurnosService,
@@ -60,15 +66,64 @@ export class MisTurnosComponent implements OnInit {
 
   aplicarFiltro() {
     const filtroLower = this.filtro.toLowerCase();
-    this.turnosFiltrados = this.turnos.filter(
-      (turno) =>
-        turno.especialidad.toLowerCase().includes(filtroLower) ||
-        turno.especialista.toLowerCase().includes(filtroLower)
-    );
+
+    this.turnosFiltrados = this.turnos.filter((turno) => {
+      return (
+        (turno.especialidad &&
+          turno.especialidad.toLowerCase().includes(filtroLower)) ||
+        (turno.especialista &&
+          turno.especialista.toLowerCase().includes(filtroLower)) ||
+        (turno.estado && turno.estado.toLowerCase().includes(filtroLower)) ||
+        (turno.altura &&
+          turno.altura.toString().toLowerCase().includes(filtroLower)) ||
+        (turno.peso &&
+          turno.peso.toString().toLowerCase().includes(filtroLower)) ||
+        (turno.temperatura &&
+          turno.temperatura.toString().toLowerCase().includes(filtroLower)) ||
+        (turno.presion &&
+          turno.presion.toString().toLowerCase().includes(filtroLower)) ||
+        (turno.datosDinamicos &&
+          turno.datosDinamicos.some(
+            (dato) =>
+              dato.clave.toLowerCase().includes(filtroLower) ||
+              dato.valor.toLowerCase().includes(filtroLower)
+          ))
+      );
+    });
   }
 
-  cancelarTurno(turno: Turno) {
-    const motivo = prompt('¿Por qué deseas cancelar el turno?');
+  openModal(
+    title: string,
+    message: string,
+    showInput = false,
+    turno: Turno | null = null
+  ) {
+    this.modalTitle = title;
+    this.modalMessage = message;
+    this.modalInput = showInput;
+    this.selectedTurno = turno;
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.selectedTurno = null;
+  }
+
+  handleModalConfirm(inputValue: string | null) {
+    if (this.selectedTurno) {
+      if (this.modalTitle.includes('Cancelar Turno')) {
+        this.cancelarTurno(this.selectedTurno, inputValue);
+      } else if (this.modalTitle.includes('Completar Encuesta')) {
+        this.completarEncuesta(this.selectedTurno, inputValue);
+      } else if (this.modalTitle.includes('Calificar Atención')) {
+        this.calificarAtencion(this.selectedTurno, inputValue);
+      }
+    }
+    this.closeModal();
+  }
+
+  cancelarTurno(turno: Turno, motivo: string | null) {
     if (motivo) {
       this.turnosService
         .actualizarTurno(turno.id!, { estado: 'Cancelado', comentario: motivo })
@@ -80,28 +135,19 @@ export class MisTurnosComponent implements OnInit {
   }
 
   verResena(turno: Turno) {
-    alert(`Reseña del turno:\n${turno.comentario}`);
+    this.openModal('Reseña del Turno', turno.comentario || 'Sin comentario');
   }
 
-  completarEncuesta(turno: Turno) {
-    const encuesta = prompt('Completa la encuesta para el turno realizado:');
-    if (encuesta) {
-      this.turnosService
-        .actualizarTurno(turno.id!, { comentario: encuesta })
-        .subscribe(() => {
-          turno.comentario = encuesta;
-        });
-    }
+  completarEncuesta(turno: Turno, inputValue: string | null) {
+    this.openModal('Completar Encuesta', 'Escribe tu encuesta:', true, turno);
   }
 
-  calificarAtencion(turno: Turno) {
-    const calificacion = prompt('Califica la atención del especialista:');
-    if (calificacion) {
-      this.turnosService
-        .actualizarTurno(turno.id!, { comentario: calificacion })
-        .subscribe(() => {
-          turno.comentario = calificacion;
-        });
-    }
+  calificarAtencion(turno: Turno, inputValue: string | null) {
+    this.openModal(
+      'Calificar Atención',
+      'Escribe tu calificación:',
+      true,
+      turno
+    );
   }
 }

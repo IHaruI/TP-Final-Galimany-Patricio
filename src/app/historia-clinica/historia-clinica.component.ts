@@ -14,9 +14,9 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HistoriaClinicaComponent implements OnInit {
   historia = {
-    altura: null,
-    peso: null,
-    temperatura: null,
+    altura: null as number | null,
+    peso: null as number | null,
+    temperatura: null as number | null,
     presion: '',
     datosDinamicos: [{ clave: '', valor: '' }],
     pacienteNombre: '',
@@ -25,6 +25,7 @@ export class HistoriaClinicaComponent implements OnInit {
     especialistaApellido: '',
     fechaConHora: '',
   };
+
   pacienteId: string = '';
   especialistaId: string | null;
 
@@ -37,12 +38,10 @@ export class HistoriaClinicaComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Obtener el pacienteId de los queryParams
     this.route.queryParams.subscribe((params) => {
-      this.pacienteId = params['pacienteId'] || ''; // Asignar pacienteId si existe
+      this.pacienteId = params['pacienteId'] || '';
     });
 
-    // Obtener los datos del paciente usando el pacienteId
     if (this.pacienteId) {
       this.authService
         .obtenerDatosPaciente(this.pacienteId)
@@ -57,19 +56,16 @@ export class HistoriaClinicaComponent implements OnInit {
         });
     }
 
-    // Obtener la fecha del turno del paciente
     this.turnosService
       .obtenerFechaTurnoPaciente(this.pacienteId)
       .subscribe((fechaConHora) => {
         if (fechaConHora) {
           this.historia.fechaConHora = fechaConHora;
-          // Aquí puedes asignarlo a la propiedad de tu componente o hacer lo que necesites
         } else {
           console.warn('No se pudo obtener la fecha del turno.');
         }
       });
 
-    // Obtener los datos del especialista usando el especialistaId
     if (this.pacienteId) {
       this.authService
         .obtenerDatosEspecialista(this.especialistaId)
@@ -98,11 +94,10 @@ export class HistoriaClinicaComponent implements OnInit {
       especialistaId: this.especialistaId,
     };
 
-    // Verifica si los campos tienen valores válidos
     if (
-      !historiaData.altura ||
-      !historiaData.peso ||
-      !historiaData.temperatura
+      historiaData.altura == null ||
+      historiaData.peso == null ||
+      historiaData.temperatura == null
     ) {
       console.error('Faltan datos obligatorios');
       return;
@@ -111,6 +106,25 @@ export class HistoriaClinicaComponent implements OnInit {
     this.turnosService.guardarHistoriaClinica(historiaData).subscribe({
       next: () => {
         console.log('Historia clínica guardada exitosamente');
+
+        const turnoData = {
+          altura: historiaData.altura as number,
+          peso: historiaData.peso as number,
+          temperatura: historiaData.temperatura as number,
+          presion: historiaData.presion || '',
+          datosDinamicos: historiaData.datosDinamicos || [],
+        };
+
+        this.turnosService
+          .agregarCamposTurno(this.pacienteId, turnoData)
+          .subscribe({
+            next: () => {
+              console.log('Campos del turno agregados exitosamente');
+            },
+            error: (err) => {
+              console.error('Error al agregar campos al turno', err);
+            },
+          });
       },
       error: (err) => {
         console.error('Error al guardar la historia clínica', err);

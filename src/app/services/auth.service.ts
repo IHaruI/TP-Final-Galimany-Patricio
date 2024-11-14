@@ -68,7 +68,6 @@ export class AuthService {
     }
   }
 
-  // Método para cerrar sesión
   logout() {
     return this.auth.signOut();
   }
@@ -87,7 +86,6 @@ export class AuthService {
     }
   }
 
-  // Método que devuelve los datos del paciente autenticado
   async getPacienteData(): Promise<{ nombre: string; apellido: string }> {
     const userId = this.getUid();
     if (userId) {
@@ -101,14 +99,14 @@ export class AuthService {
   }
 
   async obtenerDatosUsuario(usuarioId: string): Promise<any> {
-    const q = query(this.usuariosCollection, where('uid', '==', usuarioId)); // Cambia a buscar por el campo uid
+    const q = query(this.usuariosCollection, where('uid', '==', usuarioId));
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
       const doc = querySnapshot.docs[0];
-      return { id: doc.id, ...doc.data() }; // Retorna los datos del usuario
+      return { id: doc.id, ...doc.data() };
     } else {
-      return null; // Retorna null si no se encuentra el documento
+      return null;
     }
   }
 
@@ -121,17 +119,17 @@ export class AuthService {
       const data = doc.data();
       return {
         id: doc.id,
-        nombre: data['nombre'], // Acceder a 'nombre' usando corchetes
-        apellido: data['apellido'], // Acceder a 'apellido' usando corchetes
+        nombre: data['nombre'],
+        apellido: data['apellido'],
       };
     } else {
-      return null; // Retorna null si no se encuentra el documento
+      return null;
     }
   }
 
   async obtenerDatosEspecialista(usuarioId: string | null): Promise<any> {
     if (!usuarioId) {
-      return null; // Retorna null si usuarioId es null
+      return null;
     }
 
     const q = query(this.usuariosCollection, where('uid', '==', usuarioId));
@@ -146,7 +144,7 @@ export class AuthService {
         apellido: data['apellido'],
       };
     } else {
-      return null; // Retorna null si no se encuentra el documento
+      return null;
     }
   }
 
@@ -161,8 +159,8 @@ export class AuthService {
     return querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
-        ...data, // Incluye todos los campos, incluyendo el `uid` dentro del documento
-        id: doc.id, // Si quieres también el id del documento en sí
+        ...data,
+        id: doc.id,
       };
     });
   }

@@ -19,6 +19,13 @@ export class EspecialistaTurnosComponent implements OnInit {
   filtroGeneral: string = '';
   turnosFiltrados: Turno[] = [];
   especialistaNombre: string | null = null;
+  modalVisible: boolean = false;
+  modalTitle: string = '';
+  modalComentario: string = '';
+  accionEnCurso: string = '';
+  turnoSeleccionado: Turno | null = null;
+  modalResenaVisible: boolean = false;
+  modalResenaComentario: string = '';
 
   constructor(
     private turnosService: TurnosService,
@@ -60,7 +67,7 @@ export class EspecialistaTurnosComponent implements OnInit {
           ...turno,
           paciente: `${turno.nombre} ${turno.apellido}`,
         }));
-        this.aplicarFiltro(); // Aplica el filtro inicial
+        this.aplicarFiltro();
       });
   }
 
@@ -73,71 +80,96 @@ export class EspecialistaTurnosComponent implements OnInit {
     );
   }
 
-  cancelarTurno(turno: Turno) {
-    if (!turno.id) return;
-    const comentario = prompt('Ingrese el motivo de cancelación:');
-    if (comentario) {
-      this.turnosService
-        .actualizarTurno(turno.id, {
-          estado: 'Cancelado',
-          comentario,
-        })
-        .subscribe(() => {
-          turno.estado = 'Cancelado';
-          turno.comentario = comentario;
-        });
-    }
+  abrirModal(titulo: string, accion: string, turno: Turno) {
+    this.modalTitle = titulo;
+    this.accionEnCurso = accion;
+    this.turnoSeleccionado = turno;
+    this.modalComentario = '';
+    this.modalVisible = true;
   }
 
-  rechazarTurno(turno: Turno) {
-    if (!turno.id) return;
-    const comentario = prompt('Ingrese el motivo de rechazo:');
-    if (comentario) {
-      this.turnosService
-        .actualizarTurno(turno.id, {
-          estado: 'Rechazado',
-          comentario,
-        })
-        .subscribe(() => {
-          turno.estado = 'Rechazado';
-          turno.comentario = comentario;
-        });
-    }
+  cerrarModal() {
+    this.modalVisible = false;
+    this.modalComentario = '';
   }
 
-  aceptarTurno(turno: Turno) {
-    if (!turno.id) return;
-    this.turnosService
-      .actualizarTurno(turno.id, { estado: 'Aceptado' })
-      .subscribe(() => {
-        turno.estado = 'Aceptado';
-      });
+  cerrarModalResena() {
+    this.modalResenaVisible = false;
+    this.modalResenaComentario = '';
   }
 
-  finalizarTurno(turno: Turno) {
-    if (!turno.id) return;
-    const comentario = prompt('Ingrese reseña y diagnóstico:');
-    if (comentario) {
-      this.turnosService
-        .actualizarTurno(turno.id, {
-          estado: 'Realizado',
-          comentario,
-        })
-        .subscribe(() => {
-          turno.estado = 'Realizado';
-          turno.comentario = comentario;
-          // Obtener el pacienteId y navegar al componente HistoriaClinica
-          this.router.navigate(['/historia-clinica'], {
-            queryParams: { pacienteId: turno.pacienteId }, // Pasa pacienteId como query param
-          });
-        });
+  procesarAccion() {
+    if ((this.modalComentario ?? '').trim() === '') {
+      alert('Debe ingresar un comentario.');
+      return;
     }
-    // this.router.navigate(['/historia-clinica'], {
-    //   queryParams: { pacienteId: turno.pacienteId }, // Pasa pacienteId como query param
-    // });
+
+    if (this.turnoSeleccionado) {
+      const turno = this.turnoSeleccionado;
+
+      if (!turno.id) {
+        alert('El turno no tiene un ID válido.');
+        return;
+      }
+
+      switch (this.accionEnCurso) {
+        case 'cancelar':
+          this.turnosService
+            .actualizarTurno(turno.id, {
+              estado: 'Cancelado',
+              comentario: this.modalComentario ?? '',
+            })
+            .subscribe(() => {
+              turno.estado = 'Cancelado';
+              turno.comentario = this.modalComentario ?? '';
+              this.cerrarModal();
+            });
+          break;
+
+        case 'rechazar':
+          this.turnosService
+            .actualizarTurno(turno.id, {
+              estado: 'Rechazado',
+              comentario: this.modalComentario ?? '',
+            })
+            .subscribe(() => {
+              turno.estado = 'Rechazado';
+              turno.comentario = this.modalComentario ?? '';
+              this.cerrarModal();
+            });
+          break;
+
+        case 'finalizar':
+          this.turnosService
+            .actualizarTurno(turno.id, {
+              estado: 'Realizado',
+              comentario: this.modalComentario ?? '',
+            })
+            .subscribe(() => {
+              turno.estado = 'Realizado';
+              turno.comentario = this.modalComentario ?? '';
+
+              // Verificamos si pacienteId existe antes de navegar
+              const pacienteId = turno.pacienteId ?? 'valor-default';
+
+              this.router.navigate(['/historia-clinica'], {
+                queryParams: { pacienteId: pacienteId },
+              });
+
+              this.cerrarModal();
+            });
+          break;
+
+        default:
+          this.cerrarModal();
+          break;
+      }
+    }
   }
 
   verResena(turno: Turno) {
-    alert(`Reseña del turno:\n${turno.comentario}`);
+    this.modalResenaComentario =
+      turno.comentario ?? 'No hay comentario disponible';
+    this.modalResenaVisible = true;
   }
 }

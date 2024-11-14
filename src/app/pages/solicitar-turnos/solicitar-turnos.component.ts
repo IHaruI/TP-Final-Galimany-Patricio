@@ -13,7 +13,6 @@ import { FormsModule } from '@angular/forms';
 })
 export class SolicitarTurnoComponent implements OnInit {
   especialidades: string[] = [];
-  // especialidadSeleccionada: string | null = null;
   especialistas: any[] = [];
   especialistasFiltrados: any[] = [];
   disponibilidadEspecialista: string[] = [];
@@ -217,20 +216,16 @@ export class SolicitarTurnoComponent implements OnInit {
       const [dia, mes, anio] = this.fechaSeleccionada.split('/').map(Number);
       const fechaObj = new Date(anio, mes - 1, dia);
 
-      // Obtener el nombre del día de la semana
       const diaSeleccionado = fechaObj
         .toLocaleDateString('es-ES', { weekday: 'long' })
-        .toLowerCase(); // Esto devuelve "lunes", "martes", etc.
+        .toLowerCase();
 
-      // Obtener el UID del especialista
       const especialistaId = this.especialistaSeleccionado.uid;
 
-      // Obtienes la disponibilidad del especialista desde Firebase
       this.turnosService
         .obtenerUsuarioPorUid(especialistaId)
         .subscribe((usuarioDoc) => {
           if (usuarioDoc) {
-            // Buscar la disponibilidad para el día seleccionado
             const disponibilidad = usuarioDoc.disponibilidad.find(
               (d: any) => d[diaSeleccionado]
             );
@@ -253,7 +248,6 @@ export class SolicitarTurnoComponent implements OnInit {
                 0
               ); // Hora de fin
 
-              // Generar los horarios disponibles
               this.disponibilidadEspecialista = [];
               while (inicio < fin) {
                 this.disponibilidadEspecialista.push(
@@ -262,7 +256,7 @@ export class SolicitarTurnoComponent implements OnInit {
                     minute: '2-digit',
                   })
                 );
-                inicio.setMinutes(inicio.getMinutes() + 30); // Avanzar 30 minutos
+                inicio.setMinutes(inicio.getMinutes() + 30);
               }
             } else {
               this.disponibilidadEspecialista = [
@@ -292,44 +286,40 @@ export class SolicitarTurnoComponent implements OnInit {
     const fecha = new Date(anio, mes - 1, dia);
     const especialistaId = this.especialistaSeleccionado?.nombre;
 
-    // Realizar búsqueda de turnos ocupados para la fecha y la hora
-    this.turnosService
-      .obtenerTurnos() // Método que debe retornar todos los turnos
-      .subscribe((turnos) => {
-        // Buscar un turno con la misma fecha y hora
-        const turnoExistente = turnos.find(
-          (t) =>
-            t.fecha.getTime() === fecha.getTime() &&
-            t.hora === this.horaSeleccionada &&
-            t.especialidad === this.especialidadSeleccionada
-        );
+    this.turnosService.obtenerTurnos().subscribe((turnos) => {
+      const turnoExistente = turnos.find(
+        (t) =>
+          t.fecha.getTime() === fecha.getTime() &&
+          t.hora === this.horaSeleccionada &&
+          t.especialidad === this.especialidadSeleccionada
+      );
 
-        if (turnoExistente) {
-          this.mensajeError =
-            'Ya existe un turno reservado para este día y hora con este especialista.';
-        } else {
-          const nuevoTurno = {
-            pacienteId: this.pacienteId as string,
-            especialidad: this.especialidadSeleccionada,
-            especialista: especialistaId,
-            fecha: fecha,
-            hora: this.horaSeleccionada || '',
-            estado: 'Pendiente',
-            nombre: this.nombrePaciente,
-            apellido: this.apellidoPaciente,
-          };
+      if (turnoExistente) {
+        this.mensajeError =
+          'Ya existe un turno reservado para este día y hora con este especialista.';
+      } else {
+        const nuevoTurno = {
+          pacienteId: this.pacienteId as string,
+          especialidad: this.especialidadSeleccionada,
+          especialista: especialistaId,
+          fecha: fecha,
+          hora: this.horaSeleccionada || '',
+          estado: 'Pendiente',
+          nombre: this.nombrePaciente,
+          apellido: this.apellidoPaciente,
+        };
 
-          this.turnosService.solicitarTurno(nuevoTurno).subscribe(() => {
-            this.mensajeError = '';
-            this.mensajeExito = 'Turno solicitado exitosamente';
+        this.turnosService.solicitarTurno(nuevoTurno).subscribe(() => {
+          this.mensajeError = '';
+          this.mensajeExito = 'Turno solicitado exitosamente';
 
-            setTimeout(() => {
-              this.mensajeExito = '';
-            }, 3000);
+          setTimeout(() => {
+            this.mensajeExito = '';
+          }, 3000);
 
-            this.resetearEstado();
-          });
-        }
-      });
+          this.resetearEstado();
+        });
+      }
+    });
   }
 }

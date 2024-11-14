@@ -94,7 +94,6 @@
       <td>{{ turno.especialidad }}</td>
       <td>{{ turno.estado }}</td>
       <td>
-        <!-- Botón para cancelar turno, solo si cumple las condiciones -->
         <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)">
           Cancelar
         </button>

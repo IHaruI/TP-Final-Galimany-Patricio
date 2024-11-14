@@ -10,11 +10,42 @@
 
 <h2>Mis Turnos</h2>
 
+<!-- Modal -->
+<div *ngIf="modalVisible" class="modal-overlay" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>{{ modalTitle }}</h2>
+    <textarea
+      [(ngModel)]="modalComentario"
+      placeholder="Ingrese su comentario..."
+    ></textarea>
+    <div class="modal-actions">
+      <button (click)="cerrarModal()">Cancelar</button>
+      <button (click)="procesarAccion()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para ver reseña -->
+<div
+  *ngIf="modalResenaVisible"
+  class="modal-overlay resena"
+  (click)="cerrarModalResena()"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Reseña del Turno</h2>
+    <p>{{ modalResenaComentario }}</p>
+    <div class="modal-actions">
+      <button (click)="cerrarModalResena()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <div>
   <label>Filtrar por Especialidad o Paciente:</label>
   <input type="text" [(ngModel)]="filtroGeneral" (input)="aplicarFiltro()" />
 </div>
 
+<!-- Tabla de turnos -->
 <table>
   <thead>
     <tr>
@@ -30,18 +61,25 @@
       <td>{{ turno.paciente }}</td>
       <td>{{ turno.estado }}</td>
       <td>
-        <!-- Acciones para los turnos -->
         <ng-container *ngIf="turno.estado === 'Aceptado'">
-          <button (click)="cancelarTurno(turno)">Cancelar Turno</button>
-          <button (click)="finalizarTurno(turno)">Finalizar Turno</button>
+          <button (click)="abrirModal('Cancelar Turno', 'cancelar', turno)">
+            Cancelar Turno
+          </button>
+          <button (click)="abrirModal('Finalizar Turno', 'finalizar', turno)">
+            Finalizar Turno
+          </button>
           <button *ngIf="turno.comentario" (click)="verResena(turno)">
             Ver Reseña
           </button>
         </ng-container>
 
         <ng-container *ngIf="turno.estado === 'Pendiente'">
-          <button (click)="rechazarTurno(turno)">Rechazar Turno</button>
-          <button (click)="aceptarTurno(turno)">Aceptar Turno</button>
+          <button (click)="abrirModal('Rechazar Turno', 'rechazar', turno)">
+            Rechazar Turno
+          </button>
+          <button (click)="abrirModal('Aceptar Turno', 'aceptar', turno)">
+            Aceptar Turno
+          </button>
         </ng-container>
 
         <ng-container *ngIf="turno.estado === 'Realizado'">

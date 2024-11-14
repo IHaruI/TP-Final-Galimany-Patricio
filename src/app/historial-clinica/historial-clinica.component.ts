@@ -37,7 +37,7 @@ export class HistorialClinicaComponent implements OnInit {
   especialistaId: string | null = '';
   historialClinicoEspecialista: Historial[] = [];
   historialClinicoPaciente: Historial[] = [];
-  historialClinicoAdministrador: Historial[] = []; // Array para almacenar los datos completos para el administrador
+  historialClinicoAdministrador: Historial[] = [];
 
   constructor(
     private authService: AuthService,
@@ -93,8 +93,7 @@ export class HistorialClinicaComponent implements OnInit {
   descargarPDF() {
     const doc = new jsPDF();
 
-    // Agregar logo
-    const logo = 'logo.png'; // Cambia esto a la ruta de tu logo o usa una imagen en base64
+    const logo = 'logo.png';
     doc.addImage(logo, 'PNG', 10, 2, 20, 20); // Posición (10,10) y tamaño (20x20)
 
     // Título y fecha de emisión

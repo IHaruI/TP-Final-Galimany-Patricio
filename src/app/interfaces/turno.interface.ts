@@ -11,4 +11,9 @@ export interface Turno {
   comentario?: string;
   realizado?: boolean;
   paciente?: string;
+  altura?: string;
+  peso?: string;
+  temperatura?: string;
+  presion?: string;
+  datosDinamicos?: { clave: string; valor: string }[];
 }
