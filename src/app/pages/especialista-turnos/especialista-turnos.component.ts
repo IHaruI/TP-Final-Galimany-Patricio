@@ -157,6 +157,14 @@ export class EspecialistaTurnosComponent implements OnInit {
             });
           break;
 
+        // case 'aceptar':
+        //   this.turnosService
+        //     .actualizarTurno(turno.id, { estado: 'Aceptado' })
+        //     .subscribe(() => {
+        //       turno.estado = 'Aceptado';
+        //     });
+        //   break;
+
         case 'finalizar':
           this.turnosService
             .actualizarTurno(turno.id, {
@@ -167,7 +175,6 @@ export class EspecialistaTurnosComponent implements OnInit {
               turno.estado = 'Realizado';
               turno.comentario = this.modalComentario ?? '';
 
-              // Verificamos si pacienteId existe antes de navegar
               const pacienteId = turno.pacienteId ?? 'valor-default';
 
               this.router.navigate(['/historia-clinica'], {
@@ -183,6 +190,19 @@ export class EspecialistaTurnosComponent implements OnInit {
           break;
       }
     }
+  }
+
+  aceptarTurnoDirecto(turno: Turno) {
+    if (!turno.id) {
+      alert('El turno no tiene un ID válido.');
+      return;
+    }
+
+    this.turnosService
+      .actualizarTurno(turno.id, { estado: 'Aceptado' })
+      .subscribe(() => {
+        turno.estado = 'Aceptado';
+      });
   }
 
   verResena(turno: Turno) {

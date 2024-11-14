@@ -96,9 +96,7 @@
           <button (click)="abrirModal('Rechazar Turno', 'rechazar', turno)">
             Rechazar Turno
           </button>
-          <button (click)="abrirModal('Aceptar Turno', 'aceptar', turno)">
-            Aceptar Turno
-          </button>
+          <button (click)="aceptarTurnoDirecto(turno)">Aceptar Turno</button>
         </ng-container>
 
         <ng-container *ngIf="turno.estado === 'Realizado'">
