@@ -62,7 +62,14 @@ export class TurnosService {
     const q = query(turnosRef, where('especialista', '==', especialista));
     return from(
       getDocs(q).then((snapshot) =>
-        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Turno))
+        snapshot.docs.map(
+          (doc) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+              datosDinamicos: doc.data()['datosDinamicos'] || [],
+            } as Turno)
+        )
       )
     );
   }

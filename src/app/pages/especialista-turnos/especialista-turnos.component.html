@@ -41,7 +41,7 @@
 </div>
 
 <div>
-  <label>Filtrar por Especialidad o Paciente:</label>
+  <label>Filtrar:</label>
   <input type="text" [(ngModel)]="filtroGeneral" (input)="aplicarFiltro()" />
 </div>
 
@@ -51,6 +51,11 @@
     <tr>
       <th>Especialidad</th>
       <th>Paciente</th>
+      <th>Altura</th>
+      <th>Peso</th>
+      <th>Temperatura</th>
+      <th>Presión</th>
+      <th>Datos Dinámicos</th>
       <th>Estado</th>
       <th>Acciones</th>
     </tr>
@@ -59,6 +64,20 @@
     <tr *ngFor="let turno of turnosFiltrados">
       <td>{{ turno.especialidad }}</td>
       <td>{{ turno.paciente }}</td>
+      <td>{{ turno.altura }}</td>
+      <td>{{ turno.peso }}</td>
+      <td>{{ turno.temperatura }}</td>
+      <td>{{ turno.presion }}</td>
+      <td>
+        <div *ngIf="turno.datosDinamicos">
+          <ul>
+            <li *ngFor="let dato of turno.datosDinamicos">
+              {{ dato.clave }}: {{ dato.valor }}
+            </li>
+          </ul>
+        </div>
+      </td>
+
       <td>{{ turno.estado }}</td>
       <td>
         <ng-container *ngIf="turno.estado === 'Aceptado'">

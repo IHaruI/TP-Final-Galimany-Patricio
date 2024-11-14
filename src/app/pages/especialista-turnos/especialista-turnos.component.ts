@@ -72,12 +72,30 @@ export class EspecialistaTurnosComponent implements OnInit {
   }
 
   aplicarFiltro() {
-    const filtro = this.filtroGeneral.toLowerCase();
-    this.turnosFiltrados = this.turnos.filter(
-      (turno) =>
-        turno.especialidad.toLowerCase().includes(filtro) ||
-        (turno.paciente?.toLowerCase().includes(filtro) ?? false)
-    );
+    const filtroLower = this.filtroGeneral.toLowerCase();
+
+    this.turnosFiltrados = this.turnos.filter((turno) => {
+      return (
+        (turno.especialidad &&
+          turno.especialidad.toLowerCase().includes(filtroLower)) ||
+        (turno.estado && turno.estado.toLowerCase().includes(filtroLower)) ||
+        (turno.altura &&
+          turno.altura.toString().toLowerCase().includes(filtroLower)) ||
+        (turno.peso &&
+          turno.peso.toString().toLowerCase().includes(filtroLower)) ||
+        (turno.temperatura &&
+          turno.temperatura.toString().toLowerCase().includes(filtroLower)) ||
+        (turno.presion &&
+          turno.presion.toString().toLowerCase().includes(filtroLower)) ||
+        (turno.datosDinamicos &&
+          turno.datosDinamicos.some(
+            (dato) =>
+              dato.clave.toLowerCase().includes(filtroLower) ||
+              dato.valor.toLowerCase().includes(filtroLower)
+          )) ||
+        (turno.paciente && turno.paciente.toLowerCase().includes(filtroLower))
+      );
+    });
   }
 
   abrirModal(titulo: string, accion: string, turno: Turno) {
