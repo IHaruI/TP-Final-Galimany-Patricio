@@ -58,8 +58,8 @@ export class RegistroComponent {
     edad: new FormControl('', [Validators.required, Validators.min(1)]),
     dni: new FormControl('', [Validators.required, Validators.minLength(7)]),
     obraSocial: new FormControl(''),
-    especialidadSeleccionada: new FormControl(''), // Campo para seleccionar especialidad
-    especialidad: new FormControl('', [Validators.maxLength(100)]), // Campo para agregar más especialidades
+    especialidadSeleccionada: new FormControl(''),
+    especialidad: new FormControl('', [Validators.maxLength(100)]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,
@@ -99,9 +99,9 @@ export class RegistroComponent {
 
   resolverCaptcha(response: string | null): void {
     if (response) {
-      this.captchaResolved = response; // Guarda el valor si no es null
+      this.captchaResolved = response;
     } else {
-      this.captchaResolved = null; // O maneja el caso cuando es null
+      this.captchaResolved = null;
     }
   }
 
@@ -116,7 +116,6 @@ export class RegistroComponent {
     }
   }
 
-  // Función para concatenar la especialidad seleccionada y las adicionales
   getEspecialidadesConcatenadas(): string | null {
     const especialidadSeleccionada =
       this.registroForm.value.especialidadSeleccionada?.trim() || '';
@@ -135,13 +134,11 @@ export class RegistroComponent {
   }
 
   async registrarUsuario() {
-    // Muestra la animación de carga
     this.isLoading = true;
 
-    // Verifica que el reCAPTCHA fue completado exitosamente
     if (!this.captchaResolved) {
       this.mostrarMensaje('Por favor, completa el captcha.', false);
-      this.isLoading = false; // Oculta la animación si el captcha no se completó
+      this.isLoading = false;
       return;
     }
 
@@ -218,7 +215,6 @@ export class RegistroComponent {
         false
       );
     } finally {
-      // Oculta la animación de carga
       this.isLoading = false;
     }
   }
@@ -240,6 +236,6 @@ export class RegistroComponent {
     this.esExito = exito;
     setTimeout(() => {
       this.mensaje = '';
-    }, 5000); // Mensaje se oculta después de 5 segundos
+    }, 5000);
   }
 }

@@ -11,25 +11,26 @@ import { HistoriaClinicaComponent } from './historia-clinica/historia-clinica.co
 import { HistorialClinicaComponent } from './historial-clinica/historial-clinica.component';
 import { animation } from '@angular/animations';
 import { authGuard } from './guards/auth.guard';
+import { LogsComponent } from './pages/logs/logs.component';
 
 export const routes: Routes = [
   {
-    path: '', // Ruta por defecto (página de bienvenida)
+    path: '',
     component: BienvenidaComponent,
     data: { animation: 'HomePage' },
   },
   {
-    path: 'registro', // URL para acceder al componente de registro
+    path: 'registro',
     component: RegistroComponent,
     data: { animation: 'AboutPage' },
   },
   {
-    path: 'login', // URL para acceder al componente de login
+    path: 'login',
     component: LoginComponent,
     data: { animation: 'AboutPage' },
   },
   {
-    path: 'usuarios', // URL para acceder al componente de usuarios
+    path: 'usuarios',
     component: UsuariosComponent,
     canActivate: [authGuard],
     data: { animation: 'HomePage' },
@@ -41,32 +42,36 @@ export const routes: Routes = [
     data: { animation: 'HomePage' },
   },
   {
-    path: 'especialista-turnos', // URL para acceder al componente de especialista-turnos
+    path: 'especialista-turnos',
     component: EspecialistaTurnosComponent,
     canActivate: [authGuard],
     data: { animation: 'HomePage' },
   },
   {
-    path: 'solicitar-turnos', // URL para acceder al componente de especialista-turnos
+    path: 'solicitar-turnos',
     component: SolicitarTurnoComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'animation', // URL para acceder al componente de especialista-turnos
+    path: 'animation',
     component: AnimationComponent,
   },
   {
-    path: 'historia-clinica', // URL para acceder al componente de especialista-turnos
+    path: 'historia-clinica',
     component: HistoriaClinicaComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'historial-clinica', // URL para acceder al componente de especialista-turnos
+    path: 'historial-clinica',
     component: HistorialClinicaComponent,
     canActivate: [authGuard],
   },
   {
-    path: '**', // Ruta para manejar rutas no encontradas
-    redirectTo: '', // Redirige a la página de bienvenida
+    path: 'logs',
+    component: LogsComponent,
+  },
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];

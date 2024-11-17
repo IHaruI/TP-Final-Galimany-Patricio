@@ -1,5 +1,7 @@
 <div class="perfil">
-  <h2>Mi Perfil</h2>
+  <!-- Primer Directiva (Aplica un estilo visual al elemento h2, como cambiar su color o agregar un efecto resaltado.) -->
+  <h2 appResaltar>Mi Perfil</h2>
+  <!-- Primer Directiva -->
   <div class="perfil-info">
     <img
       *ngIf="usuario?.tipoUsuario === 'Paciente'"
@@ -17,11 +19,15 @@
       }"
     />
 
-    <br />
-    <br />
-    <br />
-    <h3>{{ usuario?.nombre }} {{ usuario?.apellido }}</h3>
-    <p>Tipo de usuario: {{ usuario?.tipoUsuario }}</p>
+    <br /><br /><br />
+    <!-- Primer Pipe (Combina el nombre y apellido del usuario para mostrar un nombre completo.) -->
+    <h3>{{ usuario?.nombre | nombreCompleto : usuario?.apellido }}</h3>
+    <!-- Primer Pipe -->
+    <!-- Tercera Directiva (Agrega un mensaje o aplica un estilo dependiendo del tipo de usuario) -->
+    <p appMensajeRol [rol]="usuario?.tipoUsuario">
+      Tipo de usuario: {{ usuario?.tipoUsuario }}
+    </p>
+    <!-- Tercera Directiva -->
     <p>Email: {{ usuario?.email }}</p>
   </div>
 
@@ -37,7 +43,9 @@
           [formGroupName]="i"
         >
           <div class="especialidad">
-            <label>{{ especialidades[i] }}:</label>
+            <!-- Segundo Pipe (Aplica algún formato o filtrado a las especialidades antes de mostrarlas) -->
+            <label>{{ especialidades[i] | filtroEspecialidad }}</label>
+            <!-- Segundo Pipe -->
           </div>
           <div
             *ngFor="
@@ -51,12 +59,17 @@
               ]
             "
           >
-            <label>{{ dia | titlecase }}:</label>
+            <!-- Tercer Pipe (Formatea los nombres de los días (por ejemplo, lunes, martes, etc.) en un formato más legible o específico.) -->
+            <label>{{ dia | formatoFecha }}</label>
+            <!-- Tercer Pipe -->
+            <!-- Segunda Directiva (Marca el campo como obligatorio.) -->
             <input
               type="text"
               formControlName="{{ dia }}"
               placeholder="Ej: 10:00 - 18:00"
+              appCampoObligatorio
             />
+            <!-- Segunda Directiva -->
           </div>
         </div>
       </div>

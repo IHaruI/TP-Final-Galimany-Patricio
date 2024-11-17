@@ -1,4 +1,3 @@
-/* Estilos generales */
 body {
   font-family: "Arial", sans-serif;
   background-color: #f4f4f4;
@@ -13,7 +12,6 @@ html {
   margin: 0;
 }
 
-/* Establecer box-sizing */
 *,
 *::before,
 *::after {
@@ -33,7 +31,6 @@ html {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Títulos */
 h2,
 h3 {
   margin-top: 30px;
@@ -42,10 +39,9 @@ h3 {
   color: #4e54c8;
 }
 
-/* Tabla */
 table {
   width: 100%;
-  border-collapse: collapse; /* Eliminar espacios entre celdas */
+  border-collapse: collapse;
   margin-bottom: 20px;
   background-color: #fff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -74,7 +70,6 @@ tr:hover {
   justify-content: center;
 }
 
-/* Botones */
 button {
   padding: 8px 16px;
   background-color: #4e54c8;
@@ -96,7 +91,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Formulario */
 form {
   max-width: 368px;
   margin: 20px auto;
@@ -106,12 +100,10 @@ form {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos para los grupos de input */
 .input-group {
   margin-bottom: 15px;
 }
 
-/* Etiquetas */
 label {
   display: block;
   margin-bottom: 5px;
@@ -119,7 +111,6 @@ label {
   color: #4e54c8;
 }
 
-/* Inputs */
 input[type="text"],
 input[type="email"],
 input[type="number"],
@@ -141,26 +132,22 @@ select:focus {
   border-color: #4e54c8;
 }
 
-/* Mensajes de error */
 .error {
   color: red;
   font-size: 14px;
   margin-top: -10px;
 }
 
-/* Estilos para el archivo de imagen de perfil */
 input[type="file"] {
   border: 1px dashed #ccc;
   background-color: #f9f9f9;
 }
 
-/* Botón de creación de usuario */
 button[type="submit"] {
   background-color: #4e54c8;
   font-weight: bold;
 }
 
-/* Estilos para la sección de crear nuevo usuario */
 h3 {
   margin-bottom: 15px;
   font-size: 24px;

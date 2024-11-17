@@ -94,9 +94,8 @@ export class HistorialClinicaComponent implements OnInit {
     const doc = new jsPDF();
 
     const logo = 'logo.png';
-    doc.addImage(logo, 'PNG', 10, 2, 20, 20); // Posición (10,10) y tamaño (20x20)
+    doc.addImage(logo, 'PNG', 10, 2, 20, 20);
 
-    // Título y fecha de emisión
     doc.setFontSize(16);
     doc.text('Historia Clínica del Paciente', 105, 20, { align: 'center' });
 
@@ -104,22 +103,18 @@ export class HistorialClinicaComponent implements OnInit {
     doc.setFontSize(10);
     doc.text(`Fecha de emisión: ${currentDate}`, 200, 14, { align: 'right' });
 
-    let yOffset = 30; // Posición inicial para los datos
+    let yOffset = 30;
 
-    // Estilo de encabezado
     doc.setFontSize(12);
-    doc.setTextColor(0, 0, 255); // Azul
+    doc.setTextColor(0, 0, 255);
 
     this.historialClinicoPaciente.forEach((historial, index) => {
-      // Línea separadora
       doc.setDrawColor(0);
       doc.line(10, yOffset - 5, 200, yOffset - 5);
 
-      // Encabezado del historial
       doc.text(`Historial #${index + 1}`, 10, yOffset);
       yOffset += 10;
 
-      // Datos principales del historial
       doc.setFontSize(10);
       doc.setTextColor(0);
       doc.text(
@@ -135,10 +130,9 @@ export class HistorialClinicaComponent implements OnInit {
 
       yOffset += 60;
 
-      // Datos dinámicos
       if (historial.datosDinamicos && historial.datosDinamicos.length > 0) {
         doc.setFontSize(11);
-        doc.setTextColor(0, 100, 0); // Verde oscuro para destacar los datos dinámicos
+        doc.setTextColor(0, 100, 0);
         doc.text('Datos Adicionales:', 15, yOffset);
         yOffset += 10;
 
@@ -152,14 +146,12 @@ export class HistorialClinicaComponent implements OnInit {
 
       yOffset += 15;
 
-      // Comprobación de nueva página si es necesario
       if (yOffset > 270) {
         doc.addPage();
         yOffset = 20;
       }
     });
 
-    // Guardar el archivo PDF
     doc.save('historia_clinica.pdf');
   }
 }

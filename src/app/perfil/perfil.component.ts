@@ -16,10 +16,28 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+// Importar las pipes y directivas
+import { NombreCompletoPipe } from '../pipes/nombre-completo.pipe';
+import { FiltroEspecialidadPipe } from '../pipes/filtro-especialidad.pipe';
+import { FormatoFechaPipe } from '../pipes/formato-fecha.pipe';
+import { ResaltarDirective } from '../directives/resaltar.directive';
+import { CampoObligatorioDirective } from '../directives/campo-obligatorio.directive';
+import { MensajeRolDirective } from '../directives/mensaje-rol.directive';
+
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    // Agrego las pipes y directivas
+    NombreCompletoPipe,
+    FiltroEspecialidadPipe,
+    FormatoFechaPipe,
+    ResaltarDirective,
+    CampoObligatorioDirective,
+    MensajeRolDirective,
+  ],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css'],
 })

@@ -23,6 +23,6 @@ bootstrapApplication(AppComponent, {
     ),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()), // Mantiene otros proveedores de appConfig si los tienes
+    provideStorage(() => getStorage()),
   ],
 }).catch((err) => console.error(err));

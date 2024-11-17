@@ -112,13 +112,11 @@ export class UsuariosComponent implements OnInit {
       });
   }
 
-  // Función para exportar los datos de usuarios con rol "paciente" a Excel
   exportarUsuariosExcel() {
     const usuariosPacientes = this.usuarios.filter(
       (usuario) => usuario.rol === 'paciente'
     );
 
-    // Prepara los datos para Excel
     const datos = usuariosPacientes.map((usuario) => ({
       Nombre: usuario.nombre,
       Apellido: usuario.apellido,
@@ -128,12 +126,10 @@ export class UsuariosComponent implements OnInit {
       ObraSocial: usuario.obraSocial || 'N/A',
     }));
 
-    // Crea una hoja de Excel
     const worksheet = XLSX.utils.json_to_sheet(datos);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Usuarios');
 
-    // Descarga el archivo Excel
     XLSX.writeFile(workbook, 'usuarios_pacientes.xlsx');
   }
 
@@ -142,6 +138,8 @@ export class UsuariosComponent implements OnInit {
       this.router.navigate(['/solicitar-turnos']);
     } else if (dato == 'historial') {
       this.router.navigate(['/historial-clinica']);
+    } else if (dato == 'logs') {
+      this.router.navigate(['/logs']);
     }
   }
 

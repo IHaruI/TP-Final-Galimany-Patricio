@@ -1,19 +1,14 @@
-<!-- Contenedor del formulario y la animación -->
 <div class="registro-container">
-  <!-- Botón flotante -->
   <button class="btn-flotante" (click)="redirigirBienvenida()">← Volver</button>
 
-  <!-- Animación de carga, que se muestra encima del formulario -->
   <div *ngIf="isLoading" class="loading-screen">
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Cargando...</span>
     </div>
   </div>
 
-  <!-- Formulario de registro -->
   <h2>Registro de Usuario</h2>
 
-  <!-- Botones para seleccionar el tipo de usuario con imágenes -->
   <div class="botones-usuarios">
     <div class="usuario">
       <button

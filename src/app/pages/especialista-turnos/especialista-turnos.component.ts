@@ -157,14 +157,6 @@ export class EspecialistaTurnosComponent implements OnInit {
             });
           break;
 
-        // case 'aceptar':
-        //   this.turnosService
-        //     .actualizarTurno(turno.id, { estado: 'Aceptado' })
-        //     .subscribe(() => {
-        //       turno.estado = 'Aceptado';
-        //     });
-        //   break;
-
         case 'finalizar':
           this.turnosService
             .actualizarTurno(turno.id, {
@@ -175,13 +167,20 @@ export class EspecialistaTurnosComponent implements OnInit {
               turno.estado = 'Realizado';
               turno.comentario = this.modalComentario ?? '';
 
-              const pacienteId = turno.pacienteId ?? 'valor-default';
+              // Actualizar la cantidad de turnos para el especialista
+              const especialistaNombre = turno.especialista;
 
-              this.router.navigate(['/historia-clinica'], {
-                queryParams: { pacienteId: pacienteId },
-              });
+              this.turnosService
+                .actualizarTurnosFinalizadosPorEspecialista(especialistaNombre)
+                .subscribe(() => {
+                  const pacienteId = turno.pacienteId ?? 'valor-default';
 
-              this.cerrarModal();
+                  this.router.navigate(['/historia-clinica'], {
+                    queryParams: { pacienteId: pacienteId },
+                  });
+
+                  this.cerrarModal();
+                });
             });
           break;
 

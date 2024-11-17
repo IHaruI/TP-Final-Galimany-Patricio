@@ -69,13 +69,11 @@ export class LoginComponent {
           const aprobado = usuarioData['aprobado'] === true;
           const verificado = usuarioData['verificado'] === true;
 
-          // Comprobar si el correo electrónico ha sido verificado después de volver a iniciar sesión
           if (usuarioAutenticado.emailVerified) {
             const usuarioRef = doc(usuariosRef, querySnapshot.docs[0].id);
             await updateDoc(usuarioRef, { verificado: true });
           }
 
-          // Verificar condiciones de acceso según el rol
           if (rol === 'especialista') {
             const usuarioRef = doc(usuariosRef, querySnapshot.docs[0].id);
             const usuarioActualizado = await getDoc(usuarioRef);
@@ -106,7 +104,6 @@ export class LoginComponent {
             this.router.navigate(['/mis-turnos']);
           }
 
-          // Redirigir si el rol es administrador
           if (rol === 'administrador') {
             this.router.navigate(['/usuarios']);
             return;
@@ -122,7 +119,7 @@ export class LoginComponent {
         false
       );
     } finally {
-      this.isLoading = false; // Desactivar la animación de carga
+      this.isLoading = false;
     }
   }
 
@@ -156,6 +153,6 @@ export class LoginComponent {
     this.esExito = exito;
     setTimeout(() => {
       this.mensaje = '';
-    }, 5000); // El mensaje se oculta después de 5 segundos
+    }, 5000);
   }
 }

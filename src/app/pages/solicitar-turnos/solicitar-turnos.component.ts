@@ -285,6 +285,8 @@ export class SolicitarTurnoComponent implements OnInit {
     const [dia, mes, anio] = this.fechaSeleccionada.split('/').map(Number);
     const fecha = new Date(anio, mes - 1, dia);
     const especialistaId = this.especialistaSeleccionado?.nombre;
+    const especialistaUid = this.especialistaSeleccionado?.uid;
+    const especialidad = this.especialistaSeleccionado?.especialidad;
 
     this.turnosService.obtenerTurnos().subscribe((turnos) => {
       const turnoExistente = turnos.find(
@@ -310,14 +312,33 @@ export class SolicitarTurnoComponent implements OnInit {
         };
 
         this.turnosService.solicitarTurno(nuevoTurno).subscribe(() => {
-          this.mensajeError = '';
-          this.mensajeExito = 'Turno solicitado exitosamente';
+          this.turnosService.almacenarTurnosPorDia().subscribe(() => {
+            if (especialistaUid && especialidad) {
+              this.turnosService
+                .actualizarTurnosPorEspecialista(
+                  especialistaUid,
+                  this.especialistaSeleccionado?.nombre,
+                  this.especialistaSeleccionado?.apellido
+                )
+                .subscribe(() => {
+                  this.turnosService
+                    .actualizarTurnosPorEspecialidad(
+                      especialistaUid,
+                      this.especialidadSeleccionada
+                    )
+                    .subscribe(() => {
+                      this.mensajeError = '';
+                      this.mensajeExito = 'Turno solicitado exitosamente';
 
-          setTimeout(() => {
-            this.mensajeExito = '';
-          }, 3000);
+                      setTimeout(() => {
+                        this.mensajeExito = '';
+                      }, 3000);
 
-          this.resetearEstado();
+                      this.resetearEstado();
+                    });
+                });
+            }
+          });
         });
       }
     });

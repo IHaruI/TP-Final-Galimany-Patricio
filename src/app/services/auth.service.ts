@@ -13,6 +13,7 @@ import {
   getDocs,
   getDoc,
   doc,
+  addDoc,
   query,
   where,
   CollectionReference,
@@ -60,6 +61,23 @@ export class AuthService {
         email,
         password
       );
+
+      const usuariosRef = collection(this.firestore, 'usuarios');
+      const q = query(usuariosRef, where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+
+      let rol = 'desconocido';
+      if (!querySnapshot.empty) {
+        const usuarioData = querySnapshot.docs[0].data();
+        rol = usuarioData['rol'] || 'desconocido';
+      }
+
+      const logRef = collection(this.firestore, 'logIngresos');
+      await addDoc(logRef, {
+        usuario: email,
+        rol: rol,
+        fecha: new Date().toISOString(),
+      });
 
       return userCredential.user;
     } catch (error) {

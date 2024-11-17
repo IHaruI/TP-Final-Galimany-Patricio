@@ -1,4 +1,3 @@
-/* Estilo para el título */
 h2 {
   text-align: center;
   color: #3a8fb7;
@@ -19,7 +18,6 @@ h2 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Contenedor para filtros */
 div {
   display: flex;
   justify-content: center;
@@ -39,7 +37,6 @@ input[type="text"] {
   font-size: 0.95em;
 }
 
-/* Tabla */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -67,7 +64,6 @@ tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-/* Botones de acción */
 button {
   padding: 8px 12px;
   border: none;
@@ -83,15 +79,15 @@ button:hover {
 }
 
 button:nth-child(1) {
-  background-color: #ff6347; /* Cancelar */
+  background-color: #ff6347;
 }
 
 button:nth-child(2) {
-  background-color: #4caf50; /* Finalizar/Aceptar */
+  background-color: #4caf50;
 }
 
 button:nth-child(3) {
-  background-color: #ffa500; /* Ver Reseña/Rechazar */
+  background-color: #ffa500;
 }
 
 button[disabled] {
@@ -100,7 +96,6 @@ button[disabled] {
   cursor: not-allowed;
 }
 
-/* Estilos generales del modal */
 .modal-overlay {
   position: fixed;
   top: 0;

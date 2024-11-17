@@ -31,6 +31,127 @@ interface Especialista {
 export class TurnosService {
   constructor(private firestore: Firestore) {}
 
+  almacenarTurnosPorDia(): Observable<void> {
+    const turnosRef = collection(this.firestore, 'turnosPorDia');
+
+    const hoy = new Date();
+    const fechaStr = hoy.toISOString().split('T')[0];
+
+    const turnosDelDiaRef = doc(turnosRef, fechaStr);
+
+    return from(
+      getDoc(turnosDelDiaRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const existingData = docSnapshot.data();
+          const cantidad = existingData?.['cantidad'] || 0;
+          return updateDoc(turnosDelDiaRef, { cantidad: cantidad + 1 });
+        } else {
+          return setDoc(turnosDelDiaRef, { cantidad: 1 });
+        }
+      })
+    );
+  }
+
+  actualizarTurnosPorEspecialista(
+    uid: string,
+    nombre: string,
+    apellido: string
+  ): Observable<void> {
+    const turnosRef = collection(this.firestore, 'turnosPorEspecialista');
+    const especialistaRef = doc(turnosRef, uid);
+
+    return from(
+      getDoc(especialistaRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const existingData = docSnapshot.data();
+          const cantidad = existingData['cantidad'] || 0;
+          return updateDoc(especialistaRef, {
+            cantidad: cantidad + 1,
+          });
+        } else {
+          return setDoc(especialistaRef, {
+            nombre,
+            apellido,
+            cantidad: 1,
+          });
+        }
+      })
+    );
+  }
+
+  actualizarTurnosPorEspecialidad(
+    especialistaUid: string,
+    especialidad: string
+  ): Observable<void> {
+    const turnosRef = collection(this.firestore, 'turnosPorEspecialidad');
+    const especialistaRef = doc(turnosRef, especialistaUid);
+
+    return from(
+      getDoc(especialistaRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const existingData = docSnapshot.data();
+          const cantidad = existingData['cantidad'] || 0;
+          const especialidadExistente = existingData['especialidad'];
+
+          if (especialidadExistente === especialidad) {
+            return updateDoc(especialistaRef, {
+              cantidad: cantidad + 1,
+            });
+          } else {
+            const nuevaEspecialidadRef = doc(
+              turnosRef,
+              `${especialistaUid}_${especialidad}`
+            );
+            return getDoc(nuevaEspecialidadRef).then((newDocSnapshot) => {
+              if (newDocSnapshot.exists()) {
+                const nuevaCantidad = newDocSnapshot.data()['cantidad'] || 0;
+                return updateDoc(nuevaEspecialidadRef, {
+                  cantidad: nuevaCantidad + 1,
+                });
+              } else {
+                return setDoc(nuevaEspecialidadRef, {
+                  cantidad: 1,
+                  especialidad: especialidad,
+                });
+              }
+            });
+          }
+        } else {
+          return setDoc(especialistaRef, {
+            cantidad: 1,
+            especialidad: especialidad,
+          });
+        }
+      })
+    );
+  }
+
+  actualizarTurnosFinalizadosPorEspecialista(
+    especialista: string
+  ): Observable<void> {
+    const turnosPorEspecialistaRef = collection(
+      this.firestore,
+      'turnosFinalizadosPorEspecialista'
+    );
+
+    const especialistaRef = doc(turnosPorEspecialistaRef, especialista);
+
+    return from(
+      getDoc(especialistaRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const existingData = docSnapshot.data();
+          const cantidad = existingData?.['cantidad'] || 0;
+          return updateDoc(especialistaRef, { cantidad: cantidad + 1 });
+        } else {
+          return setDoc(especialistaRef, {
+            especialista: especialista,
+            cantidad: 1,
+          });
+        }
+      })
+    );
+  }
+
   obtenerDatosUsuario(usuarioId: string): Observable<any> {
     const usuarioRef = doc(this.firestore, `usuarios/${usuarioId}`);
     return from(getDoc(usuarioRef)).pipe(
@@ -259,6 +380,18 @@ export class TurnosService {
   solicitarTurno(turno: Turno): Observable<void> {
     const turnosRef = collection(this.firestore, 'turnos');
     return from(addDoc(turnosRef, turno)).pipe(map(() => {}));
+  }
+
+  contarTurnosPorDia(fecha: Date): Observable<number> {
+    const turnosRef = collection(this.firestore, 'turnos');
+
+    const q = query(
+      turnosRef,
+      where('fecha', '>=', new Date(fecha.setHours(0, 0, 0, 0))), // Inicio del día
+      where('fecha', '<', new Date(fecha.setHours(23, 59, 59, 999))) // Fin del día
+    );
+
+    return from(getDocs(q).then((snapshot) => snapshot.size));
   }
 
   obtenerUsuarioPorUid(uid: string): Observable<any> {

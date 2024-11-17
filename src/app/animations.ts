@@ -1,4 +1,3 @@
-// src/app/animations.ts
 import {
   trigger,
   transition,
@@ -20,11 +19,10 @@ export const slideInAnimation = trigger('routeAnimations', [
         width: '100%',
       }),
     ]),
-    query(':enter', [style({ left: '100%' })], { optional: true }), // Entra desde la derecha
+    query(':enter', [style({ left: '100%' })], { optional: true }),
     query(':leave', animateChild(), { optional: true }),
     group([
       query(':leave', [animate('300ms ease-out', style({ left: '100%' }))], {
-        // Sale hacia la derecha
         optional: true,
       }),
       query(':enter', [animate('300ms ease-out', style({ left: '0%' }))], {
@@ -46,16 +44,15 @@ export const slideInAnimation = trigger('routeAnimations', [
       ],
       { optional: true }
     ),
-    query(':enter', [style({ left: '100%' })], { optional: true }), // Entra desde la derecha
+    query(':enter', [style({ left: '100%' })], { optional: true }),
     query(':leave', animateChild(), { optional: true }),
     group([
       query(
         ':leave',
-        [animate('200ms ease-out', style({ left: '100%', opacity: 0 }))], // Sale hacia la derecha
+        [animate('200ms ease-out', style({ left: '100%', opacity: 0 }))],
         { optional: true }
       ),
       query(':enter', [animate('300ms ease-out', style({ left: '0%' }))], {
-        // Entra hacia la izquierda
         optional: true,
       }),
       query('@*', animateChild(), { optional: true }),
