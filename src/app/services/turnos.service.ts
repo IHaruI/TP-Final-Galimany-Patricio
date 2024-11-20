@@ -298,7 +298,6 @@ export class TurnosService {
 
         if (turnoSinAltura) {
           const turnoRef = doc(this.firestore, 'turnos', turnoSinAltura.id);
-          console.log('Actualizando turno sin altura...');
           return from(updateDoc(turnoRef, data));
         }
 

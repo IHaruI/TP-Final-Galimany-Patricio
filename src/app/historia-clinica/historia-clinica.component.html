@@ -43,4 +43,12 @@
 
   <!-- Botón para enviar -->
   <button type="submit">Guardar Historia Clínica</button>
+
+  <div
+    *ngIf="mensaje"
+    [class]="mensajeError ? 'mensaje-error' : 'mensaje-exito'"
+    class="mensaje"
+  >
+    {{ mensaje }}
+  </div>
 </form>

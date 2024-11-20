@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-historia-clinica',
@@ -26,13 +27,16 @@ export class HistoriaClinicaComponent implements OnInit {
     fechaConHora: '',
   };
 
+  mensaje: string = '';
+  mensajeError: boolean = false;
   pacienteId: string = '';
   especialistaId: string | null;
 
   constructor(
     private turnosService: TurnosService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.especialistaId = this.authService.getUid() || '';
   }
@@ -52,7 +56,7 @@ export class HistoriaClinicaComponent implements OnInit {
           }
         })
         .catch((error) => {
-          console.error('Error al obtener los datos del paciente:', error);
+          this.mostrarMensaje('Error al obtener los datos del paciente', true);
         });
     }
 
@@ -62,7 +66,7 @@ export class HistoriaClinicaComponent implements OnInit {
         if (fechaConHora) {
           this.historia.fechaConHora = fechaConHora;
         } else {
-          console.warn('No se pudo obtener la fecha del turno.');
+          this.mostrarMensaje('No se pudo obtener la fecha del turno.', true);
         }
       });
 
@@ -76,7 +80,10 @@ export class HistoriaClinicaComponent implements OnInit {
           }
         })
         .catch((error) => {
-          console.error('Error al obtener los datos del paciente:', error);
+          this.mostrarMensaje(
+            'Error al obtener los datos del especialista.',
+            true
+          );
         });
     }
   }
@@ -99,14 +106,12 @@ export class HistoriaClinicaComponent implements OnInit {
       historiaData.peso == null ||
       historiaData.temperatura == null
     ) {
-      console.error('Faltan datos obligatorios');
+      this.mostrarMensaje('Faltan datos obligatorios.', true);
       return;
     }
 
     this.turnosService.guardarHistoriaClinica(historiaData).subscribe({
       next: () => {
-        console.log('Historia clínica guardada exitosamente');
-
         const turnoData = {
           altura: historiaData.altura as number,
           peso: historiaData.peso as number,
@@ -119,16 +124,30 @@ export class HistoriaClinicaComponent implements OnInit {
           .agregarCamposTurno(this.pacienteId, turnoData)
           .subscribe({
             next: () => {
-              console.log('Campos del turno agregados exitosamente');
+              this.mostrarMensaje(
+                'Historia clínica guardada exitosamente.',
+                false
+              );
+              setTimeout(() => {
+                this.router.navigate(['/especialista-turnos']);
+              }, 5000);
             },
             error: (err) => {
-              console.error('Error al agregar campos al turno', err);
+              this.mostrarMensaje('Error al agregar campos al turno.', true);
             },
           });
       },
       error: (err) => {
-        console.error('Error al guardar la historia clínica', err);
+        this.mostrarMensaje('Error al guardar la historia clínica.', true);
       },
     });
+  }
+
+  mostrarMensaje(texto: string, esError: boolean) {
+    this.mensaje = texto;
+    this.mensajeError = esError;
+    setTimeout(() => {
+      this.mensaje = '';
+    }, 3500);
   }
 }
