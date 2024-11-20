@@ -56,6 +56,8 @@ export class EspecialistaTurnosComponent implements OnInit {
   redireccion(dato: string) {
     if (dato == 'historial') {
       this.router.navigate(['/historial-clinica']);
+    } else if (dato == 'detalles-pacientes') {
+      this.router.navigate(['/detalles-pacientes']);
     }
   }
 

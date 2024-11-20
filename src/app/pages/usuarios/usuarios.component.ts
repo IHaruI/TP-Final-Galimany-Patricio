@@ -116,6 +116,7 @@ export class UsuariosComponent implements OnInit {
     const usuariosPacientes = this.usuarios.filter(
       (usuario) => usuario.rol === 'paciente'
     );
+    console.log(usuariosPacientes);
 
     const datos = usuariosPacientes.map((usuario) => ({
       Nombre: usuario.nombre,
@@ -140,6 +141,8 @@ export class UsuariosComponent implements OnInit {
       this.router.navigate(['/historial-clinica']);
     } else if (dato == 'logs') {
       this.router.navigate(['/logs']);
+    } else if (dato == 'administrador') {
+      this.router.navigate(['/exportar-exel']);
     }
   }
 

@@ -43,7 +43,30 @@
 
   <div class="boton-container">
     <button (click)="descargarPDF()" class="boton-descargar">
-      Descargar Historia Clínica en PDF
+      Descargar Toda la Historia Clínica en PDF
+    </button>
+  </div>
+
+  <!-- Selector para especialistas -->
+  <div class="selector-container">
+    <label for="especialista-selector" class="label-especialista"
+      >Seleccionar Especialista:</label
+    >
+    <select
+      id="especialista-selector"
+      [(ngModel)]="especialistaSeleccionado"
+      class="selector-especialista"
+    >
+      <option *ngFor="let especialista of especialistas" [value]="especialista">
+        {{ especialista }}
+      </option>
+    </select>
+    <button
+      *ngIf="especialistaSeleccionado"
+      (click)="descargarPDFPorEspecialista()"
+      class="boton-descargar-especialista"
+    >
+      Descargar PDF del Especialista
     </button>
   </div>
 

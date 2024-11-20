@@ -82,3 +82,63 @@ td ul li strong {
   outline: none;
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
 }
+
+.selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f7fc;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.label-especialista {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2a2a2a;
+  margin-bottom: 10px;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+}
+
+.selector-especialista {
+  font-size: 16px;
+  padding: 10px;
+  width: 250px;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.selector-especialista:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5);
+}
+
+.boton-descargar-especialista {
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 250px;
+  text-align: center;
+}
+
+.boton-descargar-especialista:hover {
+  background-color: #45a049;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.boton-descargar-especialista:disabled {
+  background-color: #d6d6d6;
+  cursor: not-allowed;
+}

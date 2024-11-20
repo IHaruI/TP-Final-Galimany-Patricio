@@ -12,6 +12,8 @@ import { HistorialClinicaComponent } from './historial-clinica/historial-clinica
 import { animation } from '@angular/animations';
 import { authGuard } from './guards/auth.guard';
 import { LogsComponent } from './pages/logs/logs.component';
+import { DetallesPacientesComponent } from './detalles-pacientes/detalles-pacientes.component';
+import { ExportarExelComponent } from './exportar-exel/exportar-exel.component';
 
 export const routes: Routes = [
   {
@@ -69,6 +71,17 @@ export const routes: Routes = [
   {
     path: 'logs',
     component: LogsComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'detalles-pacientes',
+    component: DetallesPacientesComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'exportar-exel',
+    component: ExportarExelComponent,
+    canActivate: [authGuard],
   },
   {
     path: '**',

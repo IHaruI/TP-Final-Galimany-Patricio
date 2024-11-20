@@ -1,0 +1,58 @@
+<!-- Botón de exportación a Excel, visible solo para el perfil Administrador -->
+<div class="exportar-todo">
+  <button (click)="exportarUsuariosExcel()">Exportar todos los usuarios</button>
+</div>
+
+<!-- Lista de Administradores -->
+<div class="usuarios-seccion">
+  <h2>Administradores</h2>
+  <div class="usuarios-list">
+    <div *ngFor="let admin of administradores" class="usuario-card">
+      <img [src]="admin.imagen" alt="Foto del usuario" class="usuario-imagen" />
+      <p class="usuario-nombre">{{ admin.nombre }} {{ admin.apellido }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Lista de Especialistas -->
+<div class="usuarios-seccion">
+  <h2>Especialistas</h2>
+  <div class="usuarios-list">
+    <div *ngFor="let especialista of especialistas" class="usuario-card">
+      <img
+        [src]="especialista.imagen"
+        alt="Foto del usuario"
+        class="usuario-imagen"
+      />
+      <p class="usuario-nombre">
+        {{ especialista.nombre }} {{ especialista.apellido }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Mensaje de estado -->
+<div class="mensaje-estado" *ngIf="mensajeEstado">
+  {{ mensajeEstado }}
+</div>
+
+<!-- Lista de Pacientes -->
+<div class="usuarios-seccion">
+  <h2>Pacientes</h2>
+  <div class="usuarios-list">
+    <div
+      *ngFor="let paciente of pacientes"
+      class="usuario-card"
+      (click)="exportarUsuarioExcel(paciente)"
+    >
+      <img
+        [src]="paciente.imagen"
+        alt="Foto del usuario"
+        class="usuario-imagen"
+      />
+      <p class="usuario-nombre">
+        {{ paciente.nombre }} {{ paciente.apellido }}
+      </p>
+    </div>
+  </div>
+</div>

@@ -19,6 +19,7 @@ import {
   CollectionReference,
 } from '@angular/fire/firestore';
 import { map, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,11 @@ import { map, Observable } from 'rxjs';
 export class AuthService {
   private usuariosCollection: CollectionReference;
 
-  constructor(private firestore: Firestore, private auth: Auth) {
+  constructor(
+    private firestore: Firestore,
+    private auth: Auth,
+    private http: HttpClient
+  ) {
     this.usuariosCollection = collection(this.firestore, 'usuarios');
   }
 

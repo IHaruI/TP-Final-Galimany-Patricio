@@ -14,9 +14,10 @@ import {
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Turno } from '../interfaces/turno.interface';
-import { Timestamp } from 'firebase/firestore';
+import { Paciente } from '../interfaces/paciente.interface';
 import { switchMap } from 'rxjs/operators';
 import { QuerySnapshot, DocumentData } from 'firebase/firestore';
+import { AuthService } from './auth.service';
 
 interface Especialista {
   uid: string;
@@ -29,7 +30,7 @@ interface Especialista {
   providedIn: 'root',
 })
 export class TurnosService {
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private auth: AuthService) {}
 
   almacenarTurnosPorDia(): Observable<void> {
     const turnosRef = collection(this.firestore, 'turnosPorDia');
@@ -280,15 +281,34 @@ export class TurnosService {
     return from(getDocs(q)).pipe(
       switchMap((querySnapshot: QuerySnapshot<DocumentData>) => {
         if (querySnapshot.empty) {
-          throw new Error(
-            'No se encontró un turno con el pacienteId especificado'
+          console.log(
+            'No se encontró un turno con el pacienteId especificado, creando nuevo...'
+          );
+          return from(
+            addDoc(turnosCollectionRef, {
+              ...data,
+              pacienteId: id,
+            })
           );
         }
 
-        const turnoDoc = querySnapshot.docs[0];
-        const turnoRef = doc(this.firestore, 'turnos', turnoDoc.id);
+        const turnoSinAltura = querySnapshot.docs.find(
+          (doc) => !doc.data()['altura']
+        );
 
-        return from(updateDoc(turnoRef, data));
+        if (turnoSinAltura) {
+          const turnoRef = doc(this.firestore, 'turnos', turnoSinAltura.id);
+          console.log('Actualizando turno sin altura...');
+          return from(updateDoc(turnoRef, data));
+        }
+
+        console.log('Todos los turnos tienen altura, creando uno nuevo...');
+        return from(
+          addDoc(turnosCollectionRef, {
+            ...data,
+            pacienteId: id,
+          })
+        );
       })
     );
   }
@@ -448,6 +468,55 @@ export class TurnosService {
     return from(
       getDocs(historiasRef).then((snapshot) =>
         snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      )
+    );
+  }
+
+  obtenerPacientesAtendidos(): Observable<any[]> {
+    const historiasClinicasRef = collection(
+      this.firestore,
+      'historias_clinicas'
+    );
+    const especialistaId = this.auth.getUid();
+
+    return from(
+      getDocs(historiasClinicasRef).then(async (snapshot) => {
+        const pacienteIdsSet = new Set(
+          snapshot.docs
+            .filter((doc) => doc.data()['especialistaId'] === especialistaId)
+            .map((doc) => doc.data()['pacienteId'])
+        );
+
+        const usuariosRef = collection(this.firestore, 'usuarios');
+        const usuariosSnapshot = await getDocs(usuariosRef);
+        const pacientes = usuariosSnapshot.docs
+          .map((doc) => doc.data())
+          .filter((usuario) => pacienteIdsSet.has(usuario['uid']))
+          .map((usuario) => ({
+            id: usuario['uid'],
+            nombre: usuario['nombre'],
+            apellido: usuario['apellido'],
+            imagen: usuario['imagenPerfilURL'] || 'assets/default-user.png',
+          }));
+
+        return pacientes;
+      })
+    );
+  }
+
+  obtenerTurnosPorPaciente(pacienteId: string): Observable<Turno[]> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    const q = query(turnosRef, where('pacienteId', '==', pacienteId));
+    return from(
+      getDocs(q).then((snapshot) =>
+        snapshot.docs.map(
+          (doc) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+              datosDinamicos: doc.data()['datosDinamicos'] || [],
+            } as Turno)
+        )
       )
     );
   }

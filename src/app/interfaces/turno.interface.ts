@@ -16,4 +16,5 @@ export interface Turno {
   temperatura?: string;
   presion?: string;
   datosDinamicos?: { clave: string; valor: string }[];
+  resena?: string;
 }

@@ -5,9 +5,7 @@
   <button (click)="logout()">Cerrar Sesión</button>
 
   <!-- Botón de exportación a Excel, solo visible para el perfil Administrador -->
-  <button *ngIf="esAdministrador" (click)="exportarUsuariosExcel()">
-    Exportar a Excel
-  </button>
+  <button (click)="redireccion('administrador')">Exportar a Excel</button>
 
   <!-- Botón para redirigir a la página de solicitar turno -->
   <button (click)="redireccion('solicitar')">Solicitar Turno</button>

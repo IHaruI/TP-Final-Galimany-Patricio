@@ -4,6 +4,11 @@
   <!-- Botón de deslogueo -->
   <button (click)="logout()">Cerrar Sesión</button>
 
+  <!-- Botón de deslogueo -->
+  <button (click)="redireccion('detalles-pacientes')">
+    Detalles Pacientes
+  </button>
+
   <!-- Botón para redirigir a la página de historial clínica -->
   <button (click)="redireccion('historial')">Historial Clínica</button>
 </div>
@@ -34,7 +39,7 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h2>Reseña del Turno</h2>
     <p>{{ modalResenaComentario }}</p>
-    <div class="modal-actions">
+    <div class="modal-cerrar">
       <button (click)="cerrarModalResena()">Cerrar</button>
     </div>
   </div>
