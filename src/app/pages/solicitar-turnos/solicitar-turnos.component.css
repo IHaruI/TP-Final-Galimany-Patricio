@@ -6,6 +6,7 @@
 h2 {
   text-align: center;
   color: #3a8fb7;
+  margin-top: 20px;
   margin-bottom: 20px;
   font-size: 1.8em;
   font-weight: 600;
@@ -228,4 +229,34 @@ button[type="submit"]:hover {
 
 .nombre-especialista {
   text-align: center;
+}
+
+.lista {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#pacienteSelect {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 15px;
+  width: 250px;
+  max-width: 100%;
+  font-size: 16px;
+  border: 2px solid #4caf50;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#pacienteSelect:hover {
+  border-color: #45a049;
+}
+
+#pacienteSelect:focus {
+  border-color: #66bb6a;
+  box-shadow: 0 0 10px rgba(102, 187, 106, 0.5);
 }
