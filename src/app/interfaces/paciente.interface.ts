@@ -3,4 +3,5 @@ export interface Paciente {
   nombre: string;
   apellido: string;
   imagen: string;
+  estado: string;
 }

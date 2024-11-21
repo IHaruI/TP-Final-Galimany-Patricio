@@ -526,18 +526,38 @@ export class TurnosService {
   }
 
   obtenerTurnosPorPaciente(pacienteId: string): Observable<Turno[]> {
-    const turnosRef = collection(this.firestore, 'turnos');
-    const q = query(turnosRef, where('pacienteId', '==', pacienteId));
+    const especialistaId = this.auth.getUid();
+    const usuariosRef = collection(this.firestore, 'usuarios');
+
     return from(
-      getDocs(q).then((snapshot) =>
-        snapshot.docs.map(
-          (doc) =>
-            ({
-              id: doc.id,
-              ...doc.data(),
-              datosDinamicos: doc.data()['datosDinamicos'] || [],
-            } as Turno)
-        )
+      getDocs(query(usuariosRef, where('uid', '==', especialistaId))).then(
+        async (snapshotUsuarios) => {
+          if (snapshotUsuarios.empty) {
+            throw new Error(
+              'Especialista no encontrado en la colección de usuarios.'
+            );
+          }
+
+          const especialistaNombre = snapshotUsuarios.docs[0].data()['nombre'];
+
+          const turnosRef = collection(this.firestore, 'turnos');
+          const q = query(
+            turnosRef,
+            where('pacienteId', '==', pacienteId),
+            where('estado', '==', 'Realizado'),
+            where('especialista', '==', especialistaNombre)
+          );
+
+          const turnosSnapshot = await getDocs(q);
+          return turnosSnapshot.docs.map(
+            (doc) =>
+              ({
+                id: doc.id,
+                ...doc.data(),
+                datosDinamicos: doc.data()['datosDinamicos'] || [],
+              } as Turno)
+          );
+        }
       )
     );
   }
