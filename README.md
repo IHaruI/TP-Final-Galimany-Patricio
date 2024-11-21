@@ -33,9 +33,17 @@
 
 <img src="documentos/pantalla-especialista.jpg"/>
 
+### PANTALLA DE LOS DETALLES DEL PACIENTE
+
+<img src="documentos/pantalla-detalles-pacientes.jpg"/>
+
 ### PANTALLA DEL ADMINISTRADOR
 
 <img src="documentos/pantalla-administrador.jpg"/>
+
+### PANTALLA DE EXPORTACION A EXEL
+
+<img src="documentos/pantalla-exportacion-exel.jpg"/>
 
 ### PANTALLA DE SOLICITAR TURNOS DEL ADMINISTRADOR
 
@@ -44,3 +52,7 @@
 ### PANTALLA DEL HISTORIAL CLINICO DEL ADMINISTRADOR
 
 <img src="documentos/pantalla-historial-clinica-admin.jpg"/>
+
+### PANTALLA DE ESTADÍSTICAS DE TURNOS
+
+<img src="documentos/pantalla-estadisticas-turnos.jpg"/>
