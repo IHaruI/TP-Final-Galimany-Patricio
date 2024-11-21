@@ -30,6 +30,8 @@ export class HistoriaClinicaComponent implements OnInit {
   mensaje: string = '';
   mensajeError: boolean = false;
   pacienteId: string = '';
+  hora: string = '';
+  comentario: string = '';
   especialistaId: string | null;
 
   constructor(
@@ -44,6 +46,8 @@ export class HistoriaClinicaComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.pacienteId = params['pacienteId'] || '';
+      this.hora = params['hora'] || '';
+      this.comentario = params['comentario'] || '';
     });
 
     if (this.pacienteId) {
@@ -121,7 +125,12 @@ export class HistoriaClinicaComponent implements OnInit {
         };
 
         this.turnosService
-          .agregarCamposTurno(this.pacienteId, turnoData)
+          .agregarCamposTurno(
+            this.pacienteId,
+            this.hora,
+            this.comentario,
+            turnoData
+          )
           .subscribe({
             next: () => {
               this.mostrarMensaje(

@@ -169,16 +169,21 @@ export class EspecialistaTurnosComponent implements OnInit {
               turno.estado = 'Realizado';
               turno.comentario = this.modalComentario ?? '';
 
-              // Actualizar la cantidad de turnos para el especialista
               const especialistaNombre = turno.especialista;
 
               this.turnosService
                 .actualizarTurnosFinalizadosPorEspecialista(especialistaNombre)
                 .subscribe(() => {
                   const pacienteId = turno.pacienteId ?? 'valor-default';
+                  const hora = turno.hora;
+                  const comentario = turno.comentario;
 
                   this.router.navigate(['/historia-clinica'], {
-                    queryParams: { pacienteId: pacienteId },
+                    queryParams: {
+                      pacienteId: pacienteId,
+                      hora: hora,
+                      comentario: comentario,
+                    },
                   });
 
                   this.cerrarModal();

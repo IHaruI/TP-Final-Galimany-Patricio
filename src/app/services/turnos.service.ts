@@ -14,7 +14,6 @@ import {
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Turno } from '../interfaces/turno.interface';
-import { Paciente } from '../interfaces/paciente.interface';
 import { switchMap } from 'rxjs/operators';
 import { QuerySnapshot, DocumentData } from 'firebase/firestore';
 import { AuthService } from './auth.service';
@@ -267,6 +266,8 @@ export class TurnosService {
 
   agregarCamposTurno(
     id: string,
+    hora: string,
+    comentario: string,
     data: {
       altura: number;
       peso: number;
@@ -288,9 +289,28 @@ export class TurnosService {
             addDoc(turnosCollectionRef, {
               ...data,
               pacienteId: id,
+              estado: 'Pendiente',
             })
           );
         }
+
+        const turnoCoincidente = querySnapshot.docs.find((doc) => {
+          const docData = doc.data();
+          return (
+            docData['hora'] === hora &&
+            docData['estado'] === 'Realizado' &&
+            docData['comentario'] === comentario
+          );
+        });
+
+        if (turnoCoincidente) {
+          const turnoRef = doc(this.firestore, 'turnos', turnoCoincidente.id);
+          return from(updateDoc(turnoRef, data));
+        }
+
+        console.log(
+          'No se encontró un turno con la hora y estado coincidente, buscando otro...'
+        );
 
         const turnoSinAltura = querySnapshot.docs.find(
           (doc) => !doc.data()['altura']
@@ -302,10 +322,12 @@ export class TurnosService {
         }
 
         console.log('Todos los turnos tienen altura, creando uno nuevo...');
+
         return from(
           addDoc(turnosCollectionRef, {
             ...data,
             pacienteId: id,
+            estado: 'Pendiente',
           })
         );
       })
