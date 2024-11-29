@@ -1,0 +1,54 @@
+1 - Crear proyecto (ir a la ubicacion a la que desea crear)
+
+ng new *nombre del proyecto*
+CSS
+No
+
+2 - Instalar dependencias de firebase
+
+npm install firebase
+npm install @angular/fire firebase
+
+3 - Crear proyecto en GitHub.
+
+4 - Subir el proyecto a github
+
+git init
+git add .
+git commit -m "elegir nombre"
+git remote add origin https://github.com/IHaruI/parcial-labo-iv.git
+git push -u origin master
+
+5 - Crear la Authentication, Firestore Database, Storage y Hosting en FIrebase.
+
+6 - Instalar dependecias para el Hosting
+
+npm install -g firebase-tools
+firebase login
+firebase init
+	yes
+	selecciona tu proyecto de firebase
+	/dist
+	logearse a GitHub
+
+7 - Hacer el buil y deploy
+
+firebase deploy
+npm run build
+
+8 - Agregar correctamente la ruta
+
+{
+  "hosting": {
+    "public": "./dist/parcial/browser",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+
+9 - Volver a hacer el buil y luego el deploy.
