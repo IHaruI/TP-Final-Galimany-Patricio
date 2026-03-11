@@ -1,0 +1,140 @@
+body {
+  background: #f0f8ff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.exportar-todo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.usuarios-seccion {
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  width: 80%;
+}
+
+h2 {
+  color: #004d73;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.usuarios-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.usuario-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  width: 130px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.usuario-card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.usuario-imagen {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffff;
+  margin-bottom: 0.7rem;
+  transition: transform 0.3s;
+}
+
+.usuario-card:hover .usuario-imagen {
+  transform: rotate(3deg) scale(1.05);
+}
+
+.usuario-nombre {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  color: #004d73;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.mensaje-estado {
+  margin: 20px auto;
+  padding: 15px 25px;
+  border-radius: 25px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  width: 60%;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.mensaje-estado {
+  background: linear-gradient(90deg, #4caf50, #81c784);
+  box-shadow: 0 3px 8px rgba(76, 175, 80, 0.4);
+}
+
+.mensaje-estado.error {
+  background: linear-gradient(90deg, #e57373, #f44336);
+  box-shadow: 0 3px 8px rgba(244, 67, 54, 0.4);
+}
+
+.mensaje-estado.warning {
+  background: linear-gradient(90deg, #ffb74d, #ff9800);
+  box-shadow: 0 3px 8px rgba(255, 152, 0, 0.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+button {
+  display: inline-block;
+  padding: 12px 30px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #64b5f6, #42a5f5);
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+}
+
+button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+button:focus {
+  outline: none;
+}

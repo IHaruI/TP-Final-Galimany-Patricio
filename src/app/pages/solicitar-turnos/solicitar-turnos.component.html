@@ -1,0 +1,121 @@
+<h2>Solicitar Turno</h2>
+
+<div *ngIf="esAdministrador">
+  <h2>Pacientes Verificados</h2>
+  <label class="lista" for="pacienteSelect">Selecciona un paciente:</label>
+  <select
+    id="pacienteSelect"
+    [(ngModel)]="pacienteSeleccionadoUid"
+    (change)="seleccionarPaciente()"
+  >
+    <option
+      *ngFor="let paciente of pacientesVerificados"
+      [value]="paciente.uid"
+    >
+      {{ paciente.nombre }} {{ paciente.apellido }}
+    </option>
+  </select>
+</div>
+
+<form (submit)="solicitarTurno()">
+  <!-- Especialidades como botones -->
+  <h3>Seleccionar Especialidad:</h3>
+  <div class="especialidades">
+    <button
+      *ngFor="let especialidad of especialidades"
+      (click)="seleccionarEspecialidad(especialidad)"
+      [class.selected]="especialidad === especialidadSeleccionada"
+    >
+      <img
+        [src]="obtenerImagenEspecialidad(especialidad)"
+        alt="{{ especialidad }}"
+        (error)="onImageError($event)"
+      />
+    </button>
+  </div>
+
+  <!-- Especialista -->
+  <h3>Seleccionar Especialista:</h3>
+  <ul>
+    <li
+      *ngFor="let especialista of especialistasFiltrados"
+      (click)="seleccionarEspecialista(especialista)"
+      [class.selected]="especialista === especialistaSeleccionado"
+    >
+      <div class="especialista-item">
+        <span class="nombre-especialista">{{ especialista.nombre }}</span>
+        <img
+          *ngIf="especialista.imagenPerfilURL"
+          [src]="especialista.imagenPerfilURL"
+          alt="{{ especialista.nombre }}"
+          class="imagen-perfil"
+        />
+      </div>
+    </li>
+  </ul>
+
+  <!-- Selección de día -->
+  <div *ngIf="especialidadSeleccionada && especialistaSeleccionado">
+    <label>Seleccionar Día del Turno:</label>
+    <div class="calendario">
+      <span>{{ mesActual }} {{ anioActual }}</span>
+      <div class="dias">
+        <div
+          *ngFor="let dia of diasDelMes"
+          (click)="seleccionarDia(dia)"
+          [class.seleccionado]="dia === diaSeleccionado"
+          [class.disabled]="isDiaDisabled(dia)"
+        >
+          {{ dia.getDate() }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disponibilidad de horarios -->
+  <div *ngIf="disponibilidadEspecialista.length > 0">
+    <br />
+    <h3>Disponibilidad:</h3>
+    <ul
+      *ngIf="
+        disponibilidadEspecialista[0] !== 'No hay disponibilidad para este día.'
+      "
+    >
+      <li
+        *ngFor="let hora of disponibilidadEspecialista"
+        (click)="!turnoOcupado.includes(hora) && seleccionarHora(hora)"
+        [class.disabled]="turnoOcupado.includes(hora)"
+      >
+        {{ hora }}
+        <span *ngIf="hora === horaSeleccionada"> (Seleccionado)</span>
+      </li>
+    </ul>
+    <p
+      *ngIf="
+        disponibilidadEspecialista[0] === 'No hay disponibilidad para este día.'
+      "
+    >
+      {{ disponibilidadEspecialista[0] }}
+    </p>
+  </div>
+
+  <div *ngIf="mensajeError" class="error-message">
+    {{ mensajeError }}
+  </div>
+
+  <div *ngIf="mensajeExito" class="success-message">
+    {{ mensajeExito }}
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="
+      !fechaSeleccionada ||
+      !especialistaSeleccionado ||
+      !horaSeleccionada ||
+      disponibilidadEspecialista[0] === 'No hay disponibilidad para este día.'
+    "
+  >
+    Solicitar Turno
+  </button>
+</form>

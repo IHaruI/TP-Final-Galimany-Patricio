@@ -1,0 +1,121 @@
+<app-perfil></app-perfil>
+
+<div class="botones">
+  <!-- Botón de deslogueo -->
+  <button (click)="logout()">Cerrar Sesión</button>
+
+  <!-- Botón de deslogueo -->
+  <button (click)="redireccion('detalles-pacientes')">
+    Detalles Pacientes
+  </button>
+
+  <!-- Botón para redirigir a la página de historial clínica -->
+  <button (click)="redireccion('historial')">Historial Clínica</button>
+</div>
+
+<h2>Mis Turnos</h2>
+
+<!-- Modal -->
+<div *ngIf="modalVisible" class="modal-overlay" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>{{ modalTitle }}</h2>
+    <textarea
+      [(ngModel)]="modalComentario"
+      placeholder="Ingrese su comentario..."
+    ></textarea>
+    <div class="modal-actions">
+      <button (click)="cerrarModal()">Cancelar</button>
+      <button (click)="procesarAccion()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para ver reseña -->
+<div
+  *ngIf="modalResenaVisible"
+  class="modal-overlay resena"
+  (click)="cerrarModalResena()"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Reseña del Turno</h2>
+    <p>{{ modalResenaComentario }}</p>
+    <div class="modal-cerrar">
+      <button (click)="cerrarModalResena()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <label>Filtrar:</label>
+  <input type="text" [(ngModel)]="filtroGeneral" (input)="aplicarFiltro()" />
+</div>
+
+<!-- Tabla de turnos -->
+<table>
+  <thead>
+    <tr>
+      <th>Especialidad</th>
+      <th>Paciente</th>
+      <th>Altura</th>
+      <th>Peso</th>
+      <th>Temperatura</th>
+      <th>Presión</th>
+      <th>Datos Dinámicos</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turno of turnosFiltrados">
+      <td>{{ turno.especialidad }}</td>
+      <td>{{ turno.paciente }}</td>
+      <td>{{ turno.altura }}</td>
+      <td>{{ turno.peso }}</td>
+      <td>{{ turno.temperatura }}</td>
+      <td>{{ turno.presion }}</td>
+      <td>
+        <div *ngIf="turno.datosDinamicos">
+          <ul>
+            <li *ngFor="let dato of turno.datosDinamicos">
+              {{ dato.clave }}: {{ dato.valor }}
+            </li>
+          </ul>
+        </div>
+      </td>
+
+      <td>{{ turno.estado }}</td>
+      <td>
+        <ng-container *ngIf="turno.estado === 'Aceptado'">
+          <button (click)="abrirModal('Cancelar Turno', 'cancelar', turno)">
+            Cancelar Turno
+          </button>
+          <button (click)="abrirModal('Finalizar Turno', 'finalizar', turno)">
+            Finalizar Turno
+          </button>
+          <button *ngIf="turno.comentario" (click)="verResena(turno)">
+            Ver Reseña
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="turno.estado === 'Pendiente'">
+          <button (click)="abrirModal('Rechazar Turno', 'rechazar', turno)">
+            Rechazar Turno
+          </button>
+          <button (click)="aceptarTurnoDirecto(turno)">Aceptar Turno</button>
+        </ng-container>
+
+        <ng-container *ngIf="turno.estado === 'Realizado'">
+          <button *ngIf="turno.comentario" (click)="verResena(turno)">
+            Ver Reseña
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="turno.estado === 'Cancelado'">
+          <button *ngIf="turno.comentario" (click)="verResena(turno)">
+            Ver Reseña
+          </button>
+        </ng-container>
+      </td>
+    </tr>
+  </tbody>
+</table>

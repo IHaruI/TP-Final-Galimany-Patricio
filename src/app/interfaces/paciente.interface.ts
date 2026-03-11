@@ -1,0 +1,7 @@
+export interface Paciente {
+  id: string;
+  nombre: string;
+  apellido: string;
+  imagen: string;
+  estado: string;
+}

@@ -1,0 +1,162 @@
+<app-perfil></app-perfil>
+
+<div class="botones">
+  <!-- Botón de deslogueo -->
+  <button (click)="logout()">Cerrar Sesión</button>
+
+  <!-- Botón de exportación a Excel, solo visible para el perfil Administrador -->
+  <button (click)="redireccion('administrador')">Exportar a Excel</button>
+
+  <!-- Botón para redirigir a la página de solicitar turno -->
+  <button (click)="redireccion('solicitar')">Solicitar Turno</button>
+
+  <!-- Botón para redirigir a la página de historial clínica -->
+  <button (click)="redireccion('historial')">Historial Clínica</button>
+
+  <button (click)="redireccion('logs')">Estadisticas</button>
+</div>
+
+<h2>Administración de Usuarios</h2>
+
+<!-- Mensaje de confirmación o error -->
+<div
+  *ngIf="mensaje"
+  class="mensaje"
+  [ngClass]="{ exito: exitoMensaje, error: !exitoMensaje }"
+>
+  {{ mensaje }}
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <td>{{ usuario.nombre }}</td>
+      <td>{{ usuario.email }}</td>
+      <td>{{ usuario.rol }}</td>
+      <td>{{ usuario.aprobado ? "Aprobado" : "Pendiente" }}</td>
+      <td>
+        <button
+          (click)="toggleAprobacion(usuario)"
+          *ngIf="usuario.rol === 'especialista'"
+        >
+          {{ usuario.aprobado ? "Inhabilitar" : "Habilitar" }}
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Administración de Turnos</h2>
+
+<!-- Filtro por Especialidad o Especialista -->
+<div>
+  <label>Filtrar por Especialidad o Especialista:</label>
+  <input
+    type="text"
+    [(ngModel)]="filtroGeneral"
+    (input)="filtrarTurnos()"
+    placeholder="Ingrese especialidad o especialista"
+  />
+</div>
+
+<!-- Listado de Turnos -->
+<table>
+  <thead>
+    <tr>
+      <th>Fecha y Hora</th>
+      <th>Paciente</th>
+      <th>Especialista</th>
+      <th>Especialidad</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turno of turnosFiltrados">
+      <td>
+        {{
+          turno.fecha
+            ? (turno.fecha | date : "dd MMMM yyyy, h:mm:ss a")
+            : "Sin fecha"
+        }}
+      </td>
+      <td>{{ turno.nombre }} {{ turno.apellido }}</td>
+      <td>{{ turno.especialista }}</td>
+      <td>{{ turno.especialidad }}</td>
+      <td>{{ turno.estado }}</td>
+      <td>
+        <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)">
+          Cancelar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal para motivo de cancelación -->
+<div *ngIf="mostrarModalCancelacion">
+  <label>Motivo de cancelación:</label>
+  <textarea [(ngModel)]="motivoCancelacion"></textarea>
+  <button (click)="confirmarCancelacion()">Confirmar</button>
+  <button (click)="cerrarModal()">Cancelar</button>
+</div>
+
+<div [formGroup]="rolForm">
+  <h3>Seleccione un Rol</h3>
+  <select formControlName="rol" (change)="onRoleChange()">
+    <option value="administrador">Administrador</option>
+    <option value="paciente-especialista">Paciente / Especialista</option>
+  </select>
+</div>
+
+<!-- Mostrar el RegistroComponent cuando el rol es "paciente-especialista" -->
+<app-registro *ngIf="mostrarRegistroComponent"></app-registro>
+
+<!-- Formulario de creación de usuarios solo si el rol es "administrador" -->
+<div *ngIf="mostrarFormulario">
+  <h3>Crear Nuevo Usuario</h3>
+  <form [formGroup]="nuevoUsuarioForm" (ngSubmit)="crearUsuario()">
+    <div class="input-group">
+      <label>Nombre</label>
+      <input formControlName="nombre" type="text" required />
+    </div>
+    <div class="input-group">
+      <label>Apellido</label>
+      <input formControlName="apellido" type="text" required />
+    </div>
+    <div class="input-group">
+      <label>Edad</label>
+      <input formControlName="edad" type="number" required />
+    </div>
+    <div class="input-group">
+      <label>DNI</label>
+      <input formControlName="dni" type="number" required />
+    </div>
+    <div class="input-group">
+      <label>Email</label>
+      <input formControlName="email" type="email" required />
+    </div>
+    <div class="input-group">
+      <label>Contraseña</label>
+      <input formControlName="password" type="password" required />
+    </div>
+    <div class="input-group">
+      <label>Imagen de Perfil</label>
+      <input type="file" (change)="onFileSelected($event)" required />
+    </div>
+    <div class="crear-usuario">
+      <button type="submit" [disabled]="!nuevoUsuarioForm.valid">
+        Crear Usuario
+      </button>
+    </div>
+  </form>
+</div>

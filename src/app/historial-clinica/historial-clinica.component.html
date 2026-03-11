@@ -1,0 +1,149 @@
+<h2>Historia Clínica</h2>
+
+<!-- Vista para el Especialista -->
+<div *ngIf="isEspecialista">
+  <h3>Historial de Pacientes</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Fecha y Hora</th>
+        <th>Altura</th>
+        <th>Peso</th>
+        <th>Temperatura</th>
+        <th>Presión</th>
+        <th>Datos Dinámicos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let historial of historialClinicoEspecialista">
+        <td>{{ historial.pacienteNombre }}</td>
+        <td>{{ historial.pacienteApellido }}</td>
+        <td>{{ historial.fechaConHora }}</td>
+        <td>{{ historial.altura }}</td>
+        <td>{{ historial.peso }}</td>
+        <td>{{ historial.temperatura }}</td>
+        <td>{{ historial.presion }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let dato of historial.datosDinamicos">
+              <strong>{{ dato.clave }}:</strong> {{ dato.valor }}
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Vista para el Paciente -->
+<div *ngIf="isPaciente">
+  <h3>Mi Historia Clínica</h3>
+
+  <div class="boton-container">
+    <button (click)="descargarPDF()" class="boton-descargar">
+      Descargar Toda la Historia Clínica en PDF
+    </button>
+  </div>
+
+  <!-- Selector para especialistas -->
+  <div class="selector-container">
+    <label for="especialista-selector" class="label-especialista"
+      >Seleccionar Especialista:</label
+    >
+    <select
+      id="especialista-selector"
+      [(ngModel)]="especialistaSeleccionado"
+      class="selector-especialista"
+    >
+      <option *ngFor="let especialista of especialistas" [value]="especialista">
+        {{ especialista }}
+      </option>
+    </select>
+    <button
+      *ngIf="especialistaSeleccionado"
+      (click)="descargarPDFPorEspecialista()"
+      class="boton-descargar-especialista"
+    >
+      Descargar PDF del Especialista
+    </button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Especialista</th>
+        <th>Fecha y Hora</th>
+        <th>Altura</th>
+        <th>Peso</th>
+        <th>Temperatura</th>
+        <th>Presión</th>
+        <th>Datos Dinámicos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let historial of historialClinicoPaciente">
+        <td>
+          {{ historial.especialistaNombre }}
+          {{ historial.especialistaApellido }}
+        </td>
+        <td>{{ historial.fechaConHora }}</td>
+        <td>{{ historial.altura }}</td>
+        <td>{{ historial.peso }}</td>
+        <td>{{ historial.temperatura }}</td>
+        <td>{{ historial.presion }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let dato of historial.datosDinamicos">
+              <strong>{{ dato.clave }}:</strong> {{ dato.valor }}
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Vista para el Administrador -->
+<div *ngIf="isAdministrador">
+  <h3>Historial Completo de Pacientes</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Especialista</th>
+        <th>Paciente</th>
+        <th>Fecha y Hora</th>
+        <th>Altura</th>
+        <th>Peso</th>
+        <th>Temperatura</th>
+        <th>Presión</th>
+        <th>Datos Dinámicos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let historial of historialClinicoAdministrador">
+        <td>
+          {{ historial.especialistaNombre }}
+          {{ historial.especialistaApellido }}
+        </td>
+        <td>
+          {{ historial.pacienteNombre }}
+          {{ historial.pacienteApellido }}
+        </td>
+        <td>{{ historial.fechaConHora }}</td>
+        <td>{{ historial.altura }}</td>
+        <td>{{ historial.peso }}</td>
+        <td>{{ historial.temperatura }}</td>
+        <td>{{ historial.presion }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let dato of historial.datosDinamicos">
+              <strong>{{ dato.clave }}:</strong> {{ dato.valor }}
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

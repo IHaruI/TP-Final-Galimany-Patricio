@@ -1,0 +1,66 @@
+<h2>Detalles de Pacientes</h2>
+
+<div class="pacientes-list">
+  <div
+    *ngFor="let paciente of pacientes"
+    class="paciente-card"
+    (click)="seleccionarPaciente(paciente)"
+  >
+    <img
+      [src]="paciente.imagen"
+      alt="Foto del paciente"
+      class="paciente-imagen"
+    />
+    <p class="paciente-nombre">{{ paciente.nombre }} {{ paciente.apellido }}</p>
+  </div>
+</div>
+
+<!-- Detalles del paciente seleccionado -->
+<div *ngIf="pacienteSeleccionado" class="detalles-paciente">
+  <h3>Detalles del Turno</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Especialidad</th>
+        <th>Paciente</th>
+        <th>Altura</th>
+        <th>Peso</th>
+        <th>Temperatura</th>
+        <th>Presión</th>
+        <th>Datos Dinámicos</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let turno of turnosPacienteSeleccionado">
+        <td>{{ turno.especialidad }}</td>
+        <td>{{ turno.nombre }} {{ turno.apellido }}</td>
+        <td>{{ turno.altura }}</td>
+        <td>{{ turno.peso }}</td>
+        <td>{{ turno.temperatura }}</td>
+        <td>{{ turno.presion }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let dato of turno.datosDinamicos">
+              <strong>{{ dato.clave }}:</strong> {{ dato.valor }}
+            </li>
+          </ul>
+        </td>
+        <td>{{ turno.estado }}</td>
+        <td>
+          <button (click)="verResena(turno)">Ver Reseña</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal de Reseña -->
+<div *ngIf="modalVisible" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Reseña de la Consulta</h3>
+    <p>{{ resenaSeleccionada }}</p>
+    <button (click)="cerrarModal()">Cerrar</button>
+  </div>
+</div>

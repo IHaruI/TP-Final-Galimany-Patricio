@@ -1,0 +1,91 @@
+<app-perfil></app-perfil>
+
+<!-- Modal para acciones de los turnos -->
+<app-modal
+  *ngIf="isModalOpen"
+  [title]="modalTitle"
+  [message]="modalMessage"
+  [showInput]="modalInput"
+  (onConfirm)="handleModalConfirm($event)"
+  (onCancel)="closeModal()"
+></app-modal>
+
+<div class="botones">
+  <!-- Botón de deslogueo -->
+  <button class="logout" (click)="logout()">Cerrar Sesión</button>
+
+  <!-- Botón para redirigir a la página de solicitar turno -->
+  <button (click)="redireccion('solicitar')">Solicitar Turno</button>
+
+  <!-- Botón para redirigir a la página de historial clínica -->
+  <button (click)="redireccion('historial')">Historial Clínica</button>
+</div>
+
+<h2>Mis Turnos</h2>
+<div>
+  <label>Filtrar:</label>
+  <input type="text" [(ngModel)]="filtro" (input)="aplicarFiltro()" />
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Especialidad</th>
+      <th>Especialista</th>
+      <th>Estado</th>
+      <th>Altura</th>
+      <th>Peso</th>
+      <th>Temperatura</th>
+      <th>Presión</th>
+      <th>Datos Dinámicos</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turno of turnosFiltrados">
+      <td>{{ turno.especialidad }}</td>
+      <td>{{ turno.especialista }}</td>
+      <td>{{ turno.estado }}</td>
+      <td>{{ turno.altura }}</td>
+      <td>{{ turno.peso }}</td>
+      <td>{{ turno.temperatura }}</td>
+      <td>{{ turno.presion }}</td>
+      <td>
+        <ul>
+          <li *ngFor="let dato of turno.datosDinamicos">
+            {{ dato.clave }}: {{ dato.valor }}
+          </li>
+        </ul>
+      </td>
+      <td>
+        <button
+          *ngIf="turno.estado === 'Pendiente'"
+          (click)="
+            openModal(
+              'Cancelar Turno',
+              'Escribe el motivo de cancelación:',
+              true,
+              turno
+            )
+          "
+        >
+          Cancelar Turno
+        </button>
+
+        <button *ngIf="turno.comentario" (click)="verResena(turno)">
+          Ver Reseña
+        </button>
+        <button
+          *ngIf="turno.realizado && turno.comentario"
+          (click)="completarEncuesta(turno, '')"
+        >
+          Completar Encuesta
+        </button>
+
+        <button *ngIf="turno.realizado" (click)="calificarAtencion(turno, '')">
+          Calificar Atención
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

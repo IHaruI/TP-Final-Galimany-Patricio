@@ -1,0 +1,16 @@
+<div class="contenedor">
+  <div class="modal-overlay" (click)="close()"></div>
+  <div class="modal-content">
+    <h2>{{ title }}</h2>
+    <p *ngIf="message">{{ message }}</p>
+    <input
+      *ngIf="showInput"
+      [(ngModel)]="inputValue"
+      placeholder="Ingrese su respuesta"
+    />
+    <div class="modal-actions">
+      <button (click)="close()">Cancelar</button>
+      <button (click)="confirm()">Confirmar</button>
+    </div>
+  </div>
+</div>

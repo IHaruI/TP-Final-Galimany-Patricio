@@ -1,0 +1,57 @@
+<div class="contenedor">
+  <!-- Botón flotante -->
+  <button class="btn-flotante" (click)="redirigirBienvenida()">← Volver</button>
+
+  <h2>Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()">
+    <label>Email</label>
+    <input formControlName="email" type="email" required />
+
+    <label>Contraseña</label>
+    <input formControlName="password" type="password" required />
+
+    <button class="button" type="submit" [disabled]="!loginForm.valid">
+      Iniciar Sesión
+    </button>
+  </form>
+
+  <!-- Pantalla de carga -->
+  <div *ngIf="isLoading" class="loading-screen">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Mensaje de éxito o error -->
+  <div *ngIf="mensaje" [ngClass]="{ success: esExito, error: !esExito }">
+    {{ mensaje }}
+  </div>
+
+  <!-- Botones de acceso rápido -->
+  <div class="botones-acceso">
+    <button (click)="autocompletar(1)">
+      <img src="paciente-hombre.png" alt="Paciente 1" />
+      Paciente 1
+    </button>
+    <button (click)="autocompletar(2)">
+      <img src="paciente-mujer.png" alt="Paciente 2" />
+      Paciente 2
+    </button>
+    <button (click)="autocompletar(3)">
+      <img src="paciente-abuela.png" alt="Paciente 3" />
+      Paciente 3
+    </button>
+    <button (click)="autocompletar(4)">
+      <img src="especialista-hombre.png" alt="Especialista 1" />
+      Especialista 1
+    </button>
+    <button (click)="autocompletar(5)">
+      <img src="especialista-mujer.png" alt="Especialista 2" />
+      Especialista 2
+    </button>
+    <button (click)="autocompletar(6)">
+      <img src="administrador.png" alt="Administrador" />
+      Administrador
+    </button>
+  </div>
+</div>

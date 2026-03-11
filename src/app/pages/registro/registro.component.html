@@ -1,0 +1,166 @@
+<div class="registro-container">
+  <button class="btn-flotante" (click)="redirigirBienvenida()">← Volver</button>
+
+  <div *ngIf="isLoading" class="loading-screen">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <h2>Registro de Usuario</h2>
+
+  <div class="botones-usuarios">
+    <div class="usuario">
+      <button
+        (click)="cambiarTipoUsuario('Paciente')"
+        class="tipo-usuario-btn paciente-btn"
+      >
+        <img
+          src="paciente-hombre.png"
+          alt="Paciente"
+          class="tipo-usuario-img"
+        />
+      </button>
+    </div>
+
+    <div class="usuario">
+      <button
+        (click)="cambiarTipoUsuario('Especialista')"
+        class="tipo-usuario-btn especialista-btn"
+      >
+        <img
+          src="especialista-hombre.png"
+          alt="Especialista"
+          class="tipo-usuario-img"
+        />
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="registroForm" (ngSubmit)="registrarUsuario()">
+    <label>Tipo de Usuario</label>
+    <select formControlName="tipoUsuario">
+      <option value="Paciente">Paciente</option>
+      <option value="Especialista">Especialista</option>
+    </select>
+
+    <label>Nombre</label>
+    <input formControlName="nombre" type="text" required />
+    <div
+      *ngIf="
+        registroForm.get('nombre')?.invalid &&
+        registroForm.get('nombre')?.touched
+      "
+    >
+      <small class="error">El nombre es requerido.</small>
+    </div>
+
+    <label>Apellido</label>
+    <input formControlName="apellido" type="text" required />
+    <div
+      *ngIf="
+        registroForm.get('apellido')?.invalid &&
+        registroForm.get('apellido')?.touched
+      "
+    >
+      <small class="error">El apellido es requerido.</small>
+    </div>
+
+    <label>Edad</label>
+    <input formControlName="edad" type="number" required />
+    <div
+      *ngIf="
+        registroForm.get('edad')?.invalid && registroForm.get('edad')?.touched
+      "
+    >
+      <small class="error">La edad es requerida y debe ser mayor a 0.</small>
+    </div>
+
+    <label>DNI</label>
+    <input formControlName="dni" type="number" required />
+    <div
+      *ngIf="
+        registroForm.get('dni')?.invalid && registroForm.get('dni')?.touched
+      "
+    >
+      <small class="error"
+        >El DNI es requerido y debe tener al menos 7 dígitos.</small
+      >
+    </div>
+
+    <div *ngIf="registroForm.value.tipoUsuario === 'Paciente'">
+      <label>Obra Social</label>
+      <input formControlName="obraSocial" type="text" />
+      <label>Imagen de Perfil</label>
+      <input type="file" (change)="onFileSelected($event, 'imagenPerfil')" />
+      <label>Imagen de Portada</label>
+      <input type="file" (change)="onFileSelected($event, 'imagenPortada')" />
+    </div>
+
+    <div *ngIf="registroForm.value.tipoUsuario === 'Especialista'">
+      <label>Especialidad</label>
+      <select formControlName="especialidadSeleccionada">
+        <option
+          *ngFor="let especialidad of especialidades"
+          [value]="especialidad"
+        >
+          {{ especialidad }}
+        </option>
+      </select>
+
+      <label>Agregar Especialidad (separada por comas)</label>
+      <input formControlName="especialidad" type="text" />
+
+      <label>Imagen de Perfil</label>
+      <input type="file" (change)="onFileSelected($event, 'imagenPerfil')" />
+    </div>
+
+    <label>Email</label>
+    <input formControlName="email" type="email" required />
+    <div
+      *ngIf="
+        registroForm.get('email')?.invalid && registroForm.get('email')?.touched
+      "
+    >
+      <small class="error"
+        >El correo electrónico es requerido y debe ser válido.</small
+      >
+    </div>
+
+    <label>Constaseña</label>
+    <input formControlName="password" type="password" required />
+    <div
+      *ngIf="
+        registroForm.get('password')?.invalid &&
+        registroForm.get('password')?.touched
+      "
+    >
+      <small class="error"
+        >La contraseña es requerida y debe tener al menos 6 caracteres.</small
+      >
+    </div>
+
+    <!-- reCAPTCHA -->
+    <div class="reCAPTCHA">
+      <div>
+        <re-captcha
+          (resolved)="resolverCaptcha($event)"
+          siteKey="6LcmOHcqAAAAAI0yUpZ8x1jjXcs0ILVWGCL56iTR"
+        ></re-captcha>
+      </div>
+    </div>
+
+    <br />
+
+    <!-- Botón de registro, habilitado solo si el reCAPTCHA es válido -->
+    <button class="registrarse" type="submit" [disabled]="!captchaResolved">
+      Registrarse
+    </button>
+    <br />
+    <br />
+    <!-- Mensajes de estado -->
+    <div *ngIf="mensaje" [ngClass]="{ success: esExito, error: !esExito }">
+      {{ mensaje }}
+    </div>
+  </form>
+</div>
