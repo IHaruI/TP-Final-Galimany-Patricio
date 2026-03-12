@@ -95,7 +95,7 @@ export class LogsComponent implements OnInit, AfterViewInit {
   async obtenerTurnosFinalizadosPorEspecialista() {
     const turnosRef = collection(
       this.firestore,
-      'turnosFinalizadosPorEspecialista'
+      'turnosFinalizadosPorEspecialista',
     );
     const q = query(turnosRef, orderBy('cantidad', 'desc'), limit(5));
     const snapshot = await getDocs(q);
@@ -126,7 +126,7 @@ export class LogsComponent implements OnInit, AfterViewInit {
     };
 
     const chart = new google.visualization.Histogram(
-      document.getElementById('grafico-ingresos')
+      document.getElementById('grafico-ingresos'),
     );
     chart.draw(chartData, options);
   }
@@ -146,7 +146,7 @@ export class LogsComponent implements OnInit, AfterViewInit {
     };
 
     const chart = new google.visualization.AreaChart(
-      document.getElementById('grafico-area')
+      document.getElementById('grafico-area'),
     );
     chart.draw(chartData, options);
   }
@@ -163,7 +163,7 @@ export class LogsComponent implements OnInit, AfterViewInit {
     };
 
     const chart = new google.visualization.PieChart(
-      document.getElementById('grafico-torta')
+      document.getElementById('grafico-torta'),
     );
     chart.draw(chartData, options);
   }
@@ -182,7 +182,7 @@ export class LogsComponent implements OnInit, AfterViewInit {
     };
 
     const chart = new google.visualization.BarChart(
-      document.getElementById('grafico-barras-especialistas')
+      document.getElementById('grafico-barras-especialistas'),
     );
     chart.draw(chartData, options);
   }
@@ -201,7 +201,7 @@ export class LogsComponent implements OnInit, AfterViewInit {
     };
 
     const chart = new google.visualization.LineChart(
-      document.getElementById('grafico-lineas')
+      document.getElementById('grafico-lineas'),
     );
     chart.draw(chartData, options);
   }
@@ -224,7 +224,7 @@ export class LogsComponent implements OnInit, AfterViewInit {
       titleYPosition,
       {
         align: 'center',
-      }
+      },
     );
 
     const currentDate = new Date().toLocaleDateString();
@@ -265,7 +265,7 @@ export class LogsComponent implements OnInit, AfterViewInit {
           chartWidth,
           chartHeight,
           undefined,
-          'FAST'
+          'FAST',
         );
 
         y += chartHeight + 20;

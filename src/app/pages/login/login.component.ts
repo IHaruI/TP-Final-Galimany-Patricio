@@ -126,18 +126,18 @@ export class LoginComponent {
   autocompletar(opcion: number): void {
     const emails = [
       'lucas.montari92@gmail.com',
-      'valentina.roldez17@gmail.com',
-      'xitiri3090@lineacr.com',
       'martin.quintera84@gmail.com',
+      'xitiri3090@lineacr.com',
+      'valentina.roldez17@gmail.com',
       'sofia.alderin56@gmail.com',
-      'patrygaly01@gmail.com',
+      'admin@gmail.com',
     ];
 
     const passwords = [
       'password1',
+      'password1',
+      'password1',
       'password2',
-      'password1',
-      'password1',
       'password1',
       'password1',
     ];

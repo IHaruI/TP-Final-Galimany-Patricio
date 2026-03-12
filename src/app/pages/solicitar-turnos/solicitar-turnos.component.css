@@ -260,3 +260,114 @@ button[type="submit"]:hover {
   border-color: #66bb6a;
   box-shadow: 0 0 10px rgba(102, 187, 106, 0.5);
 }
+
+/* ---------- Tablets ---------- */
+
+@media (max-width: 900px) {
+  form {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .especialidades {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .especialidades button {
+    width: 100%;
+  }
+
+  .imagen-perfil {
+    width: 65px;
+    height: 65px;
+  }
+
+  .dias {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+/* ---------- Pantallas ---------- */
+
+@media (max-width: 600px) {
+  h2 {
+    font-size: 1.4em;
+  }
+
+  h3 {
+    font-size: 1.1em;
+    text-align: center;
+  }
+
+  form {
+    width: 95%;
+    padding: 18px;
+  }
+
+  /* especialidades como grid responsive */
+
+  .especialidades {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .especialidades button {
+    padding: 10px;
+  }
+
+  .especialidades img {
+    width: 100%;
+    max-width: 80px;
+  }
+
+  /* especialistas */
+
+  li {
+    padding: 12px;
+  }
+
+  .imagen-perfil {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* calendario */
+
+  .dias {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .dias div {
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  /* selector de paciente */
+
+  #pacienteSelect {
+    width: 90%;
+    font-size: 15px;
+  }
+}
+
+/* ---------- Pantalla pequeña ---------- */
+
+@media (max-width: 420px) {
+  .especialidades {
+    grid-template-columns: 1fr;
+  }
+
+  .imagen-perfil {
+    width: 55px;
+    height: 55px;
+  }
+
+  .dias div {
+    padding: 5px;
+    font-size: 13px;
+  }
+}

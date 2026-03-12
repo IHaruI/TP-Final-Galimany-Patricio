@@ -105,6 +105,109 @@
   </table>
 </div>
 
+<!-- Vista del Historial de Pacientes-->
+<div class="historial-cards" *ngIf="isPaciente">
+  <div
+    class="historial-card"
+    *ngFor="let historial of historialClinicoPaciente"
+  >
+    <p>
+      <strong>Especialista:</strong>
+      {{ historial.especialistaNombre }} {{ historial.especialistaApellido }}
+    </p>
+
+    <p><strong>Fecha:</strong> {{ historial.fechaConHora }}</p>
+
+    <p><strong>Altura:</strong> {{ historial.altura }}</p>
+
+    <p><strong>Peso:</strong> {{ historial.peso }}</p>
+
+    <p><strong>Temperatura:</strong> {{ historial.temperatura }}</p>
+
+    <p><strong>Presión:</strong> {{ historial.presion }}</p>
+
+    <div class="datos-dinamicos">
+      <strong>Datos dinámicos:</strong>
+
+      <ul>
+        <li *ngFor="let dato of historial.datosDinamicos">
+          {{ dato.clave }}: {{ dato.valor }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Vista del Historial de Especialistas-->
+<div class="historial-cards" *ngIf="isEspecialista">
+  <div
+    class="historial-card"
+    *ngFor="let historial of historialClinicoEspecialista"
+  >
+    <p>
+      <strong>Paciente:</strong>
+      {{ historial.pacienteNombre }} {{ historial.pacienteApellido }}
+    </p>
+
+    <p><strong>Fecha:</strong> {{ historial.fechaConHora }}</p>
+
+    <p><strong>Altura:</strong> {{ historial.altura }}</p>
+
+    <p><strong>Peso:</strong> {{ historial.peso }}</p>
+
+    <p><strong>Temperatura:</strong> {{ historial.temperatura }}</p>
+
+    <p><strong>Presión:</strong> {{ historial.presion }}</p>
+
+    <div class="datos-dinamicos">
+      <strong>Datos dinámicos:</strong>
+
+      <ul>
+        <li *ngFor="let dato of historial.datosDinamicos">
+          {{ dato.clave }}: {{ dato.valor }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Vista del Historial del Administrador -->
+<div class="historial-cards" *ngIf="isAdministrador">
+  <div
+    class="historial-card"
+    *ngFor="let historial of historialClinicoAdministrador"
+  >
+    <p>
+      <strong>Especialista:</strong>
+      {{ historial.especialistaNombre }} {{ historial.especialistaApellido }}
+    </p>
+
+    <p>
+      <strong>Paciente:</strong>
+      {{ historial.pacienteNombre }} {{ historial.pacienteApellido }}
+    </p>
+
+    <p><strong>Fecha:</strong> {{ historial.fechaConHora }}</p>
+
+    <p><strong>Altura:</strong> {{ historial.altura }}</p>
+
+    <p><strong>Peso:</strong> {{ historial.peso }}</p>
+
+    <p><strong>Temperatura:</strong> {{ historial.temperatura }}</p>
+
+    <p><strong>Presión:</strong> {{ historial.presion }}</p>
+
+    <div class="datos-dinamicos">
+      <strong>Datos dinámicos:</strong>
+      <ul>
+        <li *ngFor="let dato of historial.datosDinamicos">
+          {{ dato.clave }}: {{ dato.valor }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 <!-- Vista para el Administrador -->
 <div *ngIf="isAdministrador">
   <h3>Historial Completo de Pacientes</h3>

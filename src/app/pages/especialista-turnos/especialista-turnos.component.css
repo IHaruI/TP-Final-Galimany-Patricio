@@ -18,10 +18,11 @@ h2 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-div {
+.filtro {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
@@ -38,7 +39,8 @@ input[type="text"] {
 }
 
 table {
-  width: 100%;
+  width: calc(100% - 40px);
+  margin: 10px auto;
   border-collapse: collapse;
   background-color: #ffffff;
   border-radius: 10px;
@@ -65,7 +67,8 @@ tr:nth-child(even) {
 }
 
 button {
-  padding: 8px 12px;
+  padding: 8px 10px;
+  margin: 5px;
   border: none;
   border-radius: 5px;
   font-size: 0.9em;
@@ -166,4 +169,70 @@ button:hover {
 
 button:active {
   transform: scale(0.98);
+}
+
+.cards-container {
+  display: none;
+}
+
+.turno-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.estado {
+  font-weight: bold;
+  color: #3a8fb7;
+}
+
+.card-body p {
+  margin: 5px 0;
+}
+
+.card-actions {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card-actions button {
+  flex: 1;
+  min-width: 120px;
+}
+
+@media (max-width: 768px) {
+  table {
+    display: none;
+  }
+
+  .cards-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .turno-card {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .botones {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filtro {
+    flex-direction: column;
+  }
 }

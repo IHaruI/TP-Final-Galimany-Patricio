@@ -142,3 +142,82 @@ td ul li strong {
   background-color: #d6d6d6;
   cursor: not-allowed;
 }
+
+.historial-card {
+  border-left: 5px solid #4caf50;
+}
+
+.historial-card p {
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.historial-card p:last-child {
+  border-bottom: none;
+}
+
+.datos-dinamicos ul {
+  margin-top: 5px;
+}
+
+.historial-cards {
+  display: none;
+}
+
+/* ---------- Tablets ---------- */
+
+@media (max-width: 900px) {
+  table {
+    width: 95%;
+    font-size: 14px;
+  }
+
+  thead th {
+    font-size: 14px;
+  }
+}
+
+/* ---------- Celulares ---------- */
+
+@media (max-width: 700px) {
+  table {
+    display: none;
+  }
+
+  .historial-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 95%;
+    margin: 20px auto;
+  }
+
+  .historial-card {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .historial-card p {
+    margin: 6px 0;
+    font-size: 14px;
+  }
+
+  .historial-card strong {
+    color: #333;
+  }
+
+  .selector-container {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .selector-especialista {
+    width: 100%;
+  }
+
+  .boton-descargar-especialista {
+    width: 100%;
+  }
+}

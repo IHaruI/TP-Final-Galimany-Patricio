@@ -45,7 +45,7 @@
   </div>
 </div>
 
-<div>
+<div class="filtro">
   <label>Filtrar:</label>
   <input type="text" [(ngModel)]="filtroGeneral" (input)="aplicarFiltro()" />
 </div>
@@ -119,3 +119,66 @@
     </tr>
   </tbody>
 </table>
+
+<!-- Cards para distintas pantallas -->
+<div class="cards-container">
+  <div class="turno-card" *ngFor="let turno of turnosFiltrados">
+    <div class="card-header">
+      <h3>{{ turno.especialidad }}</h3>
+      <span class="estado">{{ turno.estado }}</span>
+    </div>
+
+    <div class="card-body">
+      <p><strong>Paciente:</strong> {{ turno.paciente }}</p>
+      <p><strong>Altura:</strong> {{ turno.altura }}</p>
+      <p><strong>Peso:</strong> {{ turno.peso }}</p>
+      <p><strong>Temperatura:</strong> {{ turno.temperatura }}</p>
+      <p><strong>Presión:</strong> {{ turno.presion }}</p>
+
+      <div *ngIf="turno.datosDinamicos">
+        <strong>Datos Dinámicos:</strong>
+        <ul>
+          <li *ngFor="let dato of turno.datosDinamicos">
+            {{ dato.clave }}: {{ dato.valor }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card-actions">
+      <ng-container *ngIf="turno.estado === 'Aceptado'">
+        <button (click)="abrirModal('Cancelar Turno', 'cancelar', turno)">
+          Cancelar
+        </button>
+
+        <button (click)="abrirModal('Finalizar Turno', 'finalizar', turno)">
+          Finalizar
+        </button>
+
+        <button *ngIf="turno.comentario" (click)="verResena(turno)">
+          Ver Reseña
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="turno.estado === 'Pendiente'">
+        <button (click)="abrirModal('Rechazar Turno', 'rechazar', turno)">
+          Rechazar
+        </button>
+
+        <button (click)="aceptarTurnoDirecto(turno)">Aceptar</button>
+      </ng-container>
+
+      <ng-container *ngIf="turno.estado === 'Realizado'">
+        <button *ngIf="turno.comentario" (click)="verResena(turno)">
+          Ver Reseña
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="turno.estado === 'Cancelado'">
+        <button *ngIf="turno.comentario" (click)="verResena(turno)">
+          Ver Reseña
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</div>

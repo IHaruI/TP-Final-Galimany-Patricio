@@ -16,7 +16,6 @@ html {
 *::before,
 *::after {
   box-sizing: border-box;
-  margin-bottom: 10px;
 }
 
 .botones {
@@ -33,14 +32,14 @@ html {
 
 h2,
 h3 {
-  margin-top: 30px;
   margin-bottom: 30px;
   text-align: center;
   color: #4e54c8;
 }
 
 table {
-  width: 100%;
+  width: calc(100% - 40px);
+  margin: 0 auto;
   border-collapse: collapse;
   margin-bottom: 20px;
   background-color: #fff;
@@ -78,7 +77,9 @@ button {
   color: white;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
 }
 
 button:hover {
@@ -151,8 +152,24 @@ button[type="submit"] {
 h3 {
   margin-bottom: 15px;
   font-size: 24px;
-  border-bottom: 2px solid #4e54c8;
   padding-bottom: 10px;
+}
+
+.selector-rol {
+  max-width: 320px;
+  margin: 25px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.selector-rol select {
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto;
+  display: block;
 }
 
 .mensaje {
@@ -169,4 +186,111 @@ h3 {
 .mensaje.error {
   background-color: #f8d7da;
   color: #721c24;
+}
+
+.cards-container {
+  display: none;
+}
+
+.usuario-card,
+.turno-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.rol {
+  background: #4e54c8;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.estado {
+  font-weight: bold;
+  color: #4e54c8;
+}
+
+.card-body p {
+  margin: 6px 0;
+}
+
+.card-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filtro {
+  max-width: 600px;
+  margin: 0 auto 25px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.buscador {
+  width: 100%;
+}
+
+.buscador input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+.buscador input:focus {
+  outline: none;
+  border-color: #4e54c8;
+  box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.15);
+}
+
+@media (max-width: 768px) {
+  table {
+    display: none;
+  }
+
+  .cards-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .botones {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  form {
+    width: 95%;
+  }
+
+  .input-group {
+    width: 100%;
+  }
+
+  .filtro {
+    width: calc(100% - 30px);
+    margin: 0 auto;
+    padding: 0 10px;
+  }
+
+  .filtro label {
+    text-align: center;
+    font-size: 14px;
+  }
 }

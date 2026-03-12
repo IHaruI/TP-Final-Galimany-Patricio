@@ -54,6 +54,35 @@
       </tr>
     </tbody>
   </table>
+
+  <div class="turnos-cards">
+    <div class="turno-card" *ngFor="let turno of turnosPacienteSeleccionado">
+      <p><strong>Especialidad:</strong> {{ turno.especialidad }}</p>
+
+      <p><strong>Paciente:</strong> {{ turno.nombre }} {{ turno.apellido }}</p>
+
+      <p><strong>Altura:</strong> {{ turno.altura }}</p>
+
+      <p><strong>Peso:</strong> {{ turno.peso }}</p>
+
+      <p><strong>Temperatura:</strong> {{ turno.temperatura }}</p>
+
+      <p><strong>Presión:</strong> {{ turno.presion }}</p>
+
+      <div>
+        <strong>Datos dinámicos:</strong>
+        <ul>
+          <li *ngFor="let dato of turno.datosDinamicos">
+            {{ dato.clave }}: {{ dato.valor }}
+          </li>
+        </ul>
+      </div>
+
+      <p><strong>Estado:</strong> {{ turno.estado }}</p>
+
+      <button (click)="verResena(turno)">Ver Reseña</button>
+    </div>
+  </div>
 </div>
 
 <!-- Modal de Reseña -->

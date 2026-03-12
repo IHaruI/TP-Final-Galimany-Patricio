@@ -20,6 +20,7 @@ body {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   width: 80%;
+  max-width: 1200px;
 }
 
 h2 {
@@ -46,7 +47,9 @@ h2 {
   background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .usuario-card:hover {
@@ -125,7 +128,9 @@ button {
   background: linear-gradient(135deg, #64b5f6, #42a5f5);
   color: #ffffff;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.3s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.3s;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   margin-bottom: 2rem;
 }
@@ -137,4 +142,64 @@ button:hover {
 
 button:focus {
   outline: none;
+}
+
+/* ---------- Tablets ---------- */
+
+@media (max-width: 900px) {
+  .usuarios-seccion {
+    width: 90%;
+    padding: 1.2rem;
+  }
+
+  .usuarios-list {
+    gap: 1.2rem;
+  }
+
+  button {
+    font-size: 1.2rem;
+    padding: 10px 25px;
+  }
+}
+
+/* ---------- Celulares ---------- */
+
+@media (max-width: 600px) {
+  .usuarios-seccion {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  .usuarios-list {
+    gap: 1rem;
+  }
+
+  .usuario-card {
+    width: 110px;
+    padding: 0.8rem;
+  }
+
+  .usuario-imagen {
+    width: 80px;
+    height: 80px;
+  }
+
+  .usuario-nombre {
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 10px 18px;
+    width: 90%;
+  }
+
+  .mensaje-estado {
+    width: 90%;
+    font-size: 1rem;
+  }
 }

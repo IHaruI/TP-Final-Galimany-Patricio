@@ -12,6 +12,10 @@ h2 {
   font-weight: 600;
 }
 
+.filtrar {
+  margin: 0 20px 0 20px;
+}
+
 .botones {
   display: flex;
   justify-content: space-around;
@@ -29,8 +33,8 @@ h2 {
 }
 
 table {
-  width: 100%;
-  margin: 20px 0;
+  width: calc(100% - 40px);
+  margin: 0 auto;
   border-collapse: collapse;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -206,4 +210,102 @@ button[type="submit"]:hover {
   font-size: 0.9em;
   margin-top: 10px;
   text-align: center;
+}
+
+.tabla-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.turnos-cards {
+  display: none;
+}
+
+.turno-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.turno-card p {
+  margin: 6px 0;
+}
+
+.turno-card ul {
+  padding-left: 15px;
+}
+
+.turno-card .acciones {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .botones {
+    flex-direction: column;
+    gap: 10px;
+    max-width: 90%;
+  }
+
+  .filtrar {
+    margin: 10px;
+  }
+
+  table {
+    min-width: 800px;
+  }
+
+  th,
+  td {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  button {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .botones {
+    padding: 15px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  th,
+  td {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  table {
+    display: none;
+  }
+
+  .turnos-cards {
+    display: block;
+  }
+
+  .botones {
+    flex-direction: column;
+    gap: 10px;
+    max-width: 90%;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
 }

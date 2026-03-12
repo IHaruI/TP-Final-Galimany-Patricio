@@ -22,70 +22,127 @@
 </div>
 
 <h2>Mis Turnos</h2>
-<div>
+<div class="filtrar">
   <label>Filtrar:</label>
   <input type="text" [(ngModel)]="filtro" (input)="aplicarFiltro()" />
 </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Especialidad</th>
-      <th>Especialista</th>
-      <th>Estado</th>
-      <th>Altura</th>
-      <th>Peso</th>
-      <th>Temperatura</th>
-      <th>Presión</th>
-      <th>Datos Dinámicos</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let turno of turnosFiltrados">
-      <td>{{ turno.especialidad }}</td>
-      <td>{{ turno.especialista }}</td>
-      <td>{{ turno.estado }}</td>
-      <td>{{ turno.altura }}</td>
-      <td>{{ turno.peso }}</td>
-      <td>{{ turno.temperatura }}</td>
-      <td>{{ turno.presion }}</td>
-      <td>
-        <ul>
-          <li *ngFor="let dato of turno.datosDinamicos">
-            {{ dato.clave }}: {{ dato.valor }}
-          </li>
-        </ul>
-      </td>
-      <td>
-        <button
-          *ngIf="turno.estado === 'Pendiente'"
-          (click)="
-            openModal(
-              'Cancelar Turno',
-              'Escribe el motivo de cancelación:',
-              true,
-              turno
-            )
-          "
-        >
-          Cancelar Turno
-        </button>
+<div class="tabla-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Especialidad</th>
+        <th>Especialista</th>
+        <th>Estado</th>
+        <th>Altura</th>
+        <th>Peso</th>
+        <th>Temperatura</th>
+        <th>Presión</th>
+        <th>Datos Dinámicos</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let turno of turnosFiltrados">
+        <td>{{ turno.especialidad }}</td>
+        <td>{{ turno.especialista }}</td>
+        <td>{{ turno.estado }}</td>
+        <td>{{ turno.altura }}</td>
+        <td>{{ turno.peso }}</td>
+        <td>{{ turno.temperatura }}</td>
+        <td>{{ turno.presion }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let dato of turno.datosDinamicos">
+              {{ dato.clave }}: {{ dato.valor }}
+            </li>
+          </ul>
+        </td>
+        <td>
+          <button
+            *ngIf="turno.estado === 'Pendiente'"
+            (click)="
+              openModal(
+                'Cancelar Turno',
+                'Escribe el motivo de cancelación:',
+                true,
+                turno
+              )
+            "
+          >
+            Cancelar Turno
+          </button>
 
-        <button *ngIf="turno.comentario" (click)="verResena(turno)">
-          Ver Reseña
-        </button>
-        <button
-          *ngIf="turno.realizado && turno.comentario"
-          (click)="completarEncuesta(turno, '')"
-        >
-          Completar Encuesta
-        </button>
+          <button *ngIf="turno.comentario" (click)="verResena(turno)">
+            Ver Reseña
+          </button>
+          <button
+            *ngIf="turno.realizado && turno.comentario"
+            (click)="completarEncuesta(turno, '')"
+          >
+            Completar Encuesta
+          </button>
 
-        <button *ngIf="turno.realizado" (click)="calificarAtencion(turno, '')">
-          Calificar Atención
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+          <button
+            *ngIf="turno.realizado"
+            (click)="calificarAtencion(turno, '')"
+          >
+            Calificar Atención
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="turnos-cards">
+  <div class="turno-card" *ngFor="let turno of turnosFiltrados">
+    <p><strong>Especialidad:</strong> {{ turno.especialidad }}</p>
+    <p><strong>Especialista:</strong> {{ turno.especialista }}</p>
+    <p><strong>Estado:</strong> {{ turno.estado }}</p>
+    <p><strong>Altura:</strong> {{ turno.altura }}</p>
+    <p><strong>Peso:</strong> {{ turno.peso }}</p>
+    <p><strong>Temperatura:</strong> {{ turno.temperatura }}</p>
+    <p><strong>Presión:</strong> {{ turno.presion }}</p>
+
+    <div class="datos-dinamicos">
+      <strong>Datos dinámicos:</strong>
+      <ul>
+        <li *ngFor="let dato of turno.datosDinamicos">
+          {{ dato.clave }}: {{ dato.valor }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="acciones">
+      <button
+        *ngIf="turno.estado === 'Pendiente'"
+        (click)="
+          openModal(
+            'Cancelar Turno',
+            'Escribe el motivo de cancelación:',
+            true,
+            turno
+          )
+        "
+      >
+        Cancelar Turno
+      </button>
+
+      <button *ngIf="turno.comentario" (click)="verResena(turno)">
+        Ver Reseña
+      </button>
+
+      <button
+        *ngIf="turno.realizado && turno.comentario"
+        (click)="completarEncuesta(turno, '')"
+      >
+        Completar Encuesta
+      </button>
+
+      <button *ngIf="turno.realizado" (click)="calificarAtencion(turno, '')">
+        Calificar Atención
+      </button>
+    </div>
+  </div>
+</div>
