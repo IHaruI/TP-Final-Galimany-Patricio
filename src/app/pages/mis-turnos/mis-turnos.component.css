@@ -258,6 +258,7 @@ button[type="submit"]:hover {
 
   table {
     min-width: 800px;
+    display: none;
   }
 
   th,
@@ -266,9 +267,14 @@ button[type="submit"]:hover {
     font-size: 14px;
   }
 
-  button {
-    font-size: 13px;
-    padding: 6px 10px;
+  .botones {
+    flex-direction: column;
+    gap: 10px;
+    max-width: 90%;
+  }
+
+  .turnos-cards {
+    display: block;
   }
 
   h2 {
@@ -289,24 +295,8 @@ button[type="submit"]:hover {
   td {
     font-size: 13px;
   }
-}
 
-@media (max-width: 768px) {
-  table {
-    display: none;
-  }
-
-  .turnos-cards {
-    display: block;
-  }
-
-  .botones {
-    flex-direction: column;
-    gap: 10px;
-    max-width: 90%;
-  }
-
-  h2 {
-    font-size: 1.5rem;
+  input {
+    margin-bottom: 0;
   }
 }

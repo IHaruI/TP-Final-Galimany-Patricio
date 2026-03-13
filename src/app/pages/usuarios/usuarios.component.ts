@@ -177,9 +177,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   puedeCancelar(turno: Turno): boolean {
-    return turno.estado
-      ? !['Aceptado', 'Realizado', 'Rechazado'].includes(turno.estado)
-      : false;
+    return turno.estado === 'Pendiente';
   }
 
   cancelarTurno(turno: Turno) {

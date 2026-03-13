@@ -17,7 +17,6 @@ h1 {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* Contenedor de botones */
 .contenedor-bienvenida button {
   width: 250px;
   max-width: 80%;
@@ -39,7 +38,6 @@ h1 {
   transform: scale(1.05);
 }
 
-/* Tablets */
 @media (max-width: 768px) {
   h1 {
     font-size: 2.3rem;
@@ -52,7 +50,6 @@ h1 {
   }
 }
 
-/* Celulares */
 @media (max-width: 480px) {
   h1 {
     font-size: 1.8rem;

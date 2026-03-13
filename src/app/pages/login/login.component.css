@@ -186,7 +186,6 @@ select:focus {
   height: 3rem;
 }
 
-/* Tablets */
 @media (max-width: 768px) {
   .contenedor {
     padding: 20px;
@@ -219,7 +218,6 @@ select:focus {
   }
 }
 
-/* Celulares */
 @media (max-width: 480px) {
   .contenedor {
     padding: 15px;

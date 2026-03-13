@@ -144,8 +144,6 @@ button:focus {
   outline: none;
 }
 
-/* ---------- Tablets ---------- */
-
 @media (max-width: 900px) {
   .usuarios-seccion {
     width: 90%;
@@ -161,8 +159,6 @@ button:focus {
     padding: 10px 25px;
   }
 }
-
-/* ---------- Celulares ---------- */
 
 @media (max-width: 600px) {
   .usuarios-seccion {

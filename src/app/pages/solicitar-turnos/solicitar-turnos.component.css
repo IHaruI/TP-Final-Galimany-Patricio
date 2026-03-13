@@ -261,8 +261,6 @@ button[type="submit"]:hover {
   box-shadow: 0 0 10px rgba(102, 187, 106, 0.5);
 }
 
-/* ---------- Tablets ---------- */
-
 @media (max-width: 900px) {
   form {
     width: 95%;
@@ -288,8 +286,6 @@ button[type="submit"]:hover {
     grid-template-columns: repeat(7, 1fr);
   }
 }
-
-/* ---------- Pantallas ---------- */
 
 @media (max-width: 600px) {
   h2 {
@@ -353,8 +349,6 @@ button[type="submit"]:hover {
     font-size: 15px;
   }
 }
-
-/* ---------- Pantalla pequeña ---------- */
 
 @media (max-width: 420px) {
   .especialidades {

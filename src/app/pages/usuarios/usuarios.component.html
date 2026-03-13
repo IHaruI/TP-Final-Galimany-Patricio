@@ -180,11 +180,18 @@
 </div>
 
 <!-- Modal para motivo de cancelación -->
-<div *ngIf="mostrarModalCancelacion">
-  <label>Motivo de cancelación:</label>
-  <textarea [(ngModel)]="motivoCancelacion"></textarea>
-  <button (click)="confirmarCancelacion()">Confirmar</button>
-  <button (click)="cerrarModal()">Cancelar</button>
+<div *ngIf="mostrarModalCancelacion" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Cancelar turno</h3>
+
+    <label>Motivo de cancelación:</label>
+    <textarea [(ngModel)]="motivoCancelacion"></textarea>
+
+    <div class="modal-botones">
+      <button (click)="confirmarCancelacion()">Confirmar</button>
+      <button (click)="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
 </div>
 
 <div class="selector-rol" [formGroup]="rolForm">

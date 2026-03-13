@@ -187,8 +187,6 @@ button:disabled {
   height: 3rem;
 }
 
-/* ---------- Tablets ---------- */
-
 @media (max-width: 900px) {
   form {
     max-width: 90%;
@@ -208,8 +206,6 @@ button:disabled {
     height: 55px;
   }
 }
-
-/* ---------- Celular ---------- */
 
 @media (max-width: 600px) {
   form {
@@ -258,8 +254,6 @@ button:disabled {
     transform: scale(0.85);
   }
 }
-
-/* ---------- Pantallas más pequeñas ---------- */
 
 @media (max-width: 400px) {
   h2 {
