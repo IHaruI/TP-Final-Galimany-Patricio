@@ -31,10 +31,14 @@ html {
 }
 
 h2,
-h3 {
+.selector-rol h3 {
   margin-bottom: 30px;
   text-align: center;
   color: #4e54c8;
+}
+
+h2 {
+  margin-top: 60px;
 }
 
 table {
@@ -61,6 +65,22 @@ td {
 
 tr:hover {
   background-color: #f1f1f1;
+}
+
+.tabla-scroll {
+  margin: 0 auto 30px auto;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+/* para que el header quede visible */
+.tabla-scroll thead th {
+  position: sticky;
+  top: 0;
+  background-color: #4e54c8;
+  z-index: 2;
 }
 
 .crear-usuario {
@@ -190,6 +210,8 @@ h3 {
 
 .cards-container {
   display: none;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .usuario-card,
@@ -268,6 +290,12 @@ h3 {
     display: flex;
     flex-direction: column;
     padding: 10px;
+    max-height: 450px;
+    overflow-y: auto;
+  }
+
+  .tabla-scroll {
+    display: none;
   }
 
   .botones {

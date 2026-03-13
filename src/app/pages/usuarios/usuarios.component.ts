@@ -79,13 +79,15 @@ export class UsuariosComponent implements OnInit {
   mostrarModalCancelacion = false;
   turnoSeleccionado: Turno | null = null;
   motivoCancelacion: string = '';
+  filtroUsuarios: string = '';
+  usuariosFiltrados: any[] = [];
 
   constructor(
     private firestore: Firestore,
     private authService: AuthService,
     private storage: Storage,
     private turnosService: TurnosService,
-    private router: Router
+    private router: Router,
   ) {}
 
   async ngOnInit() {
@@ -96,8 +98,10 @@ export class UsuariosComponent implements OnInit {
         ({
           ...doc.data(),
           id: doc.id,
-        } as Usuario)
+        }) as Usuario,
     );
+    this.usuariosFiltrados = this.usuarios;
+
     this.obtenerTurnos();
   }
 
@@ -114,7 +118,7 @@ export class UsuariosComponent implements OnInit {
 
   exportarUsuariosExcel() {
     const usuariosPacientes = this.usuarios.filter(
-      (usuario) => usuario.rol === 'paciente'
+      (usuario) => usuario.rol === 'paciente',
     );
     console.log(usuariosPacientes);
 
@@ -153,12 +157,22 @@ export class UsuariosComponent implements OnInit {
     });
   }
 
+  filtrarUsuarios() {
+    const filtro = this.filtroUsuarios.toLowerCase();
+
+    this.usuariosFiltrados = this.usuarios.filter(
+      (usuario) =>
+        usuario.nombre.toLowerCase().includes(filtro) ||
+        usuario.apellido.toLowerCase().includes(filtro),
+    );
+  }
+
   filtrarTurnos() {
     const filtro = this.filtroGeneral.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(
       (turno) =>
         turno.especialidad.toLowerCase().includes(filtro) ||
-        turno.especialista.toLowerCase().includes(filtro)
+        turno.especialista.toLowerCase().includes(filtro),
     );
   }
 
@@ -237,7 +251,7 @@ export class UsuariosComponent implements OnInit {
     try {
       const userCredential = await this.authService.registrarUsuario(
         email!,
-        password!
+        password!,
       );
 
       if (userCredential) {
@@ -248,7 +262,7 @@ export class UsuariosComponent implements OnInit {
           const storageRef = ref(this.storage, `imagenes_perfil/${uid}`);
           const uploadTask = uploadBytesResumable(
             storageRef,
-            this.selectedFile
+            this.selectedFile,
           );
           await uploadTask;
           imagenPerfilURL = await getDownloadURL(storageRef);

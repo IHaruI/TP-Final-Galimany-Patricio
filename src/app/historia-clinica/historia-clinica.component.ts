@@ -38,7 +38,7 @@ export class HistoriaClinicaComponent implements OnInit {
     private turnosService: TurnosService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {
     this.especialistaId = this.authService.getUid() || '';
   }
@@ -65,7 +65,7 @@ export class HistoriaClinicaComponent implements OnInit {
     }
 
     this.turnosService
-      .obtenerFechaTurnoPaciente(this.pacienteId)
+      .obtenerFechaTurnoPaciente(this.pacienteId, this.hora)
       .subscribe((fechaConHora) => {
         if (fechaConHora) {
           this.historia.fechaConHora = fechaConHora;
@@ -86,7 +86,7 @@ export class HistoriaClinicaComponent implements OnInit {
         .catch((error) => {
           this.mostrarMensaje(
             'Error al obtener los datos del especialista.',
-            true
+            true,
           );
         });
     }
@@ -129,13 +129,13 @@ export class HistoriaClinicaComponent implements OnInit {
             this.pacienteId,
             this.hora,
             this.comentario,
-            turnoData
+            turnoData,
           )
           .subscribe({
             next: () => {
               this.mostrarMensaje(
                 'Historia clínica guardada exitosamente.',
-                false
+                false,
               );
               setTimeout(() => {
                 this.router.navigate(['/especialista-turnos']);

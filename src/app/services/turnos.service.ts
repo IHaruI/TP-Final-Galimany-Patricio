@@ -29,7 +29,10 @@ interface Especialista {
   providedIn: 'root',
 })
 export class TurnosService {
-  constructor(private firestore: Firestore, private auth: AuthService) {}
+  constructor(
+    private firestore: Firestore,
+    private auth: AuthService,
+  ) {}
 
   almacenarTurnosPorDia(): Observable<void> {
     const turnosRef = collection(this.firestore, 'turnosPorDia');
@@ -48,14 +51,14 @@ export class TurnosService {
         } else {
           return setDoc(turnosDelDiaRef, { cantidad: 1 });
         }
-      })
+      }),
     );
   }
 
   actualizarTurnosPorEspecialista(
     uid: string,
     nombre: string,
-    apellido: string
+    apellido: string,
   ): Observable<void> {
     const turnosRef = collection(this.firestore, 'turnosPorEspecialista');
     const especialistaRef = doc(turnosRef, uid);
@@ -75,13 +78,13 @@ export class TurnosService {
             cantidad: 1,
           });
         }
-      })
+      }),
     );
   }
 
   actualizarTurnosPorEspecialidad(
     especialistaUid: string,
-    especialidad: string
+    especialidad: string,
   ): Observable<void> {
     const turnosRef = collection(this.firestore, 'turnosPorEspecialidad');
     const especialistaRef = doc(turnosRef, especialistaUid);
@@ -100,7 +103,7 @@ export class TurnosService {
           } else {
             const nuevaEspecialidadRef = doc(
               turnosRef,
-              `${especialistaUid}_${especialidad}`
+              `${especialistaUid}_${especialidad}`,
             );
             return getDoc(nuevaEspecialidadRef).then((newDocSnapshot) => {
               if (newDocSnapshot.exists()) {
@@ -122,16 +125,16 @@ export class TurnosService {
             especialidad: especialidad,
           });
         }
-      })
+      }),
     );
   }
 
   actualizarTurnosFinalizadosPorEspecialista(
-    especialista: string
+    especialista: string,
   ): Observable<void> {
     const turnosPorEspecialistaRef = collection(
       this.firestore,
-      'turnosFinalizadosPorEspecialista'
+      'turnosFinalizadosPorEspecialista',
     );
 
     const especialistaRef = doc(turnosPorEspecialistaRef, especialista);
@@ -148,14 +151,14 @@ export class TurnosService {
             cantidad: 1,
           });
         }
-      })
+      }),
     );
   }
 
   obtenerDatosUsuario(usuarioId: string): Observable<any> {
     const usuarioRef = doc(this.firestore, `usuarios/${usuarioId}`);
     return from(getDoc(usuarioRef)).pipe(
-      map((doc) => (doc.exists() ? { id: doc.id, ...doc.data() } : null))
+      map((doc) => (doc.exists() ? { id: doc.id, ...doc.data() } : null)),
     );
   }
 
@@ -173,8 +176,8 @@ export class TurnosService {
               }))
             : [];
           return { id: doc.id, ...data, datosDinamicos } as Turno;
-        })
-      )
+        }),
+      ),
     );
   }
 
@@ -189,15 +192,22 @@ export class TurnosService {
               id: doc.id,
               ...doc.data(),
               datosDinamicos: doc.data()['datosDinamicos'] || [],
-            } as Turno)
-        )
-      )
+            }) as Turno,
+        ),
+      ),
     );
   }
 
-  obtenerFechaTurnoPaciente(pacienteId: string): Observable<string | null> {
+  obtenerFechaTurnoPaciente(
+    pacienteId: string,
+    hora: string,
+  ): Observable<string | null> {
     const turnosRef = collection(this.firestore, 'turnos');
-    const q = query(turnosRef, where('pacienteId', '==', pacienteId));
+    const q = query(
+      turnosRef,
+      where('pacienteId', '==', pacienteId),
+      where('hora', '==', hora),
+    );
 
     return from(
       getDocs(q).then((snapshot) => {
@@ -205,37 +215,22 @@ export class TurnosService {
           const turno = snapshot.docs[0].data();
 
           const fecha = turno['fecha'];
-          const hora = turno['hora'];
 
-          if (
-            fecha &&
-            typeof fecha.seconds === 'number' &&
-            typeof fecha.nanoseconds === 'number'
-          ) {
+          if (fecha?.seconds) {
             const dateObj = new Date(fecha.seconds * 1000);
 
             const day = dateObj.getDate();
             const month = dateObj.getMonth() + 1;
             const year = dateObj.getFullYear();
 
-            let formattedDate = `${day}/${month}/${year}`;
-
-            if (hora) {
-              formattedDate += ` ${hora}`;
-            }
-
-            return formattedDate;
-          } else {
-            console.warn(
-              'El campo fecha no es un Timestamp válido o la hora no está disponible.'
-            );
-            return null;
+            return `${day}/${month}/${year} ${hora}`;
           }
-        } else {
-          console.warn('No se encontraron turnos para este paciente.');
+
           return null;
         }
-      })
+
+        return null;
+      }),
     );
   }
 
@@ -247,15 +242,15 @@ export class TurnosService {
           const data = doc.data();
           const fecha = data['fecha'] ? data['fecha'].toDate() : null;
           return { id: doc.id, ...data, fecha } as Turno;
-        })
-      )
+        }),
+      ),
     );
   }
 
   cancelarTurno(id: string, motivo: string): Observable<void> {
     const turnoRef = doc(this.firestore, `turnos/${id}`);
     return from(
-      updateDoc(turnoRef, { estado: 'Cancelado', motivoCancelacion: motivo })
+      updateDoc(turnoRef, { estado: 'Cancelado', motivoCancelacion: motivo }),
     );
   }
 
@@ -274,7 +269,7 @@ export class TurnosService {
       temperatura: number;
       presion: string;
       datosDinamicos: { clave: string; valor: string }[];
-    }
+    },
   ) {
     const turnosCollectionRef = collection(this.firestore, 'turnos');
     const q = query(turnosCollectionRef, where('pacienteId', '==', id));
@@ -283,14 +278,14 @@ export class TurnosService {
       switchMap((querySnapshot: QuerySnapshot<DocumentData>) => {
         if (querySnapshot.empty) {
           console.log(
-            'No se encontró un turno con el pacienteId especificado, creando nuevo...'
+            'No se encontró un turno con el pacienteId especificado, creando nuevo...',
           );
           return from(
             addDoc(turnosCollectionRef, {
               ...data,
               pacienteId: id,
               estado: 'Pendiente',
-            })
+            }),
           );
         }
 
@@ -309,11 +304,11 @@ export class TurnosService {
         }
 
         console.log(
-          'No se encontró un turno con la hora y estado coincidente, buscando otro...'
+          'No se encontró un turno con la hora y estado coincidente, buscando otro...',
         );
 
         const turnoSinAltura = querySnapshot.docs.find(
-          (doc) => !doc.data()['altura']
+          (doc) => !doc.data()['altura'],
         );
 
         if (turnoSinAltura) {
@@ -328,9 +323,9 @@ export class TurnosService {
             ...data,
             pacienteId: id,
             estado: 'Pendiente',
-          })
+          }),
         );
-      })
+      }),
     );
   }
 
@@ -340,12 +335,12 @@ export class TurnosService {
   }
 
   obtenerEspecialistasPorEspecialidad(
-    especialidad: string
+    especialidad: string,
   ): Observable<Especialista[]> {
     const especialistasRef = collection(this.firestore, 'usuarios');
     const q = query(
       especialistasRef,
-      where('tipoUsuario', '==', 'Especialista')
+      where('tipoUsuario', '==', 'Especialista'),
     );
 
     return from(getDocs(q)).pipe(
@@ -359,9 +354,9 @@ export class TurnosService {
           especialista.especialidad
             .split(',')
             .map((e) => e.trim())
-            .includes(especialidad)
+            .includes(especialidad),
         );
-      })
+      }),
     );
   }
 
@@ -369,7 +364,7 @@ export class TurnosService {
     const especialistasRef = collection(this.firestore, 'usuarios');
     const q = query(
       especialistasRef,
-      where('tipoUsuario', '==', 'Especialista')
+      where('tipoUsuario', '==', 'Especialista'),
     );
 
     return from(getDocs(q)).pipe(
@@ -377,10 +372,10 @@ export class TurnosService {
         const especialidades = snapshot.docs
           .map((doc) => (doc.data() as any)['especialidad'])
           .flatMap((especialidad: string) =>
-            especialidad.split(',').map((e: string) => e.trim())
+            especialidad.split(',').map((e: string) => e.trim()),
           );
         return Array.from(new Set(especialidades));
-      })
+      }),
     );
   }
 
@@ -399,13 +394,13 @@ export class TurnosService {
 
   obtenerTurnosPorFecha(
     fecha: string,
-    especialista: string
+    especialista: string,
   ): Observable<any[]> {
     const turnosRef = collection(this.firestore, 'turnos');
     const q = query(
       turnosRef,
       where('fecha', '==', fecha),
-      where('especialista', '==', especialista)
+      where('especialista', '==', especialista),
     );
 
     return from(getDocs(q)).pipe(
@@ -413,8 +408,8 @@ export class TurnosService {
         snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        }))
-      )
+        })),
+      ),
     );
   }
 
@@ -429,7 +424,7 @@ export class TurnosService {
     const q = query(
       turnosRef,
       where('fecha', '>=', new Date(fecha.setHours(0, 0, 0, 0))), // Inicio del día
-      where('fecha', '<', new Date(fecha.setHours(23, 59, 59, 999))) // Fin del día
+      where('fecha', '<', new Date(fecha.setHours(23, 59, 59, 999))), // Fin del día
     );
 
     return from(getDocs(q).then((snapshot) => snapshot.size));
@@ -446,7 +441,7 @@ export class TurnosService {
           return { id: doc.id, ...doc.data() };
         }
         return null;
-      })
+      }),
     );
   }
 
@@ -455,7 +450,7 @@ export class TurnosService {
     return from(
       addDoc(historiasRef, {
         ...historia,
-      })
+      }),
     ).pipe(map(() => {}));
   }
 
@@ -464,23 +459,23 @@ export class TurnosService {
     const q = query(historiasRef, where('pacienteId', '==', pacienteId));
     return from(
       getDocs(q).then((snapshot) =>
-        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      )
+        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+      ),
     );
   }
 
   obtenerHistorialClinicoPorEspecialista(
-    especialistaId: string
+    especialistaId: string,
   ): Observable<any[]> {
     const historiasRef = collection(this.firestore, 'historias_clinicas');
     const q = query(
       historiasRef,
-      where('especialistaId', '==', especialistaId)
+      where('especialistaId', '==', especialistaId),
     );
     return from(
       getDocs(q).then((snapshot) =>
-        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      )
+        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+      ),
     );
   }
 
@@ -488,15 +483,15 @@ export class TurnosService {
     const historiasRef = collection(this.firestore, 'historias_clinicas');
     return from(
       getDocs(historiasRef).then((snapshot) =>
-        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      )
+        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+      ),
     );
   }
 
   obtenerPacientesAtendidos(): Observable<any[]> {
     const historiasClinicasRef = collection(
       this.firestore,
-      'historias_clinicas'
+      'historias_clinicas',
     );
     const especialistaId = this.auth.getUid();
 
@@ -505,7 +500,7 @@ export class TurnosService {
         const pacienteIdsSet = new Set(
           snapshot.docs
             .filter((doc) => doc.data()['especialistaId'] === especialistaId)
-            .map((doc) => doc.data()['pacienteId'])
+            .map((doc) => doc.data()['pacienteId']),
         );
 
         const usuariosRef = collection(this.firestore, 'usuarios');
@@ -521,7 +516,7 @@ export class TurnosService {
           }));
 
         return pacientes;
-      })
+      }),
     );
   }
 
@@ -534,7 +529,7 @@ export class TurnosService {
         async (snapshotUsuarios) => {
           if (snapshotUsuarios.empty) {
             throw new Error(
-              'Especialista no encontrado en la colección de usuarios.'
+              'Especialista no encontrado en la colección de usuarios.',
             );
           }
 
@@ -545,7 +540,7 @@ export class TurnosService {
             turnosRef,
             where('pacienteId', '==', pacienteId),
             where('estado', '==', 'Realizado'),
-            where('especialista', '==', especialistaNombre)
+            where('especialista', '==', especialistaNombre),
           );
 
           const turnosSnapshot = await getDocs(q);
@@ -555,10 +550,10 @@ export class TurnosService {
                 id: doc.id,
                 ...doc.data(),
                 datosDinamicos: doc.data()['datosDinamicos'] || [],
-              } as Turno)
+              }) as Turno,
           );
-        }
-      )
+        },
+      ),
     );
   }
 }

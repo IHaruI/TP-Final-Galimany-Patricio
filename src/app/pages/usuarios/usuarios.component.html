@@ -18,6 +18,20 @@
 
 <h2>Administración de Usuarios</h2>
 
+<div class="filtro">
+  <label for="busquedaUsuarios">Filtrar usuarios</label>
+
+  <div class="buscador">
+    <input
+      id="busquedaUsuarios"
+      type="text"
+      [(ngModel)]="filtroUsuarios"
+      (input)="filtrarUsuarios()"
+      placeholder="Buscar por nombre o apellido..."
+    />
+  </div>
+</div>
+
 <!-- Mensaje de confirmación o error -->
 <div
   *ngIf="mensaje"
@@ -27,36 +41,38 @@
   {{ mensaje }}
 </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Email</th>
-      <th>Rol</th>
-      <th>Estado</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let usuario of usuarios">
-      <td>{{ usuario.nombre }}</td>
-      <td>{{ usuario.email }}</td>
-      <td>{{ usuario.rol }}</td>
-      <td>{{ usuario.aprobado ? "Aprobado" : "Pendiente" }}</td>
-      <td>
-        <button
-          (click)="toggleAprobacion(usuario)"
-          *ngIf="usuario.rol === 'especialista'"
-        >
-          {{ usuario.aprobado ? "Inhabilitar" : "Habilitar" }}
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="tabla-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre y Apellido</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuariosFiltrados">
+        <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+        <td>{{ usuario.email }}</td>
+        <td>{{ usuario.rol }}</td>
+        <td>{{ usuario.aprobado ? "Aprobado" : "Pendiente" }}</td>
+        <td>
+          <button
+            (click)="toggleAprobacion(usuario)"
+            *ngIf="usuario.rol === 'especialista'"
+          >
+            {{ usuario.aprobado ? "Inhabilitar" : "Habilitar" }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <div class="cards-container usuarios-cards">
-  <div class="usuario-card" *ngFor="let usuario of usuarios">
+  <div class="usuario-card" *ngFor="let usuario of usuariosFiltrados">
     <div class="card-header">
       <h3>{{ usuario.nombre }}</h3>
       <span class="rol">{{ usuario.rol }}</span>
@@ -99,38 +115,40 @@
 </div>
 
 <!-- Listado de Turnos -->
-<table>
-  <thead>
-    <tr>
-      <th>Fecha y Hora</th>
-      <th>Paciente</th>
-      <th>Especialista</th>
-      <th>Especialidad</th>
-      <th>Estado</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let turno of turnosFiltrados">
-      <td>
-        {{
-          turno.fecha
-            ? (turno.fecha | date: "dd MMMM yyyy, h:mm:ss a")
-            : "Sin fecha"
-        }}
-      </td>
-      <td>{{ turno.nombre }} {{ turno.apellido }}</td>
-      <td>{{ turno.especialista }}</td>
-      <td>{{ turno.especialidad }}</td>
-      <td>{{ turno.estado }}</td>
-      <td>
-        <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)">
-          Cancelar
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="tabla-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha y Hora</th>
+        <th>Paciente</th>
+        <th>Especialista</th>
+        <th>Especialidad</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let turno of turnosFiltrados">
+        <td>
+          {{
+            turno.fecha
+              ? (turno.fecha | date: "dd MMMM yyyy, h:mm:ss a")
+              : "Sin fecha"
+          }}
+        </td>
+        <td>{{ turno.nombre }} {{ turno.apellido }}</td>
+        <td>{{ turno.especialista }}</td>
+        <td>{{ turno.especialidad }}</td>
+        <td>{{ turno.estado }}</td>
+        <td>
+          <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)">
+            Cancelar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <div class="cards-container turnos-cards">
   <div class="turno-card" *ngFor="let turno of turnosFiltrados">

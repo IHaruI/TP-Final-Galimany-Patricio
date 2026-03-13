@@ -209,12 +209,10 @@ export class RegistroComponent {
       this.registroForm.reset();
       this.imagenPerfilFile = null;
       this.imagenPortadaFile = null;
-    } catch (error) {
-      console.error('Error al registrar usuario:', error);
-      this.mostrarMensaje(
-        'Error al registrar el usuario. Intenta nuevamente.',
-        false,
-      );
+    } catch (error: any) {
+      console.error(error);
+
+      this.mostrarMensaje(error.message || 'Error al registrar usuario', false);
     } finally {
       this.isLoading = false;
     }

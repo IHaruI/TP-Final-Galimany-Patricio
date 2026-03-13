@@ -37,7 +37,7 @@ export class SolicitarTurnoComponent implements OnInit {
 
   constructor(
     private turnosService: TurnosService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     const hoy = new Date();
     this.mesActual = 1 + hoy.getMonth();
@@ -50,7 +50,7 @@ export class SolicitarTurnoComponent implements OnInit {
 
     if (this.pacienteId) {
       const usuario = await this.authService.obtenerDatosUsuario(
-        this.pacienteId
+        this.pacienteId,
       );
 
       if (usuario && usuario.rol === 'administrador') {
@@ -81,7 +81,7 @@ export class SolicitarTurnoComponent implements OnInit {
   async seleccionarPaciente(): Promise<void> {
     if (this.pacienteSeleccionadoUid) {
       const paciente = await this.authService.obtenerDatosUsuario(
-        this.pacienteSeleccionadoUid
+        this.pacienteSeleccionadoUid,
       );
       if (paciente) {
         this.nombrePaciente = paciente.nombre;
@@ -137,13 +137,13 @@ export class SolicitarTurnoComponent implements OnInit {
       this.turnosService
         .obtenerTurnosPorFecha(
           this.fechaSeleccionada,
-          this.especialistaSeleccionado.nombre
+          this.especialistaSeleccionado.nombre,
         )
         .subscribe((turnos) => {
           this.turnoOcupado = turnos.map((turno) => turno.hora);
           this.disponibilidadEspecialista =
             this.disponibilidadEspecialista.filter(
-              (hora) => !this.turnoOcupado.includes(hora)
+              (hora) => !this.turnoOcupado.includes(hora),
             );
         });
     } else {
@@ -160,7 +160,7 @@ export class SolicitarTurnoComponent implements OnInit {
 
     while (inicio < fin) {
       this.disponibilidadEspecialista.push(
-        inicio.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        inicio.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       );
       inicio.setMinutes(inicio.getMinutes() + 30);
     }
@@ -227,7 +227,7 @@ export class SolicitarTurnoComponent implements OnInit {
         .subscribe((usuarioDoc) => {
           if (usuarioDoc) {
             const disponibilidad = usuarioDoc.disponibilidad.find(
-              (d: any) => d[diaSeleccionado]
+              (d: any) => d[diaSeleccionado],
             );
 
             if (disponibilidad) {
@@ -238,14 +238,14 @@ export class SolicitarTurnoComponent implements OnInit {
                 parseInt(horarios[0].split(':')[0]),
                 parseInt(horarios[0].split(':')[1]),
                 0,
-                0
+                0,
               ); // Hora de inicio
               const fin = new Date();
               fin.setHours(
                 parseInt(horarios[1].split(':')[0]),
                 parseInt(horarios[1].split(':')[1]),
                 0,
-                0
+                0,
               ); // Hora de fin
 
               this.disponibilidadEspecialista = [];
@@ -254,7 +254,7 @@ export class SolicitarTurnoComponent implements OnInit {
                   inicio.toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
-                  })
+                  }),
                 );
                 inicio.setMinutes(inicio.getMinutes() + 30);
               }
@@ -282,8 +282,14 @@ export class SolicitarTurnoComponent implements OnInit {
       return;
     }
 
+    const fechaCreacion = new Date();
     const [dia, mes, anio] = this.fechaSeleccionada.split('/').map(Number);
     const fecha = new Date(anio, mes - 1, dia);
+
+    if (this.horaSeleccionada) {
+      const [hora, minutos] = this.horaSeleccionada.split(':').map(Number);
+      fecha.setHours(hora, minutos, 0, 0);
+    }
     const especialistaId = this.especialistaSeleccionado?.nombre;
     const especialistaUid = this.especialistaSeleccionado?.uid;
     const especialidad = this.especialistaSeleccionado?.especialidad;
@@ -293,7 +299,7 @@ export class SolicitarTurnoComponent implements OnInit {
         (t) =>
           t.fecha.getTime() === fecha.getTime() &&
           t.hora === this.horaSeleccionada &&
-          t.especialidad === this.especialidadSeleccionada
+          t.especialidad === this.especialidadSeleccionada,
       );
 
       if (turnoExistente) {
@@ -306,6 +312,7 @@ export class SolicitarTurnoComponent implements OnInit {
           especialista: especialistaId,
           fecha: fecha,
           hora: this.horaSeleccionada || '',
+          fechaCreacion: fechaCreacion,
           estado: 'Pendiente',
           nombre: this.nombrePaciente,
           apellido: this.apellidoPaciente,
@@ -318,13 +325,13 @@ export class SolicitarTurnoComponent implements OnInit {
                 .actualizarTurnosPorEspecialista(
                   especialistaUid,
                   this.especialistaSeleccionado?.nombre,
-                  this.especialistaSeleccionado?.apellido
+                  this.especialistaSeleccionado?.apellido,
                 )
                 .subscribe(() => {
                   this.turnosService
                     .actualizarTurnosPorEspecialidad(
                       especialistaUid,
-                      this.especialidadSeleccionada
+                      this.especialidadSeleccionada,
                     )
                     .subscribe(() => {
                       this.mensajeError = '';
