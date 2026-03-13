@@ -126,3 +126,87 @@ h2 {
 .especialidad {
   margin: 20px;
 }
+
+/* TABLET */
+
+@media (max-width: 768px) {
+  .perfil {
+    padding: 15px;
+  }
+
+  .portada-img {
+    height: 200px;
+  }
+
+  .perfil-img-paciente {
+    width: 110px;
+    height: 110px;
+    bottom: 120px;
+  }
+
+  .perfil-img-no-paciente {
+    width: 120px;
+    height: 120px;
+  }
+
+  h2 {
+    font-size: 1.6em;
+  }
+
+  .disponibilidad {
+    padding: 15px;
+  }
+
+  .disponibilidad h3 {
+    font-size: 1.3em;
+  }
+}
+
+/* CELULAR */
+
+@media (max-width: 480px) {
+  .perfil {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .portada-img {
+    height: 160px;
+  }
+
+  .perfil-img-paciente {
+    width: 90px;
+    height: 90px;
+    bottom: 100px;
+  }
+
+  .perfil-img-no-paciente {
+    width: 100px;
+    height: 100px;
+  }
+
+  h2 {
+    font-size: 1.4em;
+  }
+
+  h3 {
+    font-size: 1.1em;
+  }
+
+  .disponibilidad form {
+    gap: 10px;
+  }
+
+  .disponibilidad input[type="text"] {
+    font-size: 0.9em;
+    padding: 7px;
+  }
+
+  .disponibilidad button[type="submit"] {
+    width: 100%;
+  }
+
+  .especialidad {
+    margin: 10px 0;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -78,12 +78,13 @@ export class RegistroComponent {
   esExito: boolean = false;
   captchaResolved: string | null = null;
   isLoading: boolean = false;
+  @Input() mostrarBotonVolver: boolean = true;
 
   constructor(
     private storage: Storage,
     private firestore: Firestore,
     private auth: Auth,
-    private router: Router
+    private router: Router,
   ) {}
 
   redirigirBienvenida() {
@@ -126,7 +127,7 @@ export class RegistroComponent {
 
     if (especialidadesAdicionales) {
       especialidades.push(
-        ...especialidadesAdicionales.split(',').map((e) => e.trim())
+        ...especialidadesAdicionales.split(',').map((e) => e.trim()),
       );
     }
 
@@ -147,7 +148,7 @@ export class RegistroComponent {
     if (tipoUsuario !== 'Paciente' && tipoUsuario !== 'Especialista') {
       this.mostrarMensaje(
         'Solo se pueden registrar Pacientes y Especialistas.',
-        false
+        false,
       );
       return;
     }
@@ -179,7 +180,7 @@ export class RegistroComponent {
       const userCredential = await createUserWithEmailAndPassword(
         this.auth,
         usuario.email,
-        usuario.password
+        usuario.password,
       );
       await sendEmailVerification(userCredential.user);
       usuario.uid = userCredential.user.uid;
@@ -187,14 +188,14 @@ export class RegistroComponent {
       if (this.imagenPerfilFile) {
         usuario.imagenPerfilURL = await this.uploadImage(
           this.imagenPerfilFile,
-          `usuarios/${usuario.uid}/perfil.jpg`
+          `usuarios/${usuario.uid}/perfil.jpg`,
         );
       }
 
       if (this.imagenPortadaFile) {
         usuario.imagenPortadaURL = await this.uploadImage(
           this.imagenPortadaFile,
-          `usuarios/${usuario.uid}/portada.jpg`
+          `usuarios/${usuario.uid}/portada.jpg`,
         );
       }
 
@@ -203,7 +204,7 @@ export class RegistroComponent {
 
       this.mostrarMensaje(
         'Usuario registrado exitosamente. Por favor verifica tu correo electrónico.',
-        true
+        true,
       );
       this.registroForm.reset();
       this.imagenPerfilFile = null;
@@ -212,7 +213,7 @@ export class RegistroComponent {
       console.error('Error al registrar usuario:', error);
       this.mostrarMensaje(
         'Error al registrar el usuario. Intenta nuevamente.',
-        false
+        false,
       );
     } finally {
       this.isLoading = false;

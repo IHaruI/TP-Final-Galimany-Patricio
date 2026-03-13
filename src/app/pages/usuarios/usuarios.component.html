@@ -179,7 +179,10 @@
 </div>
 
 <!-- Mostrar el RegistroComponent cuando el rol es "paciente-especialista" -->
-<app-registro *ngIf="mostrarRegistroComponent"></app-registro>
+<app-registro
+  *ngIf="mostrarRegistroComponent"
+  [mostrarBotonVolver]="false"
+></app-registro>
 
 <!-- Formulario de creación de usuarios solo si el rol es "administrador" -->
 <div *ngIf="mostrarFormulario">

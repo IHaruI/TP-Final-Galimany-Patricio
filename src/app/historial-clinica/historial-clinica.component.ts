@@ -45,7 +45,7 @@ export class HistorialClinicaComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private turnosService: TurnosService
+    private turnosService: TurnosService,
   ) {}
 
   ngOnInit() {
@@ -84,8 +84,8 @@ export class HistorialClinicaComponent implements OnInit {
 
           const especialistasSet = new Set(
             historial.map(
-              (h) => `${h.especialistaNombre} ${h.especialistaApellido}`
-            )
+              (h) => `${h.especialistaNombre} ${h.especialistaApellido}`,
+            ),
           );
           this.especialistas = Array.from(especialistasSet);
         });
@@ -123,7 +123,7 @@ export class HistorialClinicaComponent implements OnInit {
     const historialFiltrado = this.historialClinicoPaciente.filter(
       (historial) =>
         `${historial.especialistaNombre} ${historial.especialistaApellido}` ===
-        this.especialistaSeleccionado
+        this.especialistaSeleccionado,
     );
 
     historialFiltrado.forEach((historial, index) => {
@@ -138,7 +138,7 @@ export class HistorialClinicaComponent implements OnInit {
       doc.text(
         `Especialista: ${historial.especialistaNombre} ${historial.especialistaApellido}`,
         15,
-        yOffset
+        yOffset,
       );
       doc.text(`Fecha y Hora: ${historial.fechaConHora}`, 15, yOffset + 10);
       doc.text(`Altura: ${historial.altura} cm`, 15, yOffset + 20);
@@ -192,6 +192,13 @@ export class HistorialClinicaComponent implements OnInit {
     doc.setTextColor(0, 0, 255);
 
     this.historialClinicoPaciente.forEach((historial, index) => {
+      const espacioNecesario = 80;
+
+      if (yOffset + espacioNecesario > 280) {
+        doc.addPage();
+        yOffset = 20;
+      }
+
       doc.setDrawColor(0);
       doc.line(10, yOffset - 5, 200, yOffset - 5);
 
@@ -203,7 +210,7 @@ export class HistorialClinicaComponent implements OnInit {
       doc.text(
         `Especialista: ${historial.especialistaNombre} ${historial.especialistaApellido}`,
         15,
-        yOffset
+        yOffset,
       );
       doc.text(`Fecha y Hora: ${historial.fechaConHora}`, 15, yOffset + 10);
       doc.text(`Altura: ${historial.altura} cm`, 15, yOffset + 20);
@@ -228,11 +235,6 @@ export class HistorialClinicaComponent implements OnInit {
       }
 
       yOffset += 15;
-
-      if (yOffset > 270) {
-        doc.addPage();
-        yOffset = 20;
-      }
     });
 
     doc.save('historia_clinica.pdf');
